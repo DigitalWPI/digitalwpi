@@ -4,16 +4,11 @@ class User < ApplicationRecord
   # Connects this user object to Role-management behaviors.
   include Hydra::RoleManagement::UserRoles
 
-
   # Connects this user object to Hyrax behaviors.
   include Hyrax::User
   include Hyrax::UserUsageStats
 
-
-
-  if Blacklight::Utils.needs_attr_accessible?
-    attr_accessible :email, :password, :password_confirmation
-  end
+  attr_accessible :email, :password, :password_confirmation if Blacklight::Utils.needs_attr_accessible?
   # Connects this user object to Blacklights Bookmarks.
   include Blacklight::User
   # Include default devise modules. Others available are:
