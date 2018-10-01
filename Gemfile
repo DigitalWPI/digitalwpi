@@ -45,6 +45,9 @@ gem 'orcid', git: 'https://github.com/uclibs/orcid', branch: 'rails-5-1'
 gem 'riiif', '~> 1.1'
 gem 'rsolr', '>= 1.0'
 gem 'sidekiq'
+gem 'xray-rails'
+
+
 
 group :development, :test do
   gem 'bixby'
@@ -53,6 +56,11 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+  gem 'fcrepo_wrapper'
+  gem 'rspec-rails'
+  gem 'solr_wrapper', '>= 0.3'
+  gem 'database_cleaner'
+  gem 'shoulda-matchers'
 end
 
 group :development do
