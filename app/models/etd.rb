@@ -8,6 +8,14 @@ class Etd < ActiveFedora::Base
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
 
+  property :degree, predicate: "http://vivoweb.org/ontology/core#AcademicDegree" do |index|
+    index.as :stored_searchable, :facetable
+  end
+
+  property :department, predicate: "http://vivoweb.org/ontology/core#AcademicDepartment" do |index|
+    index.as :stored_searchable, :facetable
+  end
+
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
   include ::Hyrax::BasicMetadata
