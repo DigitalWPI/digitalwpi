@@ -1,0 +1,15 @@
+language: ruby
+rvm:
+ - 2.5.1
+sudo: required # temporary travis-recommended workaround, routes to older (known to work) env
+cache: bundler
+dist: trusty
+
+jdk:
+  - oraclejdk8
+before_script:
+  - bundle exec rake db:create
+script:
+  - xvfb-run -a bundle exec rake ci
+services:
+  - redis-server
