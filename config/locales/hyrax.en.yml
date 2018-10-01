@@ -54,7 +54,7 @@ en:
       service_html: A service of <a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a>.
     institution_name: WPI
     institution_name_full: Worcester Polytechnic Institute
-    product_name: Digital WPI
+    product_name: Hyrax
     product_twitter_handle: "@SamveraRepo"
     first_name: "First Name"
     last_name: "Last Name"
