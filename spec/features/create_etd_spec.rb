@@ -33,6 +33,7 @@ RSpec.feature 'Create a Etd', js: false do
     scenario do
       visit '/dashboard'
       click_link "Works"
+      save_and_open_page
       click_link "Add new work"
 
       # If you generate more than one work uncomment these lines
@@ -51,6 +52,8 @@ RSpec.feature 'Create a Etd', js: false do
       fill_in('Title', with: 'My Test Work')
       fill_in('Creator', with: 'Doe, Jane')
       fill_in('Keyword', with: 'testing')
+      fill_in('Degree', with: 'MS')
+      fill_in('Department', with: 'ECE')
       select('In Copyright', from: 'Rights statement')
 
       # With selenium and the chrome driver, focus remains on the

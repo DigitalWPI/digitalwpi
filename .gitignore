@@ -16,6 +16,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+dump.rdb
 ./dump.rdb
 ./*dump.rdb
 
