@@ -33,7 +33,6 @@ RSpec.feature 'Create a Etd', js: false do
     scenario do
       visit '/dashboard'
       click_link "Works"
-      save_and_open_page
       click_link "Add new work"
 
       # If you generate more than one work uncomment these lines

@@ -47,20 +47,18 @@ gem 'rsolr', '>= 1.0'
 gem 'sidekiq'
 gem 'xray-rails'
 
-
-
 group :development, :test do
   gem 'bixby'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
-  gem 'selenium-webdriver'
+  gem 'database_cleaner'
   gem 'fcrepo_wrapper'
   gem 'rspec-rails'
-  gem 'solr_wrapper', '>= 0.3'
-  gem 'database_cleaner'
+  gem 'selenium-webdriver'
   gem 'shoulda-matchers'
+  gem 'solr_wrapper', '>= 0.3'
 end
 
 group :development do
@@ -74,12 +72,3 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
-group :development, :test do
-  gem 'solr_wrapper', '>= 0.3'
-end
-
-group :development, :test do
-  gem 'fcrepo_wrapper'
-  gem 'rspec-rails'
-end
