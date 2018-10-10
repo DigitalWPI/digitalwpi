@@ -33,7 +33,6 @@ RSpec.feature 'Create a Etd', js: false do
     scenario do
       visit '/dashboard'
       click_link "Works"
-      save_and_open_page
       click_link "Add new work"
 
       # If you generate more than one work uncomment these lines
@@ -66,7 +65,7 @@ RSpec.feature 'Create a Etd', js: false do
 
       click_on('Save')
       expect(page).to have_content('My Test Work')
-      expect(page).to have_content "Your files are being processed by Hyrax in the background."
+      expect(page).to have_content "Your files are being processed by Digital WPI in the background."
     end
   end
 end

@@ -452,6 +452,8 @@ GEM
     kaminari-core (1.1.1)
     kaminari_route_prefix (0.1.1)
       kaminari (~> 1.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     ld-patch (0.3.3)
       ebnf (~> 1.1)
       rdf (>= 2.2, < 4.0)
@@ -697,11 +699,18 @@ GEM
     rsolr (2.2.1)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
+    rspec-activemodel-mocks (1.1.0)
+      activemodel (>= 3.0)
+      activesupport (>= 3.0)
+      rspec-mocks (>= 2.99, < 4.0)
     rspec-core (3.8.0)
       rspec-support (~> 3.8.0)
     rspec-expectations (3.8.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
+    rspec-its (1.2.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
     rspec-mocks (3.8.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
@@ -876,6 +885,7 @@ DEPENDENCIES
   hyrax!
   jbuilder (~> 2.5)
   jquery-rails
+  launchy
   listen (>= 3.0.5, < 3.2)
   omniauth-openid
   omniauth-shibboleth
@@ -884,6 +894,8 @@ DEPENDENCIES
   rails (~> 5.1.4)
   riiif (~> 1.1)
   rsolr (>= 1.0)
+  rspec-activemodel-mocks
+  rspec-its
   rspec-rails
   sass-rails (~> 5.0)
   selenium-webdriver
