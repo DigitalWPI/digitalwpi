@@ -8,7 +8,7 @@ class Etd < ActiveFedora::Base
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
 
-  property :degree, predicate: "http://vivoweb.org/ontology/core#AcademicDegree" do |index|
+  property :degree, predicate: "http://vivoweb.org/ontology/core#AcademicDegree", multiple: false do |index|
     index.as :stored_searchable, :facetable
   end
 

@@ -33,6 +33,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'active_attr'
+gem 'active_fedora-noid'
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
 gem 'devise-multi_auth', git: 'https://github.com/uclibs/devise-multi_auth', branch: 'rails-5-1'
