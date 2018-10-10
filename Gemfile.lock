@@ -125,6 +125,10 @@ GEM
       activesupport (>= 3.0.2, < 6.0)
     active_encode (0.2)
       rails
+    active_fedora-noid (2.2.0)
+      active-fedora (>= 9.7, < 12)
+      noid (~> 0.9)
+      rails (>= 5.0.0, < 6)
     activejob (5.1.4)
       activesupport (= 5.1.4)
       globalid (>= 0.3.6)
@@ -858,6 +862,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_attr
+  active_fedora-noid
   bixby
   byebug
   capybara (~> 2.13)
