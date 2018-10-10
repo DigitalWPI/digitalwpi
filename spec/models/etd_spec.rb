@@ -7,7 +7,7 @@ RSpec.describe Etd do
     context 'with a new ETD' do
       it "has no degree when first created" do
       	etd = Etd.new()
-      	expect(etd.degree).to be_empty
+      	expect(etd.degree).to eq(nil)
       end
     end
   end
@@ -15,7 +15,7 @@ RSpec.describe Etd do
     context 'with a new ETD' do 
       it "has no department when first created" do
       	etd = Etd.new()
-      	expect(etd.department).to be_empty
+      	expect(etd.department).to eq([])
       end
   	end
   end
@@ -23,8 +23,8 @@ RSpec.describe Etd do
     context 'with a new ETD' do
       it "can assign and retrieve the degree of ETD works" do
       	etd = Etd.new()
-      	etd.degree = ["MS"]
-      	expect(etd.degree).to eq(["MS"])
+      	etd.degree = "MS"
+      	expect(etd.degree).to eq("MS")
       end
     end
   end

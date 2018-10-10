@@ -6,7 +6,7 @@ RSpec.feature 'Display an Etd work' do
 	let(:keyword) { ['hello world'] }
 	let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
 	let(:user) { 'test@example.com' }
-	let(:degree) { ['MS'] }
+	let(:degree) { 'MS' }
 	let(:department) { ['CS'] }
 
 	let :etd do

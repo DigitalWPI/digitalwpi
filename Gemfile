@@ -33,6 +33,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'active_attr'
+gem 'active_fedora-noid'
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
 gem 'devise-multi_auth', git: 'https://github.com/uclibs/devise-multi_auth', branch: 'rails-5-1'
@@ -55,8 +56,11 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
+  gem 'launchy'
   gem 'selenium-webdriver'
   gem 'fcrepo_wrapper'
+  gem 'rspec-activemodel-mocks'
+  gem 'rspec-its'
   gem 'rspec-rails'
   gem 'solr_wrapper', '>= 0.3'
   gem 'database_cleaner'
