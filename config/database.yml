@@ -5,21 +5,27 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: sqlite3
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
+  adapter: mysql2
+  username: rails
+  password: <%= ENV['MYSQL_RAILS_PASS'] %> #make sure you have these exported, best to put them in your bash_profile
+  host: <%= ENV['MYSQL_DB_HOST'] %> #make sure you have these exported, best to put them in your bash_profile
+  port: 3306 
 
 development:
   <<: *default
-  database: db/development.sqlite3
+  database: hyraxdb
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test.sqlite3
+  database: hyraxdb_test
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  adapter: mysql2
+  databse: <%= ENV['HYRAX_DATABSE'] %>
+  username: <%= ENV['HYRAX_DATABSE_USERNAME'] %>
+  password: <%= ENV['HYRAX_DATABSE_PASSWORD'] %>
+  host: <%= ENV['HYRAX_DATABSE_HOST'] %>
