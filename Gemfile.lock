@@ -528,6 +528,7 @@ GEM
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
+    mysql2 (0.4.10)
     nest (3.1.1)
       redic
     net-http-persistent (3.0.0)
@@ -887,6 +888,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   listen (>= 3.0.5, < 3.2)
+  mysql2 (>= 0.3.18, < 0.5)
   omniauth-openid
   omniauth-shibboleth
   orcid!
@@ -912,4 +914,4 @@ DEPENDENCIES
   xray-rails
 
 BUNDLED WITH
-   1.16.4
+   1.16.5
