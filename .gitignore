@@ -25,5 +25,5 @@ redis-4.0.11/*
 
 /node_modules
 /yarn-error.log
-
+fits.log
 .byebug_history
