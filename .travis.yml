@@ -22,7 +22,7 @@ jdk:
 before_script:
   - cp config/database.yml config/databse.tmp.yml
   - cp config/database.travis.yml config/database.yml
-  - mysql -e 'create database hyrax_test'
+  - mysql -e 'create database hyraxdb_test'
 script:
   - xvfb-run -a bundle exec rake ci
 after_script:
