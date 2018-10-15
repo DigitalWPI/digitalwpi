@@ -4,12 +4,28 @@ rvm:
 sudo: required # temporary travis-recommended workaround, routes to older (known to work) env
 cache: bundler
 dist: trusty
+env:
+  MYSQL_DB_HOST=127.0.0.1
+addons:
+  apt:
+   sources:
+    - mysql-5.7-trusty
+   packages:
+    - mysql-server
+    - mysql-client
+
+# before_install:
+#   - mysql -e 'CREATE DATABASE hyraxdb_test;'
 
 jdk:
   - oraclejdk8
 before_script:
-  - bundle exec rake db:create
+  - cp config/database.yml config/databse.tmp.yml
+  - cp config/database.travis.yml config/database.yml
+  - mysql -e 'create database hyraxdb_test'
 script:
   - xvfb-run -a bundle exec rake ci
+after_script:
+  - cp config/database.tmp.yml config/database.yml #this will revert to the normal state.
 services:
   - redis-server

@@ -70,7 +70,6 @@ RSpec.feature 'Create a Etd', js: false do
 
       click_on('Save')
       click_on('Go')
-      save_and_open_page
       results = page.find('div', :id => 'search-results')
       div = results.find('div', :class => 'metadata')
       dl = div.find('dl', :class => 'dl-horizontal')
