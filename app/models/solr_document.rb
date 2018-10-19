@@ -32,4 +32,8 @@ class SolrDocument
   def department
     self[Solrizer.solr_name('department')]
   end
+
+  def identifier
+    self[Solrizer.solr_name('identifier')]
+  end
 end

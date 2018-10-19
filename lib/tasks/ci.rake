@@ -8,22 +8,22 @@ unless Rails.env.production?
   task :ci do # does not include rails :environment
     ENV["environment"] = "test"
     solr_params = {
-        port: 8985,
-        verbose: true,
-        managed: true
+      port: 8985,
+      verbose: true,
+      managed: true
     }
     fcrepo_params = {
-        port: 8986,
-        verbose: true,
-        managed: true,
-        enable_jms: false,
-        fcrepo_home_dir: 'tmp/fcrepo4-test-data'
+      port: 8986,
+      verbose: true,
+      managed: true,
+      enable_jms: false,
+      fcrepo_home_dir: 'tmp/fcrepo4-test-data'
     }
     SolrWrapper.wrap(solr_params) do |solr|
       solr.with_collection(
-          name: "hydra-test",
-          persist: false,
-          dir: Rails.root.join("solr", "config")
+        name: "hydra-test",
+        persist: false,
+        dir: Rails.root.join("solr", "config")
       ) do
         FcrepoWrapper.wrap(fcrepo_params) do
           Rake::Task["spec"].invoke
