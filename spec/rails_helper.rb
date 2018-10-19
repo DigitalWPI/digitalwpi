@@ -10,6 +10,8 @@ require 'capybara/rspec'
 require 'capybara/rails'
 require 'active_fedora/cleaner'
 require 'database_cleaner'
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |file| require file } #require all support files
+#require 'support/factory_bot' 
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

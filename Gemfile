@@ -33,6 +33,10 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'factory_bot_rails' # #comment from besss: Needed so we can load fixtures for demos in production
+gem 'faker' # #comment from besss: Needed so we can load fixtures for demos in production
+gem 'ffaker'
+
 gem 'active_attr'
 gem 'active_fedora-noid'
 gem 'devise'
