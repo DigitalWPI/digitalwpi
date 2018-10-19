@@ -27,3 +27,5 @@ redis-4.0.11/*
 /yarn-error.log
 fits.log
 .byebug_history
+
+fresh_start.sh
