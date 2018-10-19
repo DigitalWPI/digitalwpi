@@ -63,14 +63,14 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-  
+
   config.include Capybara::RSpecMatchers, type: :input
 
   config.before :suite do
     ActiveFedora::Cleaner.clean!
   end
 
-  config.before :each do
+  config.before do
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.start
   end
