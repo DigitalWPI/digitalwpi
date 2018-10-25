@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180809170955) do
+ActiveRecord::Schema.define(version: 20181019163042) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -543,8 +543,11 @@ ActiveRecord::Schema.define(version: 20180809170955) do
     t.binary "zotero_token"
     t.string "zotero_userid"
     t.string "preferred_locale"
+    t.string "provider"
+    t.string "uid"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["uid"], name: "index_users_on_uid"
   end
 
   create_table "version_committers", force: :cascade do |t|
