@@ -4,6 +4,8 @@ rvm:
 sudo: required # temporary travis-recommended workaround, routes to older (known to work) env
 cache: bundler
 dist: trusty
+git:
+    submodules: false
 env:
   MYSQL_DB_HOST=127.0.0.1
 addons:
