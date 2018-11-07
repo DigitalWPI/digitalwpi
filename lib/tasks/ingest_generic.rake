@@ -1,8 +1,8 @@
 require 'fileutils'
 require 'json'
 require 'optparse'
-
-namespace :gwss  do
+# copied from https://github.com/gwu-libraries/ and heavily modified
+namespace :wpi  do
   # adding a logger since it got removed from our gemset
   #def logger
   #  Rails.logger
@@ -13,7 +13,7 @@ namespace :gwss  do
     SitemapRegenerateJob.perform_later
   end
 
-  desc "Create GW ScholarSpace user roles"
+  desc "Create digitalwpi user roles"
   task create_roles: :environment do
     adminrole = Role.find_or_create_by(name: 'admin')
     adminrole.save
@@ -28,13 +28,14 @@ namespace :gwss  do
       options = {}
 
       op = OptionParser.new
-      op.banner = "Usage: rake gwss:ingest_work -- --manifest=MFPATH --primaryfile=PFPATH --otherfiles=OFLIST --depositor=DEPOSITOR --update-item-id=UPDATEID"
+      op.banner = "Usage: rake ingest -- --manifest=MFPATH --primaryfile=PFPATH --otherfiles=OFLIST --depositor=DEPOSITOR --update-item-id=UPDATEID"
       op.on('-mf MFPATH', '--manifest=MFPATH', 'Path to manifest file') { |mfpath| options[:mfpath] = mfpath }
       op.on('-pf FPATH', '--primaryfile=PFPATH', 'Path to primary attachment file') { |pfpath| options[:pfpath] = pfpath }
       op.on('-of OFLIST', '--otherfiles=OFLIST', 'Comma-separated list of paths to supplemental files') { |oflist| options[:oflist] = oflist }
       op.on('-dep DEPOSITOR', '--depositor=DEPOSITOR', 'Scholarspace ID (e.g. email) of depositor') { |depositor| options[:depositor] = depositor }
       op.on('--set-item-id[=UPDATEID]', 'Set Item ID') { |setid| options[:setid] = setid }
       op.on('--update-item-id[=UPDATEID]', 'Update Item ID') { |updateid| options[:updateid] = updateid }
+      op.on('-wt WORKTYPE', '--worktype=WORKTYPE', 'string representing hyrax worktype, ie worktype') do |worktype| options[:worktype] = worktype end
       op.on('--private', 'Ingest and create with Private visibility') do
         options[:private] = true
       end
@@ -46,6 +47,9 @@ namespace :gwss  do
       raise OptionParser::MissingArgument if options[:mfpath].nil?
       raise OptionParser::MissingArgument if options[:pfpath].nil?
       raise OptionParser::MissingArgument if options[:depositor].nil?
+      raise OptionParser::MissingArgument if options[:worktype].nil?
+
+      worktype = eval(options[:worktype])
 
       manifest_file = options[:mfpath]
       if File.exist?(manifest_file)
@@ -54,7 +58,7 @@ namespace :gwss  do
         item_attributes = manifest_json.dup
         item_attributes.delete('embargo')
         item_attributes.delete('embargo_release_date')
-        
+
         # dc:rights
         # There are some items with extraneous 'None' values; remove these
         licenses = (manifest_json['license'] or []) - ['None']
@@ -66,11 +70,12 @@ namespace :gwss  do
 
         # edm:rights
         item_attributes['rights_statement'] = ['http://rightsstatements.org/vocab/InC/1.0/']
-        
-        work_id = ingest_work(item_attributes, options[:depositor], options[:updateid], options[:setid], options[:private])
-        # generate_ingest_report(noid_list, investigation_id) 
+
+        work_id = ingest_work(item_attributes, options[:depositor], options[:updateid], options[:setid], options[:private], worktype)
+        # generate_ingest_report(noid_list, investigation_id)
         embargo_attributes = read_embargo_info(manifest_json)
-        gww = GwWork.find(work_id)
+
+        gww = worktype.find(work_id)
         attach_files(gww, options[:pfpath], options[:oflist],
                      options[:depositor], embargo_attributes)
         puts work_id
@@ -91,6 +96,7 @@ namespace :gwss  do
       op.on('-pf FPATH', '--primaryfile=PFPATH', 'Path to primary attachment file') { |pfpath| options[:pfpath] = pfpath }
       op.on('-of OFLIST', '--otherfiles=OFLIST', 'Comma-separated list of paths to supplemental files') { |oflist| options[:oflist] = oflist }
       op.on('-dep DEPOSITOR', '--depositor=DEPOSITOR', 'Scholarspace ID (e.g. email) of depositor') { |depositor| options[:depositor] = depositor }
+      op.on('-wt WORKTYPE', '--worktype=WORKTYPE', 'string representing hyrax worktype, ie worktype') do |worktype| options[:worktype] = worktype end
       op.on('--update-item-id[=UPDATEID]', 'Update Item ID') { |updateid| options[:updateid] = updateid }
 
       # return `ARGV` with the intended arguments
@@ -100,11 +106,13 @@ namespace :gwss  do
       raise OptionParser::MissingArgument if options[:mfpath].nil?
       raise OptionParser::MissingArgument if options[:pfpath].nil?
       raise OptionParser::MissingArgument if options[:depositor].nil?
+      raise OptionParser::MissingArgument if options[:worktype].nil?
 
-      # Reference GwWork to work around circular dependency
-      # problem that would be caused by referencing GwEtd first
+      # Reference worktype to work around circular dependency
+      # problem that would be caused by referencing worktype first
       # See articles such as http://neethack.com/2015/04/rails-circular-dependency/
-      GwWork
+      worktype = eval(options[:worktype])
+
       manifest_file = options[:mfpath]
       if File.exist?(manifest_file)
         mf = File.read(manifest_file)
@@ -126,10 +134,10 @@ namespace :gwss  do
         # edm:rights
         item_attributes['rights_statement'] = ['http://rightsstatements.org/vocab/InC/1.0/']
 
-        etd_id = ingest_etd(item_attributes, options[:depositor], options[:updateid])
-        # generate_ingest_report(noid_list, investigation_id) 
+        etd_id = ingest_etd(item_attributes, options[:depositor], options[:updateid], worktype)
+        # generate_ingest_report(noid_list, investigation_id)
         embargo_attributes = read_embargo_info(manifest_json)
-        gwe = GwEtd.find(etd_id)
+        gwe = worktype.find(etd_id)
         attach_files(gwe, options[:pfpath], options[:oflist],
                      options[:depositor], embargo_attributes)
         puts etd_id
@@ -139,18 +147,18 @@ namespace :gwss  do
     end
   end
 
-  def ingest_work(item_attributes, depositor, updateid, setid, visibility_private)
+  def ingest_work(item_attributes, depositor, updateid, setid, visibility_private, worktype)
     begin
       gww = nil
       if updateid.nil?
-        gww = GwWork.new
+        gww = worktype.new
         if setid.nil?
           gww.id = ActiveFedora::Noid::Service.new.mint
         else
           gww.id = setid
         end
       else
-        gww = GwWork.find(updateid)
+        gww = worktype.find(updateid)
         # delete existing files; we'll "overwrite" with new ones
         # TODO: Unfortunately, this will have the effect that links
         # to individual files won't be persistent if the ETD is updated
@@ -158,11 +166,13 @@ namespace :gwss  do
         # with existing files (perhaps by file name?)
         fsets = gww.file_sets
         fsets.each do |fs|
-          fs.delete  
+          fs.delete
         end
       end
 
       gww.apply_depositor_metadata(depositor)
+      #set the attributes of the work
+      # File.open('log.txt', 'w') { |file| file.write(item_attributes.inspect) }
       gww.attributes = item_attributes
       if visibility_private
         gww.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
@@ -183,14 +193,14 @@ namespace :gwss  do
     end
   end
 
-  def ingest_etd(item_attributes, depositor, updateid)
+  def ingest_etd(item_attributes, depositor, updateid, worktype)
     begin
       gwe = nil
       if updateid.nil?
-        gwe = GwEtd.new
+        gwe = worktype.new
         gwe.id = ActiveFedora::Noid::Service.new.mint
       else
-        gwe = GwEtd.find(updateid)
+        gwe = worktype.find(updateid)
         # delete existing files; we'll "overwrite" with new ones
         # TODO: Unfortunately, this will have the effect that links
         # to individual files won't be persistent if the ETD is updated
@@ -198,7 +208,7 @@ namespace :gwss  do
         # with existing files (perhaps by file name?)
         fsets = gwe.file_sets
         fsets.each do |fs|
-          fs.delete  
+          fs.delete
         end
       end
 
