@@ -1,3 +1,6 @@
+#frozen_string_literal: true
+
+require 'sidekiq/web'
 Rails.application.routes.draw do
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
@@ -11,6 +14,7 @@ Rails.application.routes.draw do
   devise_for :users
   mount Hydra::RoleManagement::Engine => '/'
 
+  mount Sidekiq::Web => 'sidekiq'
   mount Qa::Engine => '/authorities'
   mount Hyrax::Engine, at: '/'
   resources :welcome, only: 'index'

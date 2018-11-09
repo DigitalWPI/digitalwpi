@@ -7,7 +7,8 @@ namespace :wpi  do
   #def logger
   #  Rails.logger
   #end
-
+  class InvalidWorkType < StandardError
+  end
   desc "Queues a job to (re)generate the sitemap.xml"
   task "sitemap_queue_generate" => :environment do
     SitemapRegenerateJob.perform_later
@@ -48,9 +49,11 @@ namespace :wpi  do
       raise OptionParser::MissingArgument if options[:pfpath].nil?
       raise OptionParser::MissingArgument if options[:depositor].nil?
       raise OptionParser::MissingArgument if options[:worktype].nil?
-
-      worktype = eval(options[:worktype])
-
+      begin
+        worktype = eval(options[:worktype])
+      rescue
+        raise InvalidWorkType, "An invalid worktype was given #{options[:worktype]} was not okay"
+      end
       manifest_file = options[:mfpath]
       if File.exist?(manifest_file)
         mf = File.read(manifest_file)
