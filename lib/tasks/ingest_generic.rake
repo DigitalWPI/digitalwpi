@@ -29,6 +29,77 @@ namespace :wpi  do
       options = {}
 
       op = OptionParser.new
+      op.banner = "Usage: rake ingest -- --manifest=MFPATH --primaryfile=PFPATH --otherfiles=OFLIST --depositor=DEPOSITOR --update-item-id=UPDATEID --worktype WORKTYPE --collection=COLLECTION (optional)"
+      op.on('-mf MFPATH', '--manifest=MFPATH', 'Path to manifest file') { |mfpath| options[:mfpath] = mfpath }
+      op.on('-pf FPATH', '--primaryfile=PFPATH', 'Path to primary attachment file') { |pfpath| options[:pfpath] = pfpath }
+      op.on('-of OFLIST', '--otherfiles=OFLIST', 'Comma-separated list of paths to supplemental files') { |oflist| options[:oflist] = oflist }
+      op.on('-dep DEPOSITOR', '--depositor=DEPOSITOR', 'Scholarspace ID (e.g. email) of depositor') { |depositor| options[:depositor] = depositor }
+      op.on('--set-item-id[=UPDATEID]', 'Set Item ID') { |setid| options[:setid] = setid }
+      op.on('--update-item-id[=UPDATEID]', 'Update Item ID') { |updateid| options[:updateid] = updateid }
+      op.on('-wt WORKTYPE', '--worktype=WORKTYPE', 'string representing hyrax worktype, ie worktype') do |worktype| options[:worktype] = worktype end
+      op.on('-cl COLLECTION', '--collection=COLLECTION', 'an id of a collection to add these works to') { |collectionid| options[:collectionid] = collectionid }
+      op.on('--private', 'Ingest and create with Private visibility') do
+        options[:private] = true
+      end
+
+      # return `ARGV` with the intended arguments
+      args = op.order!(ARGV) {}
+      op.parse!(args)
+
+      raise OptionParser::MissingArgument if options[:mfpath].nil?
+      raise OptionParser::MissingArgument if options[:pfpath].nil?
+      raise OptionParser::MissingArgument if options[:depositor].nil?
+      raise OptionParser::MissingArgument if options[:worktype].nil?
+      begin
+        worktype = eval(options[:worktype])
+      rescue
+        raise InvalidWorkType, "An invalid worktype was given #{options[:worktype]} was not okay"
+      end
+
+      manifest_file = options[:mfpath]
+      if File.exist?(manifest_file)
+        mf = File.read(manifest_file)
+        manifest_json = JSON.parse(mf.squish)
+        item_attributes = manifest_json.dup
+        item_attributes.delete('embargo')
+        item_attributes.delete('embargo_release_date')
+
+        # dc:rights
+        # There are some items with extraneous 'None' values; remove these
+        licenses = (manifest_json['license'] or []) - ['None']
+        if licenses.length == 0
+          item_attributes['license'] = ['http://www.europeana.eu/portal/rights/rr-r.html']
+        else
+          item_attributes['license'] = licenses
+        end
+
+        # edm:rights
+        item_attributes['rights_statement'] = ['http://rightsstatements.org/vocab/InC/1.0/']
+
+        work_id = ingest_work(item_attributes, options[:depositor], options[:updateid], options[:setid], options[:private], worktype)
+        # generate_ingest_report(noid_list, investigation_id)
+        embargo_attributes = read_embargo_info(manifest_json)
+
+        gww = worktype.find(work_id)
+        attach_files(gww, options[:pfpath], options[:oflist],
+                     options[:depositor], embargo_attributes)
+        if options[:collectionid]
+          col = Collection.find(options[:collectionid])#throws error if id not found
+          gww.member_of_collections << col
+          gww.save
+        end
+        puts work_id
+      else
+        puts "Manifest file doesn't exist - no ingest"
+      end
+    end
+  end
+
+  task :ingest_work_res_to_collections => :environment do |t, args|
+    begin
+      options = {}
+
+      op = OptionParser.new
       op.banner = "Usage: rake ingest -- --manifest=MFPATH --primaryfile=PFPATH --otherfiles=OFLIST --depositor=DEPOSITOR --update-item-id=UPDATEID"
       op.on('-mf MFPATH', '--manifest=MFPATH', 'Path to manifest file') { |mfpath| options[:mfpath] = mfpath }
       op.on('-pf FPATH', '--primaryfile=PFPATH', 'Path to primary attachment file') { |pfpath| options[:pfpath] = pfpath }
@@ -81,6 +152,14 @@ namespace :wpi  do
         gww = worktype.find(work_id)
         attach_files(gww, options[:pfpath], options[:oflist],
                      options[:depositor], embargo_attributes)
+        for res_type in gww.resource_type do
+          collections = Collection.where(title: res_type)
+          if collections.length == 1
+            gww.member_of_collections << collections[0]
+            gww.save
+          end
+        end
+
         puts work_id
       else
         puts "Manifest file doesn't exist - no ingest"
