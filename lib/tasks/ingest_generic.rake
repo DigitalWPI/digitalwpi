@@ -32,7 +32,7 @@ namespace :wpi  do
       op.banner = "Usage: rake ingest -- --manifest=MFPATH --primaryfile=PFPATH --otherfiles=OFLIST --depositor=DEPOSITOR --update-item-id=UPDATEID --worktype WORKTYPE --collection=COLLECTION (optional)"
       op.on('-mf MFPATH', '--manifest=MFPATH', 'Path to manifest file') { |mfpath| options[:mfpath] = mfpath }
       op.on('-pf FPATH', '--primaryfile=PFPATH', 'Path to primary attachment file') { |pfpath| options[:pfpath] = pfpath }
-      op.on('-of OFLIST', '--otherfiles=OFLIST', 'Comma-separated list of paths to supplemental files') { |oflist| options[:oflist] = oflist }
+      op.on('-of OFLIST', '--otherfiles=OFLIST', 'Deliniated list of paths to supplemental files,Delimiter={|,|}') { |oflist| options[:oflist] = oflist }
       op.on('-dep DEPOSITOR', '--depositor=DEPOSITOR', 'Scholarspace ID (e.g. email) of depositor') { |depositor| options[:depositor] = depositor }
       op.on('--set-item-id[=UPDATEID]', 'Set Item ID') { |setid| options[:setid] = setid }
       op.on('--update-item-id[=UPDATEID]', 'Update Item ID') { |updateid| options[:updateid] = updateid }
@@ -103,7 +103,7 @@ namespace :wpi  do
       op.banner = "Usage: rake ingest -- --manifest=MFPATH --primaryfile=PFPATH --otherfiles=OFLIST --depositor=DEPOSITOR --update-item-id=UPDATEID"
       op.on('-mf MFPATH', '--manifest=MFPATH', 'Path to manifest file') { |mfpath| options[:mfpath] = mfpath }
       op.on('-pf FPATH', '--primaryfile=PFPATH', 'Path to primary attachment file') { |pfpath| options[:pfpath] = pfpath }
-      op.on('-of OFLIST', '--otherfiles=OFLIST', 'Comma-separated list of paths to supplemental files') { |oflist| options[:oflist] = oflist }
+      op.on('-of OFLIST', '--otherfiles=OFLIST', 'Deliniated list of paths to supplemental files,Delimiter={|,|}') { |oflist| options[:oflist] = oflist }
       op.on('-dep DEPOSITOR', '--depositor=DEPOSITOR', 'Scholarspace ID (e.g. email) of depositor') { |depositor| options[:depositor] = depositor }
       op.on('--set-item-id[=UPDATEID]', 'Set Item ID') { |setid| options[:setid] = setid }
       op.on('--update-item-id[=UPDATEID]', 'Update Item ID') { |updateid| options[:updateid] = updateid }
@@ -176,7 +176,7 @@ namespace :wpi  do
       op.banner = "Usage: rake gwss:ingest_etd -- --manifest=MFPATH --primaryfile=PFPATH --otherfiles=OFLIST --depositor=DEPOSITOR --update-item-id=UPDATEID"
       op.on('-mf MFPATH', '--manifest=MFPATH', 'Path to manifest file') { |mfpath| options[:mfpath] = mfpath }
       op.on('-pf FPATH', '--primaryfile=PFPATH', 'Path to primary attachment file') { |pfpath| options[:pfpath] = pfpath }
-      op.on('-of OFLIST', '--otherfiles=OFLIST', 'Comma-separated list of paths to supplemental files') { |oflist| options[:oflist] = oflist }
+      op.on('-of OFLIST', '--otherfiles=OFLIST', 'Deliniated list of paths to supplemental files,Delimiter={|,|}') { |oflist| options[:oflist] = oflist }
       op.on('-dep DEPOSITOR', '--depositor=DEPOSITOR', 'Scholarspace ID (e.g. email) of depositor') { |depositor| options[:depositor] = depositor }
       op.on('-wt WORKTYPE', '--worktype=WORKTYPE', 'string representing hyrax worktype, ie worktype') do |worktype| options[:worktype] = worktype end
       op.on('--update-item-id[=UPDATEID]', 'Update Item ID') { |updateid| options[:updateid] = updateid }
@@ -323,7 +323,7 @@ namespace :wpi  do
     # add primary file first, other files afterwards
     files = []
     files += [primaryfile_path] if primaryfile_path
-    files += otherfiles_list.split(',') if otherfiles_list
+    files += otherfiles_list.split('{|,|}') if otherfiles_list
     files.each do |f|
       fs = FileSet.new
       # use the filename as the FileSet title
