@@ -1,6 +1,10 @@
 Hyrax.config do |config|
   # Injected via `rails g hyrax:work Etd`
   config.register_curation_concern :etd
+  # Injected via `rails g hyrax:work GenericWork`
+  config.register_curation_concern :generic_work
+  # Injected via `rails g hyrax:work StudentWork`
+  config.register_curation_concern :student_work
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
   # @note there are magical roles as defined in Hyrax::RoleRegistry::MAGIC_ROLES

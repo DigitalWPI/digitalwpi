@@ -31,9 +31,7 @@ RSpec.feature 'Create a Etd', js: false do
     end
 
     scenario do
-      visit '/dashboard'
-      click_link "Works"
-      click_link "Add new work"
+      visit '/concern/etds/new'
 
       # If you generate more than one work uncomment these lines
       # choose "payload_concern", option: "Etd"
