@@ -1,0 +1,8 @@
+pt-BR:
+  hyrax:
+    icons:
+      student_work:     'fa fa-file-text-o'
+    select_type:
+      student_work:
+        description:        "Student work trabalhos"
+        name:               "Student Work"
