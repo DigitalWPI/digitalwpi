@@ -28,6 +28,15 @@ RSpec.describe Etd do
       end
     end
   end
+  describe '#department' do
+    context 'with a new ETD' do
+      it "can assign and retrieve the department of ETD works" do
+        etd = described_class.new
+        etd.department = ["ECE"]
+        expect(etd.department).to eq(["ECE"])
+      end
+    end
+  end
   describe '#school' do
     context 'with a new ETD' do
       it "has no school when first created" do
@@ -36,12 +45,12 @@ RSpec.describe Etd do
       end
     end
   end
-  describe '#department' do
+  describe '#school' do
     context 'with a new ETD' do
-      it "can assign and retrieve the department of ETD works" do
+      it "can assign and retrieve the school of ETD works" do
         etd = described_class.new
-        etd.department = ["ECE"]
-        expect(etd.department).to eq(["ECE"])
+        etd.school = ["School of Arts"]
+        expect(etd.school).to eq(["School of Arts"])
       end
     end
   end

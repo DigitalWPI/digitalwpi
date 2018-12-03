@@ -36,7 +36,7 @@ class SolrDocument
   def school
     self[Solrizer.solr_name('school')]
   end
-  
+
   def identifier
     self[Solrizer.solr_name('identifier')]
   end
@@ -83,6 +83,10 @@ class SolrDocument
 
   def sponsor
     self[Solrizer.solr_name('sponsor')]
+  end
+
+  def major
+    self[Solrizer.solr_name('major')]
   end
 
   def institute
