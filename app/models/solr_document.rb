@@ -92,4 +92,20 @@ class SolrDocument
   def institute
     self[Solrizer.solr_name('institute')]
   end
+
+  def digitization_date
+    self[Solrizer.solr_name('digitization_date')]
+  end
+
+  def series
+    self[Solrizer.solr_name('series')]
+  end
+
+  def event
+    self[Solrizer.solr_name('event')]
+  end
+
+  def extent
+    self[Solrizer.solr_name('extent')]
+  end
 end

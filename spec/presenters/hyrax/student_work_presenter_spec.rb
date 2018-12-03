@@ -23,11 +23,6 @@ RSpec.describe Hyrax::StudentWorkPresenter do
   let(:school) { ['School of Engineering'] }
   let(:major) { ['Theatre'] }
 
-
-
-
-
-
   let :student_work do
     StudentWork.create(
       title: title,
@@ -90,7 +85,6 @@ RSpec.describe Hyrax::StudentWorkPresenter do
     expect(solr_document).to receive(:funding)
     presenter.funding
   end
-
   it "delegates institute to solr document" do
     expect(solr_document).to receive(:institute)
     presenter.institute
