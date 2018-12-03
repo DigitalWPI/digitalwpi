@@ -1,8 +1,17 @@
 inherit_gem:
   bixby: bixby_default.yml
 
+AllCops:
+  TargetRubyVersion: 2.5
+  Exclude:
+    - 'db/**/*'
+    - 'lib/tasks/**/*'
+
 Metrics/BlockLength:
   Enabled: false
 
 RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MessageSpies:
   Enabled: false

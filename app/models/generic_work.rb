@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Generated via
 #  `rails generate hyrax:work GenericWork`
 class GenericWork < ActiveFedora::Base

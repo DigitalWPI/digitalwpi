@@ -1,9 +1,15 @@
+# frozen_string_literal: true
 # Generated via
 #  `rails generate hyrax:work StudentWork`
 require 'rails_helper'
 
 RSpec.describe Hyrax::StudentWorkPresenter do
   subject { presenter }
+
+  before do
+    DatabaseCleaner.clean
+    ActiveFedora::Cleaner.clean!
+  end
 
   let(:title) { ['Example title'] }
   let(:creator) { ['Doe, Jane'] }

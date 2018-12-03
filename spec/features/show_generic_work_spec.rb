@@ -1,6 +1,13 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.feature 'Display an Generic Work work' do
+
+  before do
+    DatabaseCleaner.clean
+    ActiveFedora::Cleaner.clean!
+  end
+
   let(:title) { ['Example title'] }
   let(:creator) { ['Doe, Jane'] }
   let(:keyword) { ['hello world'] }
