@@ -1,7 +1,8 @@
-#tests for database auth / shib / azure
+# frozen_string_literal: true
+# tests for database auth / shib / azure
 require 'rails_helper'
-RSpec.describe User do 
-  let(:user) { build(:user) } #creates a new dog user
+RSpec.describe User do
+  let(:user) { build(:user) } # creates a new dog user
 
   describe 'omniauthable user' do
     it "has a uid field" do

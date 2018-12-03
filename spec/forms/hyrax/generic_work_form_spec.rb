@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 # Generated via
 #  `rails generate hyrax:work GenericWork`
 require 'rails_helper'
 
 RSpec.describe Hyrax::GenericWorkForm do
   subject { form }
-  let(:generic_work)    { GenericWork.new }
+  let(:generic_work) { GenericWork.new }
   let(:ability) { Ability.new(nil) }
   let(:request) { nil }
   let(:form)    { described_class.new(generic_work, ability, request) }

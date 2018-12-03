@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Generated via
 #  `rails generate hyrax:work Etd`
 require 'rails_helper'
@@ -120,5 +121,4 @@ RSpec.describe Hyrax::EtdPresenter do
     expect(solr_document).to receive(:institute)
     presenter.institute
   end
-
 end

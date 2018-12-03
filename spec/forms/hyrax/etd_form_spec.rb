@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 # Generated via
 #  `rails generate hyrax:work Etd`
 require 'rails_helper'
 
 RSpec.describe Hyrax::EtdForm do
   subject { form }
-  let(:etd)    { Etd.new }
+  let(:etd) { Etd.new }
   let(:ability) { Ability.new(nil) }
   let(:request) { nil }
   let(:form)    { described_class.new(etd, ability, request) }

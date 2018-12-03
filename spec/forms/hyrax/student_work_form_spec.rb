@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 # Generated via
 #  `rails generate hyrax:work StudentWork`
 require 'rails_helper'
 
 RSpec.describe Hyrax::StudentWorkForm do
   subject { form }
-  let(:student_work)    { StudentWork.new }
+  let(:student_work) { StudentWork.new }
   let(:ability) { Ability.new(nil) }
   let(:request) { nil }
   let(:form)    { described_class.new(student_work, ability, request) }
