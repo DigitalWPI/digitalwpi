@@ -6,3 +6,7 @@ en:
       generic_work:
         description:        "Generic work works"
         name:               "Generic Work"
+  simple_form:
+    labels:
+      generic_work:
+        digitization_date: "Date of Digitization"

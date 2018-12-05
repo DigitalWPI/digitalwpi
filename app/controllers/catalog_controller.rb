@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CatalogController < ApplicationController
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior
@@ -271,6 +272,14 @@ class CatalogController < ApplicationController
 
     config.add_search_field('license') do |field|
       solr_name = solr_name("license", :stored_searchable)
+      field.solr_local_parameters = {
+        qf: solr_name,
+        pf: solr_name
+      }
+    end
+
+    config.add_search_field('advisor') do |field|
+      solr_name = solr_name("advisor", :stored_searchable)
       field.solr_local_parameters = {
         qf: solr_name,
         pf: solr_name

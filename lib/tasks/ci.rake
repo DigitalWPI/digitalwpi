@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 unless Rails.env.production?
   APP_ROOT = File.dirname(__FILE__)
   require "solr_wrapper"

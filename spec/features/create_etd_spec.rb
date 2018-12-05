@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Generated via
 #  `rails generate hyrax:work Etd`
 require 'rails_helper'
@@ -49,9 +50,25 @@ RSpec.feature 'Create a Etd', js: false do
       fill_in('Title', with: 'My Test Work')
       fill_in('Creator', with: 'Doe, Jane')
       fill_in('Keyword', with: 'testing')
-      fill_in('Degree', with: 'MS')
-      fill_in('Department', with: 'ECE')
       select('In Copyright', from: 'Rights statement')
+
+      click_link "Additional fields"
+      fill_in("Identifier", with: "eir-9876-9878")
+      fill_in("Alternate title", with: "Alternate title for my work")
+      fill_in("Award", with: "Best Dissertation of the Year")
+      fill_in("Includes", with: "This work also includes a rails application as part of this dissertation.")
+      fill_in("Faculty Advisor/Committee Chair", with: "Me, Not")
+      fill_in("Sponsor", with: "Musk, Elon")
+      fill_in("Center", with: "Bangkok, Thailand Project Center")
+      fill_in("Year", with: "2018")
+      fill_in("Funding Organization", with: "National Science Foundation")
+      fill_in("Institute", with: "Thailand Research Institute")
+      fill_in("ORCID ID", with: "5678987654578")
+      fill_in("Committee Member", with: "Cooper, Sheldon")
+      fill_in("Degree", with: "MS")
+      fill_in("Department", with: "Physics")
+      fill_in("School", with: "School of Engineering")
+      fill_in("Date of Defense", with: "2018-12-25")
 
       # With selenium and the chrome driver, focus remains on the
       # select box. Click outside the box so the next line can't find

@@ -6,3 +6,8 @@ en:
       student_work:
         description:        "Student work works"
         name:               "Student Work"
+  simple_form:
+    labels:
+      student_work:
+        advisor: "Faculty Advisor"
+        funding: "Funding Organization"
