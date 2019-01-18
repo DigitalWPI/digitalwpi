@@ -25,7 +25,7 @@ test:
 production:
   <<: *default
   adapter: mysql2
-  databse: <%= ENV['HYRAX_DATABSE'] %>
+  database: <%= ENV['HYRAX_DATABSE'] %>
   username: <%= ENV['HYRAX_DATABSE_USERNAME'] %>
   password: <%= ENV['HYRAX_DATABSE_PASSWORD'] %>
   host: <%= ENV['HYRAX_DATABSE_HOST'] %>
