@@ -19,6 +19,10 @@ env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - ENGINE_CART_RAILS_OPTIONS='--skip-git --skip-bundle --skip-listen --skip-spring --skip-yarn --skip-keeps --skip-action-cable --skip-coffee --skip-puma --skip-test'
+    - MAILSERVER='smtp.example.com'
+    - MAILUSER='test@example.com'
+    - MAILPASS='word'
+    - SERVERNAME='localhost'
 
 script:
   - bundle exec rake ci

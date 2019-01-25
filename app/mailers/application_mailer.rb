@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 class ApplicationMailer < ActionMailer::Base
-  default from: ENV['MAILUSER']
+  default from: "DigitalWPI Repository <#{ENV['MAILUSER']}>"
   layout 'mailer'
 end
