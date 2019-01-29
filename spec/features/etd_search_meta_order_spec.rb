@@ -74,7 +74,6 @@ RSpec.feature 'Create a Etd', js: false do
       dl = div.find('dl', class: 'dl-horizontal')
 
       expect(dl).to have_content 'Date Created'
-      expect(dl).to have_content('Description')
       expect(dl).to have_content('Creator')
       expect(dl).to have_content('Contributor')
       expect(dl).to have_content('Publisher')
