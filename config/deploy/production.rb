@@ -7,8 +7,11 @@ server "hyrax-prod.wpi.edu", user: "webapp", roles: %w{app db web}
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
+set :data_server, "data-prod.wpi.edu"
+set :pull_data, false #dont overwrite prod data please
 
-
+# set :prod -> {"#{fetch :server}"}
+# set :qa -> {}
 # role-based syntax
 # ==================
 

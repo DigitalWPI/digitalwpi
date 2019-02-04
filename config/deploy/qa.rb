@@ -5,8 +5,10 @@
 
 server "hyrax-qa.wpi.edu", user: "webapp", roles: %w{app db web}
 # server "data-qa.wpi.edu", user: "webapp", roles: %w{db} #fedora solr
-
-
+set :data_server, "data-qa.wpi.edu"
+set :prod_data_server,"data-prod.wpi.edu"
+set :prod_server, "hyrax-prod.wpi.edu"
+set :pull_data, true
 
 # role-based syntax
 # ==================

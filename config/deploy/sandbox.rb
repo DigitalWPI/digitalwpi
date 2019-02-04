@@ -6,7 +6,11 @@
 server "hyrax-sandbox.wpi.edu", user: "webapp", roles: %w{app db web}
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
-
+set :data_server, "hyrax-sandbox.wpi.edu"
+set :prod_data_server,"hyrax-sandbox.wpi.edu"
+set :prod_server,"hyrax-sandbox.wpi.edu"
+set :pull_data, true
+set :fcrepo_port, 8984
 
 
 # role-based syntax
