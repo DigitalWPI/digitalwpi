@@ -3,12 +3,12 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server "hyrax-sandbox.wpi.edu", user: "webapp", roles: %w{app db web}
+server ENV['hysand'], user: ENV['SERVER_USER'], roles: %w{app db web}
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
-set :data_server, "hyrax-sandbox.wpi.edu"
-set :prod_data_server,"hyrax-sandbox.wpi.edu"
-set :prod_server,"hyrax-sandbox.wpi.edu"
+set :data_server, ENV['hysand']
+set :prod_data_server,ENV['hysand']
+set :prod_server,ENV['hysand']
 set :pull_data, true
 set :fcrepo_port, 8984
 

@@ -36,8 +36,8 @@ namespace :data do
         puts "\t Exporting fedora data"
         execute(:java, "-jar",path_to_jar,"--mode","export","--resource","http://#{fetch :prod_data_server}:#{fetch :fcrepo_port}/rest","--dir","#{tmp_fcr}","--binaries")
         puts "\t Importing fedora data"
-        execute(:java, "-jar",path_to_jar,"--mode","import","--resource","http://130.215.27.148:8984/rest","--dir","#{tmp_fcr}","--binaries","--map","#{fetch :prod_data_server}:#{fetch :fcrepo_port}/rest,http://130.215.27.148:8984/rest")
-        #execute(:java, "-jar",path_to_jar,"--mode","import","--resource","$FEDORA_HOST","--dir","#{tmp_fcr}","--binaries","--map","#{fetch :prod_data_server}:#{fetch :fcrepo_port}/rest,$FEDORA_HOST")
+        execute(:java, "-jar",path_to_jar,"--mode","import","--resource","http://#{fetch :self_data_server}:#{fetch :fcrepo_port}/rest","--dir","#{tmp_fcr}","--binaries","--map","#{fetch :prod_data_server}:#{fetch :fcrepo_port}/rest,http://#{fetch :self_data_server}:#{fetch :fcrepo_port}/rest")
+
       else
         raise "Can not pull data becuase :pull_data is set as false or not defined. Are you calling this for qa or test?"
       end

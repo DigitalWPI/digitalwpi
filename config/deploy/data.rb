@@ -3,9 +3,10 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-
-server "data-qa.wpi.edu", user: "webapp", roles: %w{db}, level: :qa 
-server "data-prod.wpi.edu", user: "webapp", roles: %w{db}, level: :prod
+#ENV['DATAQA']
+#ENV['DATAPROD']
+server ENV['DATAQA'], user: ENV['SERVER_USER'], roles: %w{db}, level: :qa 
+server ENV['DATAPROD'], user: ENV['SERVER_USER'], roles: %w{db}, level: :prod
 
 
 # role-based syntax

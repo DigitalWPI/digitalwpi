@@ -3,11 +3,9 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server "hyrax-prod.wpi.edu", user: "webapp", roles: %w{app db web}
-# server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
-# server "db.example.com", user: "deploy", roles: %w{db}
+server ENV['ADDRESS_PROD'], user: ENV['SERVER_USER'], roles: %w{app db web}
 
-set :data_server, "data-prod.wpi.edu"
+set :data_server, ENV['DATAPROD']
 set :pull_data, false #dont overwrite prod data please
 
 # set :prod -> {"#{fetch :server}"}
