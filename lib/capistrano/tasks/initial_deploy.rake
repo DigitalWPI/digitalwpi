@@ -6,7 +6,9 @@ namespace :deploy do
 		after "deploy:initial:restart_solr", "deploy:initial:restart_fedora"
 
 		after "deploy:initial:restart_fedora", "deploy:initial:bundle_install"
-		after "deploy:initial:bundle_install", "deploy:initial:restart_passenger"
+		after "deploy:initial:bundle_install", "deploy:initial:"
+		after "deploy:initial:", "deploy:initial:"
+
 		invoke "deploy"
 	end
 	namespace :initial do 
@@ -55,5 +57,8 @@ namespace :deploy do
 				end
 			end
 		end
+		# do before passenger
+		#RAILS_ENV=production bundle exec rake assets:precompile db:migrate
+
 	end
 end
