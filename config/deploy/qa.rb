@@ -4,6 +4,8 @@
 # You can define all roles on a single server, or split them:
 
 server ENV["ADDRESS_QA"], user: ENV['SERVER_USER'], roles: %w{app db web}
+server ENV['DATAQA'], user: ENV['SERVER_USER'], roles: %w{data}
+
 set :data_server, ENV['DATAQA']
 set :prod_data_server,ENV['DATAPROD']
 set :prod_server, ENV["ADDRESS_PROD"]

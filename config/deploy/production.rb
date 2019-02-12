@@ -4,7 +4,7 @@
 # You can define all roles on a single server, or split them:
 
 server ENV['ADDRESS_PROD'], user: ENV['SERVER_USER'], roles: %w{app db web}
-
+server ENV['DATAPROD'], user: ENV['SERVER_USER'], roles: %w{data}
 set :data_server, ENV['DATAPROD']
 set :pull_data, false #dont overwrite prod data please
 
