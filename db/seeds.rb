@@ -18,6 +18,20 @@
 #   bin/rails hyrax:default_admin_set:create
 #   rake db:seed
 
+# i've been doing this:
+# rails db:drop 
+# rails db:create
+# rails db:migrate
+# rails c
+# require 'active_fedora/cleaner'
+# ActiveFedora::Cleaner.clean!
+# ActiveFedora::Cleaner.clean!
+# exit
+# rails hyrax:default_admin_set:create
+# rails hyrax:workflow:load
+# rails db:seed
+
+
 # ---------------------------------
 # methods to create various objects
 # ---------------------------------
@@ -114,7 +128,13 @@ genuser = create_user('general_user@example.com', 'pppppp')
 
 puts "Create Groups for QA"
 admin_role = Role.create(name: "admin")
-sw_role = Role.create(name: "student_worker")
+studentwork_permission_role = Role.create(name: "StudentWork_permission")
+genericwork_permission_role = Role.create(name: "GenericWork_permission")
+etd_permission_role =         Role.create(name: "Etd_permission")
+collection_permission_role =  Role.create(name: "Collection_permission")
+library_depositor_role =      Role.create(name: "Library_depositor")
+
+
 
 puts 'Create collection types for QA not really tho'
 # _discoverable_gid = create_collection_type('discoverable_collection_type', title: 'Discoverable', description: 'Sample collection type allowing collections to be discovered.', discoverable: true).gid
@@ -178,138 +198,17 @@ puts 'Create collections for collection nesting ad hoc testing'
 # cc = create_public_collection(user, nestable_gid, 'child_nested', title: ['A Child Collection'], description: ['Public collection that will be a child of another collection.'])
 # mqp = create_public_collection(user, nestable_gid, 'mqp', title: ['MQP'], description: ['MQPs ONLY'])
 special_collection = create_public_collection(user, nestable_gid, 'special_collection', title: ['SPECIAL COLLECTION'], description: ['special_collections ONLY'])
-# Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: pc, child: cc)
+gps = create_public_collection(user, nestable_gid, 'gps', title: ['Great Problems Seminar'], description: ['GPS\'s ONLY'])
+iqp = create_public_collection(user, nestable_gid, 'iqp', title: ['IQP'], description: ['IQPs ONLY'])
+mqp = create_public_collection(user, nestable_gid, 'mqp', title: ['MQP'], description: ['MQPs ONLY'])
+etd = create_public_collection(user, nestable_gid, 'etd', title: ['Electronic Theses and Diessertation'], description: ['ETDs ONLY'])
+thes = create_public_collection(user, nestable_gid, 'thesis', title: ['Thesis'], description: ['Theses ONLY'])# and Diessertation
+diser = create_public_collection(user, nestable_gid, 'dissertation', title: ['Dissertation'], description: ['Dissertations ONLY'])
+
+Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: etd, child: thes)
+Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: etd, child: diser)
 
 
 puts "Adding Users to Groups in CanCan"
 admin_role.users << user
-sw_role.users << banana_user
 
-# puts 'Create collection with many child collections and works'
-# mpc = create_public_collection(
-#   user,
-#   nestable_gid,
-#   'parent_nested_many',
-#   title: ['A Parent Collection with many Child Collections'],
-#   description: ['Public collection that will be a parent of many collections.']
-# )
-# 3.times do |i|
-#   mcc = create_public_collection(user, nestable_gid, "child_nested_#{i}", title: ["Child Collection #{i}"], description: ['Public collection that will be a child of another collection.'])
-#   Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: mpc, child: mcc)
-#   create_public_work(user, "pub_mgw_#{i}",
-#                      title: ["Public #{i}"],
-#                      description: ["Public work #{i} being added to the Public Nested Collection"],
-#                      creator: ['Joan Smith'], keyword: ['test'], rights_statement: 'http://rightsstatements.org/vocab/InC/1.0/',
-#                      member_of_collections_attributes: collection_attributes_for([mpc.id]))
-# end
-
-puts 'Create collections with many parent collections'
-# # Pool of collections that will be used as parents of the collections
-# parent_pool = Array.new(12) do |i|
-#   create_public_collection(user,
-#                            nestable_gid,
-#                            "col_shared_parents_#{i}",
-#                            title: ["Shared Parent collection #{i}"],
-#                            description: ['Collection that shares children with multiple parents.'])
-# end
-# # 2 parent collection
-# col_two_parents = create_public_collection(user, nestable_gid, "col_two_parents", title: ["Collection - 2 parents"], description: ['Collection that has two parents.'])
-# 2.times { |i| Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: parent_pool[i], child: col_two_parents) }
-# # 6 parent collection
-# col_six_parents = create_public_collection(user, nestable_gid, "col_six_parents", title: ["Collection - 6 parents"], description: ['Collection that has six parents.'])
-# 3.times { |i| Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: parent_pool[i], child: col_six_parents) }
-# # 12 parent collection
-# col_twelve_parents = create_public_collection(user, nestable_gid, "col_twelve_parents", title: ["Collection - 12 parents"], description: ['Collection that has twelve parents.'])
-# 4.times { |i| Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: parent_pool[i], child: col_twelve_parents) }
-
-# puts 'Create works for collection nesting ad hoc testing'
-# 3.times do |i|
-#   create_public_work(user, "pub_gw_#{i}",
-#                      title: ["Public #{i}"],
-#                      description: ["Public work #{i} being added to the Public Nested Collection"],
-#                      creator: ['Joan Smith'], keyword: ['test'], rights_statement: 'http://rightsstatements.org/vocab/InC/1.0/',
-#                      member_of_collections_attributes: collection_attributes_for([pnc.id]))
-# end
-# 2.times do |i|
-#   create_authenticated_work(user, "auth_gw_#{i}",
-#                             title: ["Authenticated #{i}"],
-#                             description: ["Authenticated work #{i} being added to the Parent Collection"],
-#                             creator: ['John Smith'], keyword: ['test'], rights_statement: 'http://rightsstatements.org/vocab/InC/1.0/',
-#                             member_of_collections_attributes: collection_attributes_for([pc.id]))
-# end
-# 1.times do |i|
-#   create_private_work(user, "priv_gw_#{i}",
-#                       title: ["Private #{i}"],
-#                       description: ["Proviate work #{i} being added to the Child Collection"],
-#                       creator: ['Jean Smith'], keyword: ['test'], rights_statement: 'http://rightsstatements.org/vocab/InC/1.0/',
-#                       member_of_collections_attributes: collection_attributes_for([cc.id]))
-# end
-
-puts "-----------------------------------------------------"
-puts " Create seeded objects for embargo ad hoc testing"
-puts "-----------------------------------------------------"
-# TODO: update to use create_work method which uses actor stack to create works
-
-# puts 'Create Active, Private Embargo works'
-# 3.times do |i|
-#   GenericWork.create(title: ["Active Private #{i}"]) do |work|
-#     work.apply_depositor_metadata(user)
-#     work.apply_embargo(Date.tomorrow.to_s, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
-#   end
-# end
-
-# puts 'Create Active, Authenticated Embargo works'
-# 2.times do |i|
-#   GenericWork.create(title: ["Active Authenticated #{i}"]) do |work|
-#     work.apply_depositor_metadata(user)
-#     work.apply_embargo(Date.tomorrow.to_s, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
-#   end
-# end
-
-# puts 'Create Expired, Authenticated Embargo works'
-# 1.times do |i|
-#   GenericWork.create(title: ["Expired Authenticated #{i}"], read_groups: ['registered']) do |work|
-#     work.apply_depositor_metadata(user)
-#     work.apply_embargo(Date.yesterday.to_s, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
-#   end
-# end
-
-# puts 'Create Expired, Public Embargo works'
-# 3.times do |i|
-#   GenericWork.create(title: ["Expired Public #{i}"], read_groups: ['public']) do |work|
-#     work.apply_depositor_metadata(user)
-#     work.apply_embargo(Date.yesterday.to_s, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
-#   end
-# end
-
-# puts 'Create Active, Public Lease works'
-# 3.times do |i|
-#   GenericWork.create(title: ["Active Public #{i}"], read_groups: ['public']) do |work|
-#     work.apply_depositor_metadata(user)
-#     work.apply_lease(Date.tomorrow.to_s, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE)
-#   end
-# end
-
-# puts 'Create Active, Authenticated Lease works'
-# 2.times do |i|
-#   GenericWork.create(title: ["Active Authenticated #{i}"], read_groups: ['registered']) do |work|
-#     work.apply_depositor_metadata(user)
-#     work.apply_lease(Date.tomorrow.to_s, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE)
-#   end
-# end
-
-# puts 'Create Expired, Authenticated Lease works'
-# 1.times do |i|
-#   GenericWork.create(title: ["Expired Authenticated #{i}"], read_groups: ['registered']) do |work|
-#     work.apply_depositor_metadata(user)
-#     work.apply_lease(Date.yesterday.to_s, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
-#   end
-# end
-
-# puts 'Create Expired, Private Lease works'
-# 3.times do |i|
-#   GenericWork.create(title: ["Expired Public #{i}"]) do |work|
-#     work.apply_depositor_metadata(user)
-#     work.apply_lease(Date.yesterday.to_s, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE)
-#   end
-# end
