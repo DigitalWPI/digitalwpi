@@ -28,7 +28,10 @@ RSpec.feature 'Create a StudentWork', js: false do
         agent_id: user.user_key,
         access: 'deposit'
       )
+      studentwork_permission_role = Role.create(name: "StudentWork_permission")
+      studentwork_permission_role.users << user
       login_as user
+
     end
 
     scenario do

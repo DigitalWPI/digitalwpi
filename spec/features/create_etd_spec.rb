@@ -28,6 +28,8 @@ RSpec.feature 'Create a Etd', js: false do
         agent_id: user.user_key,
         access: 'deposit'
       )
+      permission_role = Role.create(name: "Etd_permission")
+      permission_role.users << user
       login_as user
     end
 
