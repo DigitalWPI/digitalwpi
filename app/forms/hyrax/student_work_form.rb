@@ -9,5 +9,6 @@ module Hyrax
     self.terms += [:advisor, :sponsor, :center, :year]
     self.terms += [:funding, :institute, :school, :major]
     self.required_fields -= [:keyword]
+    # self.required_fields += [:member_of_collection_ids]
   end
 end
