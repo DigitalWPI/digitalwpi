@@ -892,7 +892,7 @@ DEPENDENCIES
   omniauth-openid
   omniauth-shibboleth
   puma (~> 3.7)
-  rails (~> 5.1.6.1)
+  rails (~> 5.1.4)
   riiif (~> 2.0)
   rsolr (>= 1.0)
   rspec-activemodel-mocks
