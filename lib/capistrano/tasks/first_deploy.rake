@@ -57,7 +57,6 @@ namespace :deploy do
 			within release_path do #release_path is current path to our released project on the remote surver. 
 				with rails_env: fetch(:rails_env) do
 					execute(:rails,"db:migrate")
-					execute(:rails,"c")
 				end
 			end
 		end			
