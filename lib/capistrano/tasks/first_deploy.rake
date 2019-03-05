@@ -1,22 +1,22 @@
 namespace :deploy do
 	desc "Performs first deploy to server"
 	task :with_batch_loader do
-		after "deploy:updated", "deploy:add_batch_loader"
+		after "deploy:log_revision", "deploy:add_batch_loader"
 		invoke "deploy"
 	end
 	desc "frist deploy + asset precompilation"
 	task :with_assets do
-		after "deploy:updated", "deploy:asset_precompile"
+		after "deploy:log_revision", "deploy:asset_precompile"
 		invoke "deploy"
 	end
 	desc "frist deploy + bundle install (to vendor/bundle)"
 	task :with_bundle_install do
-		after "deploy:updated", "deploy:bundle_install"
+		after "deploy:log_revision", "deploy:bundle_install"
 		invoke "deploy"
 	end
 	desc "frist deploy"
 	task :with_all do
-		after "deploy:updated", "deploy:add_batch_loader"
+		after "deploy:log_revision", "deploy:add_batch_loader"
 		after "deploy:add_batch_loader", "deploy:bundle_install"
 		after "deploy:bundle_install", "deploy:asset_precompile"
 		after "deploy:asset_precompile", "deploy:migrate"
