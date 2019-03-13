@@ -23,6 +23,7 @@ env:
     - MAILUSER='test@example.com'
     - MAILPASS='word'
     - SERVERNAME='localhost'
+    - NFS_DIR='tmp'
 
 script:
   - bundle exec rake ci
