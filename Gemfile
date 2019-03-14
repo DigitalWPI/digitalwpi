@@ -71,6 +71,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'solr_wrapper', '>= 0.3'
+  gem 'rspec_junit_formatter'
 end
 
 group :development do
