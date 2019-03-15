@@ -14,7 +14,9 @@ Rails.application.routes.draw do
   devise_for :users
   mount Hydra::RoleManagement::Engine => '/'
 
-  mount Sidekiq::Web => 'sidekiq'
+  authenticate :user, ->(u) { u.admin? } do
+    mount Sidekiq::Web => 'sidekiq'
+  end
   mount Qa::Engine => '/authorities'
   mount Hyrax::Engine, at: '/'
   resources :welcome, only: 'index'
