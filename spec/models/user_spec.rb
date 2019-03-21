@@ -6,7 +6,6 @@ RSpec.describe User do
 
   describe 'omniauthable user' do
     it "has a uid field" do
-      p user.email
       expect(user.email).not_to be_empty
     end
     it "can have a provider" do
