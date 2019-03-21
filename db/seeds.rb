@@ -127,7 +127,7 @@ create_user('archivist1@example.com', 'pppppp')#archivist1@example.com
 genuser = create_user('general_user@example.com', 'pppppp')
 
 puts "Create Groups for QA"
-admin_role = Role.create(name: "admin")
+admin_role = Role.find_or_create_by(name: "admin")
 studentwork_permission_role = Role.create(name: "StudentWork_permission")
 genericwork_permission_role = Role.create(name: "GenericWork_permission")
 etd_permission_role =         Role.create(name: "Etd_permission")
