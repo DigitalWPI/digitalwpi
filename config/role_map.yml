@@ -1,8 +1,14 @@
 development:
+  all_group:
+    - awscott@wpi.edu
+    - foo@example.com
+    - mgr1@example.com
+  mqp_banana:
+    - awscott@wpi.edu
   archivist:
     - archivist1@example.com
   admin:
-    - admin@example.com
+    - foo@example.com
 test:
   archivist:
     - archivist1@example.com
