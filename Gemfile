@@ -45,7 +45,7 @@ group :production, :development, :test do
   gem 'devise-guests', '~> 0.6'
   gem 'devise-multi_auth', git: 'https://github.com/uclibs/devise-multi_auth', branch: 'rails-5-1'
   gem 'hydra-role-management'
-  gem 'hyrax', git: 'https://github.com/samvera/hyrax.git', tag: 'v2.4.1'
+  gem 'hyrax', git: 'https://github.com/samvera/hyrax.git', tag: 'v2.5.0'
   gem 'jquery-rails'
   gem 'omniauth-openid'
   gem 'omniauth-shibboleth'

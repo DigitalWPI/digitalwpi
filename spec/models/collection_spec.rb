@@ -1,8 +1,5 @@
-# frozen_string_literal: true
-require 'rails_helper'
-
 RSpec.describe Collection, type: :model do
-  let(:collection) { build(:public_collection_lw) }
+  let(:collection) { build(:public_collection) }
 
   it "has open visibility" do
     expect(collection.read_groups).to eq ['public']
@@ -18,7 +15,7 @@ RSpec.describe Collection, type: :model do
 
   describe "#to_solr" do
     let(:user) { build(:user) }
-    let(:collection) { build(:collection_lw, user: user, title: ['A good title']) }
+    let(:collection) { build(:collection, user: user, title: ['A good title']) }
 
     let(:solr_document) { collection.to_solr }
 
@@ -43,7 +40,7 @@ RSpec.describe Collection, type: :model do
   end
 
   describe "#members_objects", clean_repo: true do
-    let(:collection) { create(:collection_lw) }
+    let(:collection) { create(:collection) }
 
     it "is empty by default" do
       expect(collection.member_objects).to match_array []
@@ -83,7 +80,7 @@ RSpec.describe Collection, type: :model do
   end
 
   describe "#destroy", clean_repo: true do
-    let(:collection) { build(:collection_lw) }
+    let(:collection) { build(:collection) }
     let(:work1) { create(:work) }
 
     before do
@@ -133,7 +130,7 @@ RSpec.describe Collection, type: :model do
   end
 
   describe '#collection_type_gid=' do
-    let(:collection) { build(:collection_lw) }
+    let(:collection) { build(:collection) }
     let(:collection_type) { create(:collection_type) }
 
     it 'sets gid' do
@@ -173,7 +170,7 @@ RSpec.describe Collection, type: :model do
   end
 
   describe 'collection type delegated methods' do
-    subject { build(:collection_lw) }
+    subject { build(:collection) }
 
     it { is_expected.to delegate_method(:nestable?).to(:collection_type) }
     it { is_expected.to delegate_method(:discoverable?).to(:collection_type) }
@@ -188,7 +185,7 @@ RSpec.describe Collection, type: :model do
 
   describe '.after_destroy' do
     it 'will destroy the associated permission template' do
-      collection = build(:collection_lw, with_permission_template: true)
+      collection = create(:collection, with_permission_template: true)
       expect { collection.destroy }.to change { Hyrax::PermissionTemplate.count }.by(-1)
     end
   end
@@ -196,7 +193,7 @@ RSpec.describe Collection, type: :model do
   describe '#reset_access_controls!' do
     let!(:user) { build(:user) }
     let(:collection_type) { create(:collection_type) }
-    let!(:collection) { build(:collection_lw, user: user, collection_type_gid: collection_type.gid) }
+    let!(:collection) { create(:collection, user: user, collection_type_gid: collection_type.gid) }
     let!(:permission_template) { build(:permission_template) }
 
     before do
@@ -239,20 +236,20 @@ RSpec.describe Collection, type: :model do
 
     describe 'permission template' do
       it 'will be created when with_permission_template is true' do
-        expect { build(:collection_lw, with_permission_template: true) }.to change { Hyrax::PermissionTemplate.count }.by(1)
+        expect { create(:collection, with_permission_template: true) }.to change { Hyrax::PermissionTemplate.count }.by(1)
       end
 
       it 'will be created when with_permission_template is set to attributes identifying access' do
-        expect { build(:collection_lw, with_permission_template: { manage_users: [user] }) }.to change { Hyrax::PermissionTemplate.count }.by(1)
-        expect { build(:collection_lw, with_permission_template: { manage_users: [user], deposit_users: [user] }) }.to change { Hyrax::PermissionTemplate.count }.by(1)
+        expect { create(:collection, with_permission_template: { manage_users: [user] }) }.to change { Hyrax::PermissionTemplate.count }.by(1)
+        expect { create(:collection, with_permission_template: { manage_users: [user], deposit_users: [user] }) }.to change { Hyrax::PermissionTemplate.count }.by(1)
       end
 
       it 'will be created when create_access is true' do
-        expect { create(:collection_lw, with_permission_template: true) }.to change { Hyrax::PermissionTemplate.count }.by(1)
+        expect { create(:collection, create_access: true) }.to change { Hyrax::PermissionTemplate.count }.by(1)
       end
 
       it 'will not be created by default' do
-        expect { build(:collection_lw) }.not_to change { Hyrax::PermissionTemplate.count }
+        expect { create(:collection) }.not_to change { Hyrax::PermissionTemplate.count }
       end
     end
 
@@ -267,11 +264,11 @@ RSpec.describe Collection, type: :model do
       end
 
       it 'will be created when create_access is true' do
-        expect { build(:collection_lw, user: user, with_permission_template: true) }.to change { Hyrax::PermissionTemplate.count }.by(1)
+        expect { create(:collection, user: user, create_access: true) }.to change { Hyrax::PermissionTemplate.count }.by(1)
       end
 
       it 'will not be created by default' do
-        expect { build(:collection_lw) }.not_to change { Hyrax::PermissionTemplateAccess.count }
+        expect { create(:collection) }.not_to change { Hyrax::PermissionTemplateAccess.count }
       end
     end
 
@@ -296,7 +293,7 @@ RSpec.describe Collection, type: :model do
 
       context 'when building a collection' do
         let(:coll123) do
-          build(:collection_lw,
+          build(:collection,
                 id: 'Collection123',
                 collection_type_gid: collection_type.gid,
                 with_nesting_attributes:
