@@ -17,6 +17,8 @@ terms:
     term: Image
   - id: Journal
     term: Journal
+  - id: Manuscript
+    term: Manuscript
   - id: Map or Cartographic Material
     term: Map or Cartographic Material
   - id: Masters Thesis
