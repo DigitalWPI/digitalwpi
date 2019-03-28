@@ -14,8 +14,8 @@ Install system dependencies
 * LibreOffice
 * ffmpeg
 
-1. Clone this repository: `git clone git@gitdev.wpi.edu:jndungavath/wpirepo.git ./path/to/local`
-    * **Note:** Solr will not run properly if there are spaces in any of the directory names above it <br />(e.g. /user/my apps/wpirepo/)
+1. Clone this repository: `git clone https://github.com/DigitalWPI/digitalwpi ./path/to/local`
+    * **Note:** Solr will not run properly if there are spaces in any of the directory names above it <br />(e.g. /user/my apps/digitalwpi/)
 1. Change to the application's directory: e.g. `cd ./path/to/local`
 1. Make sure you are on the develop branch: `git checkout master`
 1. Install bundler (if needed): `gem install bundler`
