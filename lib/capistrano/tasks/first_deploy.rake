@@ -14,12 +14,30 @@ namespace :deploy do
 		after "deploy:log_revision", "deploy:bundle_install"
 		invoke "deploy"
 	end
+	desc "frist deploy + rails db migrate"
+    task :with_migrate do
+        after "deploy:log_revision", "deploy:migrate"
+        invoke "deploy"
+    end
+	desc "frist deploy + rails default_admin_set"
+    task :with_default_admin_set do
+        after "deploy:log_revision", "deploy:default_admin_set"
+        invoke "deploy"
+    end
 	desc "frist deploy"
 	task :with_all do
 		after "deploy:log_revision", "deploy:add_batch_loader"
 		after "deploy:add_batch_loader", "deploy:bundle_install"
 		after "deploy:bundle_install", "deploy:asset_precompile"
 		after "deploy:asset_precompile", "deploy:migrate"
+		invoke "deploy"
+	end
+	task :with_init do
+		after "deploy:log_revision", "deploy:add_batch_loader"
+		after "deploy:add_batch_loader", "deploy:bundle_install"
+		after "deploy:bundle_install", "deploy:asset_precompile"
+		after "deploy:asset_precompile", "deploy:default_admin_set"
+		after "deploy:default_admin_set", "deploy:migrate"
 		invoke "deploy"
 	end
 	desc "runs rm and git clone for batch_loader, because cap doesnt support submodules"
@@ -36,8 +54,18 @@ namespace :deploy do
 		on roles(:app) do
 			within release_path do #release_path is current path to our released project on the remote surver. 
 				with rails_env: fetch(:rails_env) do
-					execute(:rails,"assets:precompile")
+					execute(:bundle,:exec,:rails,"assets:precompile")
 					# execute(:rails,"db:migrate")
+				end
+			end
+		end			
+	end
+	desc "generate default admin set"
+	task :default_admin_set do
+		on roles(:app) do
+			within release_path do #release_path is current path to our released project on the remote surver. 
+				with rails_env: fetch(:rails_env) do
+					execute(:bundle,:exec,:rails,"hyrax:default_admin_set:create --trace")
 				end
 			end
 		end			
@@ -56,7 +84,7 @@ namespace :deploy do
 		on roles(:app) do
 			within release_path do #release_path is current path to our released project on the remote surver. 
 				with rails_env: fetch(:rails_env) do
-					execute(:rails,"db:migrate")
+					execute("bin/rails","db:migrate")
 				end
 			end
 		end			
