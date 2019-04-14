@@ -1,9 +1,7 @@
 #
-# To integrate your app with Google Analytics, uncomment the lines below and add your API key information.
+# To integrate your app with Matomo
 #
-# analytics:
-#   app_name: GOOGLE_OAUTH_APP_NAME
-#   app_version: GOOGLE_OAUTH_APP_VERSION
-#   privkey_path: GOOGLE_OAUTH_PRIVATE_KEY_PATH
-#   privkey_secret: GOOGLE_OAUTH_PRIVATE_KEY_SECRET
-#   client_email: GOOGLE_OAUTH_CLIENT_EMAIL
+analytics: 
+  matomo_url: <%= ENV['matomo_url'] %> 
+  matomo_token: <%= ENV['matomo_token'] %> 
+  matomo_site_id: <%= ENV['matomo_site_id'] %> 
