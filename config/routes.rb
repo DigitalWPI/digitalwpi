@@ -39,5 +39,7 @@ Rails.application.routes.draw do
     end
   end
 
+  match 'show/:id' => 'common_objects#show', via: :get, as: 'common_object'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
