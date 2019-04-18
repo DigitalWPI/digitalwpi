@@ -1,0 +1,12 @@
+<h2>Log In</h2>
+
+<div id="central-login">
+  <p>If you have a <a href="https://its.wpi.edu/Article/Authenticating-to-WPI-Applications">WPI Central Login username</a>, you can use it to log in to Digital WPI.</p>
+  <p><%= link_to 'Log in using your WPI Central Login', '/users/auth/saml', class: 'btn btn-primary', style: 'font-size: larger' %></p>
+</div>
+
+<div id="local-login">
+  &nbsp;<br />
+  <h3>Other Users</h3>
+  <p>If you're not affiliated with WPI, but have been given an account for Digital WPI, you can <strong><%= link_to 'log in using a local account', new_user_session_path %></strong>.  To request an account, <a href="/contact">use the contact page</a>.</p>
+</div>

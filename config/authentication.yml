@@ -1,0 +1,11 @@
+development:
+  sso_enabled:  true
+  signups_enabled:  false
+
+test:
+  sso_enabled:  true
+  signups_enabled:  false
+
+production:
+  sso_enabled:  true
+  signups_enabled:  false

@@ -282,4 +282,15 @@ Devise.setup do |config|
   # When using OmniAuth, Devise cannot automatically set OmniAuth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
+
+  OneLogin::RubySaml::Attributes.single_value_compatibility = false
+  config.omniauth :saml,
+    idp_cert_fingerprint: ENV['SAML_IDP_CERT_FINGERPRINT'],
+    idp_sso_target_url: ENV['SAML_IDP_TARGET_URL'],
+    issuer: ENV['SAML_SP_ISSUER'],
+    single_value_compatibility: false,
+    attribute_statements: {
+      email: ['urn:oid:1.3.6.1.4.1.5923.1.1.1.6'],
+      name: ['urn:oid:2.16.840.1.113730.3.1.241'],
+    }
 end
