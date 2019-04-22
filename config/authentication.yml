@@ -1,10 +1,10 @@
 development:
-  sso_enabled:  true
-  signups_enabled:  false
+  sso_enabled: false 
+  signups_enabled:  true
 
 test:
   sso_enabled:  true
-  signups_enabled:  false
+  signups_enabled:  true
 
 production:
   sso_enabled:  true

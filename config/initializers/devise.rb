@@ -288,6 +288,8 @@ Devise.setup do |config|
     idp_cert_fingerprint: ENV['SAML_IDP_CERT_FINGERPRINT'],
     idp_sso_target_url: ENV['SAML_IDP_TARGET_URL'],
     issuer: ENV['SAML_SP_ISSUER'],
+    assertion_consumer_service_url: ENV['SAML_SERVICE_URL'],
+    name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
     single_value_compatibility: false,
     attribute_statements: {
       email: ['urn:oid:1.3.6.1.4.1.5923.1.1.1.6'],
