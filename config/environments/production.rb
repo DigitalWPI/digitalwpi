@@ -68,12 +68,15 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
   address: ENV['MAILSERVER'],
-  port: '587',
-  user_name: ENV['MAILUSER'],
-  password: ENV['MAILPASS'],
-  enable_starttls_auto: true
+  port: ENV['MAILPORT'] || '587'
   }
-  
+  if not ENV['MAILPASS'].nil? and not ENV['MAILPASS'].empty? # if there is a passphrase, add the auth stuff, otherwise F off
+    config.action_mailer.smtp_settings.merge!({
+      user_name: ENV['MAILUSER'],
+      password: ENV['MAILPASS'],
+      enable_starttls_auto: true
+    })
+  end
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
