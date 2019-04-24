@@ -11,11 +11,16 @@ class CallbacksController < Devise::OmniauthCallbacksController
     end
   end
 
+  def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
+  end
+
   private
 
     def retrieve_saml_attributes
       @omni = request.env["omniauth.auth"]
-      @email = use_uid_if_email_is_blank
+      @email = @omni.extra.raw_info.attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'][0]
     end
 
     def create_or_update_user
@@ -23,7 +28,6 @@ class CallbacksController < Devise::OmniauthCallbacksController
         update_saml_attributes if user_has_never_logged_in?
       else
         create_user
-        send_welcome_email
       end
     end
 
@@ -33,27 +37,13 @@ class CallbacksController < Devise::OmniauthCallbacksController
       flash[:notice] = "You are now signed in as #{@user.name} (#{@user.email})"
     end
 
-    def use_uid_if_email_is_blank
-      # If user has no email address use their sixplus2@uc.edu instead
-      # Some test accounts on QA/dev don't have email addresses
-      @email = if defined?(@omni.extra.raw_info.mail)
-                 if @omni.extra.raw_info.mail.presence || @omni.uid
-                   @omni.uid
-                 else
-                   @omni.extra.raw_info.mail
-                 end
-               else
-                 @omni.uid
-               end
-    end
-
     def user_exists?
-      @user = find_by_provider_and_uid
+      @user = find_by_provider_and_email
       return true unless @user.nil?
     end
 
-    def find_by_provider_and_uid
-      User.where(provider: @omni['provider'], uid: @omni['uid']).first
+    def find_by_provider_and_email
+      User.where(provider: @omni['provider'], email: @omni.extra.raw_info.attributes['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'][0]).first
     end
 
     def update_saml_attributes
@@ -68,16 +58,12 @@ class CallbacksController < Devise::OmniauthCallbacksController
       @user = User.create provider: @omni.provider,
                           uid: @omni.uid,
                           email: @email,
-                          password: Devise.friendly_token[0, 20]
-      update_user_saml_attributes
+                          password: Devise.friendly_token[0, 20],
+                          display_name: @omni.extra.raw_info.attributes['http://schemas.microsoft.com/identity/claims/displayname'][0]
     end
 
     def update_user_saml_attributes
-      @user.name         = @omni.extra.raw_info.userprincipalname
+      @user.name         = @omni.extra.raw_info.attributes['http://schemas.microsoft.com/identity/claims/displayname'][0]
       @user.save
-    end
-
-    def send_welcome_email
-      # WelcomeMailer.welcome_email(@user).deliver
     end
 end

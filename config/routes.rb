@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     concerns :searchable
   end
 
-  devise_for :users, controllers: { omniauth_callbacks: 'callbacks' }
+  devise_for :users, controllers: { omniauth_callbacks: 'callbacks', registrations: "registrations" }
   get 'login' => 'static#login'
 
   mount Hydra::RoleManagement::Engine => '/'
@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   authenticate :user, ->(u) { u.admin? } do
     mount Sidekiq::Web => 'sidekiq'
   end
-  
+
   mount Qa::Engine => '/authorities'
   mount Hyrax::Engine, at: '/'
   resources :welcome, only: 'index'
