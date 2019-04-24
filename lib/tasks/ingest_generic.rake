@@ -62,6 +62,7 @@ namespace :wpi do
       manifest_json = JSON.parse(mf.squish)
       item_attributes = manifest_json.dup
       item_attributes.delete('embargo')
+      item_attributes.delete('embargo_visibility')
       item_attributes.delete('embargo_release_date')
 
       # dc:rights
@@ -245,6 +246,8 @@ namespace :wpi do
     gww.apply_depositor_metadata(depositor)
     # set the attributes of the work
     # File.open('log.txt', 'w') { |file| file.write(item_attributes.inspect) }
+
+
     gww.attributes = item_attributes
     gww.visibility = if visibility_private
                        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
@@ -298,9 +301,25 @@ namespace :wpi do
     embargo_info['embargo'] = metadata['embargo'] == true ? true : false
     if embargo_info['embargo'] == true
       embargo_info['embargo_release_date'] = metadata['embargo_release_date'].nil? ? '2100-01-01' : metadata['embargo_release_date']
+      visibilities = []
+      metadata['embargo_visibility'].each do |item| 
+        if item == "public"
+          visibilities << Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        elsif item == "authenticated"
+          visibilities << Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+        else
+          visibilities << Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+        end
+      end
+      embargo_info['embargo_visibility'] = visibilities
+
+      if embargo_info['embargo_visibility'].length != 2
+        puts embargo_info['embargo_visibility']
+        raise "not the correct amount of visibilities were sent. got: #{embargo_visibility}"
+      end
     end
 
-    embargo_info
+    return embargo_info
   end
 
   def attach_files(work, primaryfile_path, otherfiles_list, depositor, embargo_attributes)
@@ -320,8 +339,8 @@ namespace :wpi do
       actor.attach_to_work(work)
       if embargo_attributes['embargo'] == true
         fs.apply_embargo(embargo_attributes['embargo_release_date'],
-                         Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,
-                         Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
+                         embargo_attributes['embargo_visibility'][0],
+                         embargo_attributes['embargo_visibility'][1])
       end
       fs.set_edit_groups(["content-admin"], [])
       fs.save
