@@ -178,8 +178,7 @@ puts "-------------------------------------------------------------"
 
 
 puts 'Create users for collection nesting ad hoc testing'
-user = create_user('foo@example.com', 'foobarbaz')
-banana_user = create_user('awscott@wpi.edu', 'aaaaaa')
+user = create_user('digital@wpi.edu', "change_me")
 
 
 
@@ -197,13 +196,14 @@ puts 'Create collections for collection nesting ad hoc testing'
 # pc = create_public_collection(user, nestable_gid, 'parent_nested', title: ['A Parent Collection'], description: ['Public collection that will be a parent of another collection.'])
 # cc = create_public_collection(user, nestable_gid, 'child_nested', title: ['A Child Collection'], description: ['Public collection that will be a child of another collection.'])
 # mqp = create_public_collection(user, nestable_gid, 'mqp', title: ['MQP'], description: ['MQPs ONLY'])
-special_collection = create_public_collection(user, nestable_gid, 'special_collection', title: ['SPECIAL COLLECTION'], description: ['special_collections ONLY'])
+special_collection = create_public_collection(user, nestable_gid, 'special_collection', title: ['Special Collection'], description: ['special_collections ONLY'])
 gps = create_public_collection(user, nestable_gid, 'gps', title: ['Great Problems Seminar'], description: ['GPS\'s ONLY'])
 iqp = create_public_collection(user, nestable_gid, 'iqp', title: ['IQP'], description: ['IQPs ONLY'])
 mqp = create_public_collection(user, nestable_gid, 'mqp', title: ['MQP'], description: ['MQPs ONLY'])
 etd = create_public_collection(user, nestable_gid, 'etd', title: ['Electronic Theses and Diessertation'], description: ['ETDs ONLY'])
 thes = create_public_collection(user, nestable_gid, 'thesis', title: ['Thesis'], description: ['Theses ONLY'])# and Diessertation
 diser = create_public_collection(user, nestable_gid, 'dissertation', title: ['Dissertation'], description: ['Dissertations ONLY'])
+
 
 Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: etd, child: thes)
 Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: etd, child: diser)
