@@ -83,7 +83,7 @@ RSpec.feature 'Create a Etd', js: false do
       expect(dl).not_to have_content('Subject')
       expect(dl).to have_content('Date')
       expect(dl).to have_content('Degree')
-      expect(dl).to have_content('Department')
+      expect(dl).to have_content('Unit')
     end
   end
 end
