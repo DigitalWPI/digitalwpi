@@ -97,4 +97,9 @@ class Rack::Attack
     # DOSed the site. Rack::Attack returns 403 for blocklists by default
     [ 503, {}, ['Blocked']]
   end
+
+  # allow requests from localhost
+  safelist('allow from localhost') do |req|
+    '127.0.0.1' == req.ip || '::1' == req.ip
+  end
 end
