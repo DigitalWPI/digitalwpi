@@ -29,7 +29,7 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
   config.action_mailer.perform_caching = false
-  
+
   config.action_mailer.default_url_options = { :host => ENV['SERVERNAME']}
   config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :smtp
@@ -57,5 +57,8 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Remove rack-attack so tests aren't rate limited
+  config.middleware.delete Rack::Attack
 
 end
