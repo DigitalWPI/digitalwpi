@@ -9,7 +9,7 @@ class Rack::Attack
   # whitelisting). It must implement .increment and .write like
   # ActiveSupport::Cache::Store
 
-  # Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
+  Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
 
   ### Throttle Spammy Clients ###
 
@@ -25,7 +25,7 @@ class Rack::Attack
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
   throttle('req/ip', limit: 300, period: 5.minutes) do |req|
-    req.ip # unless req.path.start_with?('/assets')
+    req.ip unless req.path.start_with?('/assets')
   end
 
   ### Prevent Brute-Force Login Attacks ###
@@ -41,7 +41,7 @@ class Rack::Attack
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
   throttle('logins/ip', limit: 5, period: 20.seconds) do |req|
-    if req.path == '/login' && req.post?
+    if req.path == '/users/sign_in' && req.post?
       req.ip
     end
   end
@@ -55,7 +55,7 @@ class Rack::Attack
   # denied, but that's not very common and shouldn't happen to you. (Knock
   # on wood!)
   throttle("logins/email", limit: 5, period: 20.seconds) do |req|
-    if req.path == '/login' && req.post?
+    if req.path == '/users/sign_in' && req.post?
       # return the email if present, nil otherwise
       req.params['email'].presence
     end
@@ -83,7 +83,7 @@ class Rack::Attack
   #        100 requests in 0.38 days (~250 requests/day)
   (1..5).each do |level|
     throttle("logins/ip/#{level}", :limit => (20 * level), :period => (8 ** level).seconds) do |req|
-      if req.path == '/login' && req.post?
+      if req.path == '/users/sign_in' && req.post?
         req.ip
       end
     end

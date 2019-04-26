@@ -60,5 +60,4 @@ Rails.application.configure do
 
   # Remove rack-attack so tests aren't rate limited
   config.middleware.delete Rack::Attack
-
 end
