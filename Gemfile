@@ -7,7 +7,7 @@ git_source(:github) do |repo_name|
 end
 group :production, :development, :test do
   # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-  gem 'rails', '~> 5.1.4'
+  gem 'rails', '~> 5.1.6.1'
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3', '~> 1.3.13'
   # Use Puma as the app server
@@ -49,7 +49,7 @@ group :production, :development, :test do
   gem 'jquery-rails'
   gem 'omniauth'
   gem 'omniauth-saml'
-  gem 'orcid', git: 'https://github.com/uclibs/orcid', branch: 'rails-5-1'
+  gem 'orcid', git: 'https://github.com/uclibs/orcid', branch: 'rails-5-1-6'
   gem 'riiif', '~> 2.0'
   gem 'rsolr', '>= 1.0'
   gem 'sidekiq'
