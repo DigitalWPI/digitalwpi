@@ -10,10 +10,10 @@ GIT
 
 GIT
   remote: https://github.com/samvera/hyrax.git
-  revision: 8e1bf359eb258bd46be34d9876ca8f767bc3f994
-  tag: v2.4.1
+  revision: e2e1487a320a765d2e57720bbcfd63eb47777156
+  tag: v2.5.0
   specs:
-    hyrax (2.4.1)
+    hyrax (2.5.0)
       active-fedora (~> 11.5, >= 11.5.2)
       almond-rails (~> 0.1)
       awesome_nested_set (~> 3.1)
@@ -32,7 +32,7 @@ GIT
       font-awesome-rails (~> 4.2)
       hydra-derivatives (~> 3.3)
       hydra-editor (>= 3.3, < 5.0)
-      hydra-head (>= 10.5.0)
+      hydra-head (>= 10.6.1)
       hydra-works (>= 0.16, < 2.0)
       iiif_manifest (>= 0.3, < 0.6)
       jquery-datatables-rails (~> 3.4)
@@ -926,6 +926,7 @@ DEPENDENCIES
   active_fedora-noid
   autometal-piwik (>= 1.0)
   bixby
+  bootstrap-sass (>= 3.4.1)
   byebug
   capistrano (~> 3.11)
   capistrano-rails (~> 1.3)
