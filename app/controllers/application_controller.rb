@@ -12,8 +12,7 @@ class ApplicationController < ActionController::Base
   with_themed_layout '1_column'
 
   protect_from_forgery with: :exception
-  skip_before_action :verify_authenticity_token
-
+  skip_before_action :verify_authenticity_token, only: :saml
   private
 
     # override devise helper and route to CC.new when parameter is set
