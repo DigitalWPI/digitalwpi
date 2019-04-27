@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181019163042) do
+ActiveRecord::Schema.define(version: 20190427045014) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -86,6 +86,20 @@ ActiveRecord::Schema.define(version: 20181019163042) do
     t.index ["parent_id"], name: "index_curation_concerns_operations_on_parent_id"
     t.index ["rgt"], name: "index_curation_concerns_operations_on_rgt"
     t.index ["user_id"], name: "index_curation_concerns_operations_on_user_id"
+  end
+
+  create_table "devise_multi_auth_authentications", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "provider", null: false
+    t.string "uid", null: false
+    t.string "access_token"
+    t.string "refresh_token"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expires_at"], name: "index_devise_multi_auth_authentications_on_expires_at"
+    t.index ["provider", "uid"], name: "index_devise_multi_auth_authentications_on_provider_and_uid", unique: true
+    t.index ["user_id"], name: "index_devise_multi_auth_authentications_on_user_id"
   end
 
   create_table "featured_works", force: :cascade do |t|
