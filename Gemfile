@@ -7,9 +7,9 @@ git_source(:github) do |repo_name|
 end
 group :production, :development, :test do
   # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-  gem 'rails', '~> 5.1.4'
+  gem 'rails', '~> 5.1.6.1'
   # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.3.13'
   # Use Puma as the app server
   gem 'puma', '~> 3.7'
   # Use SCSS for stylesheets
@@ -41,16 +41,17 @@ group :production, :development, :test do
 
   gem 'active_attr'
   gem 'active_fedora-noid'
-  gem 'devise'
+  gem "bootstrap-sass", ">= 3.4.1"
+  gem "devise", ">= 4.6.0"
   gem 'devise-guests', '~> 0.6'
-  gem 'devise-multi_auth', git: 'https://github.com/uclibs/devise-multi_auth', branch: 'rails-5-1'
+  gem 'devise-multi_auth', git: 'https://github.com/DigitalWPI/devise-multi_auth', branch: 'rails-5-1'
   gem 'hydra-role-management'
-  gem 'hyrax', git: 'https://github.com/samvera/hyrax.git', tag: 'v2.4.1'
-  gem 'honeybadger', '~> 4.0'
+  gem 'hyrax', git: 'https://github.com/samvera/hyrax.git', tag: 'v2.5.0'
   gem 'jquery-rails'
   gem 'omniauth'
   gem 'omniauth-saml'
-  gem 'orcid', git: 'https://github.com/uclibs/orcid', branch: 'rails-5-1'
+  gem 'orcid', git: 'https://github.com/uclibs/orcid', branch: 'rails-5-1-6'
+  gem 'honeybadger', '~> 4.0'
   gem 'rack-attack'
   gem 'riiif', '~> 2.0'
   gem 'rsolr', '>= 1.0'
