@@ -46,6 +46,7 @@ group :production, :development, :test do
   gem 'devise-multi_auth', git: 'https://github.com/uclibs/devise-multi_auth', branch: 'rails-5-1'
   gem 'hydra-role-management'
   gem 'hyrax', git: 'https://github.com/samvera/hyrax.git', tag: 'v2.4.1'
+  gem 'honeybadger', '~> 4.0'
   gem 'jquery-rails'
   gem 'omniauth'
   gem 'omniauth-saml'
