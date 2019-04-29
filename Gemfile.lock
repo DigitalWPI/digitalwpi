@@ -400,6 +400,7 @@ GEM
       concurrent-ruby (~> 1.0)
     hashie (3.6.0)
     hiredis (0.6.3)
+    honeybadger (4.2.2)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -628,6 +629,8 @@ GEM
       rails (~> 5.0)
       rdf
     rack (2.0.7)
+    rack-attack (6.0.0)
+      rack (>= 1.0, < 3)
     rack-protection (2.0.5)
       rack
     rack-test (1.1.0)
@@ -940,6 +943,7 @@ DEPENDENCIES
   faker
   fcrepo_wrapper
   ffaker
+  honeybadger (~> 4.0)
   hydra-role-management
   hyrax!
   jbuilder (~> 2.5)
@@ -951,6 +955,7 @@ DEPENDENCIES
   omniauth-saml
   orcid!
   puma (~> 3.7)
+  rack-attack
   rails (~> 5.1.6.1)
   riiif (~> 2.0)
   rsolr (>= 1.0)

@@ -51,6 +51,8 @@ group :production, :development, :test do
   gem 'omniauth'
   gem 'omniauth-saml'
   gem 'orcid', git: 'https://github.com/uclibs/orcid', branch: 'rails-5-1-6'
+  gem 'honeybadger', '~> 4.0'
+  gem 'rack-attack'
   gem 'riiif', '~> 2.0'
   gem 'rsolr', '>= 1.0'
   gem 'sidekiq'
