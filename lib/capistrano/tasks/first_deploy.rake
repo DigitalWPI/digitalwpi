@@ -89,4 +89,14 @@ namespace :deploy do
 			end
 		end			
 	end
+	desc "bundle exec honeybadger install $HONEYBADGER_API_KEY"
+	task :honey do
+		on roles(:app) do
+			within release_path do #release_path is current path to our released project on the remote surver. 
+				with rails_env: fetch(:rails_env) do
+					execute(:bundle, :exec, :honeybadger, :install, "$HONEYBADGER_API_KEY")
+				end
+			end
+		end			
+	end
 end
