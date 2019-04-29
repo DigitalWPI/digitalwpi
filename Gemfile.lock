@@ -633,6 +633,8 @@ GEM
       rails (~> 5.0)
       rdf
     rack (2.0.6)
+    rack-attack (6.0.0)
+      rack (>= 1.0, < 3)
     rack-protection (2.0.4)
       rack
     rack-test (1.1.0)
@@ -953,6 +955,7 @@ DEPENDENCIES
   omniauth-saml
   orcid!
   puma (~> 3.7)
+  rack-attack
   rails (~> 5.1.4)
   riiif (~> 2.0)
   rsolr (>= 1.0)
