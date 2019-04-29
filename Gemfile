@@ -48,6 +48,7 @@ group :production, :development, :test do
   gem 'hydra-role-management'
   gem 'hyrax', git: 'https://github.com/samvera/hyrax.git', tag: 'v2.5.0'
   gem 'jquery-rails'
+  gem 'lograge'
   gem 'omniauth'
   gem 'omniauth-saml'
   gem 'orcid', git: 'https://github.com/uclibs/orcid', branch: 'rails-5-1-6'
