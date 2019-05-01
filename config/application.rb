@@ -17,5 +17,6 @@ module DigitalWpi
     # -- all .rb files in that directory are automatically loaded.
 
     config.middleware.use Rack::Attack
+    config.eager_load_paths << Rails.root.join('lib')
   end
 end
