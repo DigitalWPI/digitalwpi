@@ -554,6 +554,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
+    logstash-event (1.2.02)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -958,6 +959,7 @@ DEPENDENCIES
   launchy
   listen (>= 3.0.5, < 3.2)
   lograge
+  logstash-event
   mysql2 (< 0.5)
   omniauth
   omniauth-saml

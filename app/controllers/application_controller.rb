@@ -30,4 +30,9 @@ class ApplicationController < ActionController::Base
     def parameter_set?
       session['user_return_to'] == '/'
     end
+
+    def append_info_to_payload(payload)
+      super
+      payload[:host] = request.host
+    end
 end
