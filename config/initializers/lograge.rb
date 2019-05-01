@@ -5,6 +5,13 @@ Rails.application.configure do
   config.lograge.keep_original_rails_log = true
   config.lograge.logger = ActiveSupport::Logger.new "#{Rails.root}/log/lograge_#{Rails.env}.log"
   config.lograge.custom_options = lambda do |event|
-    { time: Time.now }
+    {
+      time: Time.now,
+      remote_ip: event.payload[:remote_ip],
+      params: event.payload[:params].except('controller', 'action', 'format', 'utf8'),
+      user_id: event.payload[:user_id],
+      organization_id: event.payload[:organization_id],
+      referer: event.payload[:referer]
+    }
   end
 end
