@@ -8,9 +8,8 @@ Rails.application.configure do
     {
       time: Time.now,
       remote_ip: event.payload[:remote_ip],
-      params: event.payload[:params].except('controller', 'action', 'format', 'utf8'),
+      params: event.payload[:params],
       user_id: event.payload[:user_id],
-      organization_id: event.payload[:organization_id],
       referer: event.payload[:referer]
     }
   end

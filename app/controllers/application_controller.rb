@@ -36,8 +36,6 @@ class ApplicationController < ActionController::Base
       payload[:host] = request.host
       payload[:remote_ip] = request.remote_ip
       payload[:user_id] = current_user.try(:id)
-      payload[:organization_id] = current_organization.try(:id)
-      payload[:app] = current_organization.name
       payload[:referer] = request.referer.to_s
       payload[:request_id] = request.uuid
       payload[:user_agent] = request.user_agent
