@@ -222,6 +222,11 @@ GEM
       bootstrap-sass (~> 3.0)
       openseadragon (>= 0.2.0)
       rails
+    blazer (2.0.1)
+      activerecord (>= 4.2)
+      chartkick
+      railties (>= 4.2)
+      safely_block (>= 0.1.1)
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
@@ -267,6 +272,7 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
+    chartkick (3.0.2)
     childprocess (1.0.1)
       rake (< 13.0)
     clipboard-rails (1.7.1)
@@ -957,6 +963,7 @@ DEPENDENCIES
   ahoy_matey
   autometal-piwik (>= 1.0)
   bixby
+  blazer
   bootstrap-sass (>= 3.4.1)
   byebug
   capistrano (~> 3.11)

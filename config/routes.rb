@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
   authenticate :user, ->(u) { u.admin? } do
     mount Sidekiq::Web => 'sidekiq'
+    mount Blazer::Engine, at: "blazer"
   end
 
   mount Qa::Engine => '/authorities'
