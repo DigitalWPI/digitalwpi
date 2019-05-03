@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class User < ApplicationRecord
+  has_many :visits, class_name: "Ahoy::Visit"
   # Connects this user object to Hydra behaviors.
   include Hydra::User
   # Connects this user object to Role-management behaviors.

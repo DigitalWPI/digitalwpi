@@ -13,6 +13,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
   skip_before_action :verify_authenticity_token, only: :saml
+  skip_before_action :track_ahoy_visit
+
   private
 
     # override devise helper and route to CC.new when parameter is set
@@ -39,5 +41,9 @@ class ApplicationController < ActionController::Base
       payload[:request_id] = request.uuid
       payload[:user_agent] = request.user_agent
       payload[:xhr] = request.xhr? ? 'true' : 'false'
+    end
+
+    def track_action
+      ahoy.track "Ran action", request.path_parameters
     end
 end

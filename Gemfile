@@ -41,6 +41,7 @@ group :production, :development, :test do
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'active_attr'
   gem 'active_fedora-noid'
+  gem 'ahoy_matey'
   gem "bootstrap-sass", ">= 3.4.1"
   gem "devise", ">= 4.6.0"
   gem 'devise-guests', '~> 0.6'

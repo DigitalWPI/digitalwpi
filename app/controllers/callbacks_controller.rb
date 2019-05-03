@@ -35,6 +35,7 @@ class CallbacksController < Devise::OmniauthCallbacksController
       sign_in_and_redirect @user, event: :authentication # this will throw if @user is not activated
       cookies[:login_type] = "saml"
       flash[:notice] = "You are now signed in as #{@user.name} (#{@user.email})"
+      ahoy.track '#{@user.email} User sign in'
     end
 
     def user_exists?
@@ -60,6 +61,7 @@ class CallbacksController < Devise::OmniauthCallbacksController
                           email: @email,
                           password: Devise.friendly_token[0, 20],
                           display_name: @omni.extra.raw_info.attributes['http://schemas.microsoft.com/identity/claims/displayname'][0]
+      ahoy.track "New User, with Email: #{@user.email} created"
     end
 
     def update_user_saml_attributes
