@@ -34,7 +34,7 @@ class GenericWork < ActiveFedora::Base
   end
 
   property :year, predicate: "http://purl.org/dc/terms/date", multiple: false do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :facetable
   end
 
   property :extent, predicate: "http://purl.org/dc/terms/extent" do |index|
