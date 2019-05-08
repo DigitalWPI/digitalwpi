@@ -34,7 +34,7 @@ class Etd < ActiveFedora::Base
   end
 
   property :year, predicate: "http://purl.org/dc/terms/date", multiple: false do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :facetable
   end
 
   property :funding, predicate: "http://vivoweb.org/ontology/core#FundingOrganization" do |index|
