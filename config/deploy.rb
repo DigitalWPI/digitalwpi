@@ -8,6 +8,7 @@ set :repo_url, "https://github.com/DigitalWPI/digitalwpi.git"
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 set :branch, ENV.fetch('REVISION', 'master')
 
+
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, "/var/#{my_app_name}"
 

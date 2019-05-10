@@ -74,7 +74,7 @@ namespace :deploy do
 	task :bundle_install do
 		on roles(:app) do
 			within release_path do #release_path is current path to our released project on the remote surver. 
-				execute(:bundle, :install, "--path vendor/bundle")
+				execute(:bundle, :install, "--path vendor/bundle", "--without development")
 				# execute(:rails,"db:migrate")
 			end
 		end			
