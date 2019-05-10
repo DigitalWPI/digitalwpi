@@ -967,6 +967,7 @@ DEPENDENCIES
   puma (~> 3.7)
   rack-attack
   rails (~> 5.1.6.1)
+  redis (~> 4.0)
   riiif (~> 2.0)
   rsolr (>= 1.0)
   rspec-activemodel-mocks
