@@ -38,7 +38,7 @@ group :production, :development, :test do
   gem 'factory_bot_rails' # #comment from besss: Needed so we can load fixtures for demos in production
   gem 'faker' # #comment from besss: Needed so we can load fixtures for demos in production
   gem 'ffaker'
-
+  gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'active_attr'
   gem 'active_fedora-noid'
   gem "bootstrap-sass", ">= 3.4.1"
@@ -81,7 +81,6 @@ end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
