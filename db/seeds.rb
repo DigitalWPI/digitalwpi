@@ -117,17 +117,16 @@ puts "---------------------------------"
 puts " Create seeded objects for QA"
 puts "---------------------------------"
 puts 'Create users for QA'
-create_user('mgr1@example.com', 'pppppp') # 6*p
-create_user('mgr2@example.com', 'pppppp')
-create_user('dep1@example.com', 'pppppp')
-create_user('dep2@example.com', 'pppppp')
-create_user('vw1@example.com', 'pppppp')
-create_user('vw2@example.com', 'pppppp')#archivist1@example.com
-create_user('archivist1@example.com', 'pppppp')#archivist1@example.com
-genuser = create_user('general_user@example.com', 'pppppp')
 
-puts "Create Groups for QA"
+
+depuser = create_user('depositor@wpi.edu', 'this is so secret!')
+user = create_user('digital@wpi.edu', "change_me")
+
+puts "creating some stock users and adding them to some sort of admin role, also change the passwords or ill get sick"
 admin_role = Role.find_or_create_by(name: "admin")
+admin_role.users << user
+admin_role.users << depuser
+
 studentwork_permission_role = Role.create(name: "StudentWork_permission")
 genericwork_permission_role = Role.create(name: "GenericWork_permission")
 etd_permission_role =         Role.create(name: "Etd_permission")
@@ -146,39 +145,8 @@ puts 'Create collection types for QA not really tho'
 # _empty_gid = create_collection_type('empty_collection_type', title: 'Test Empty Collection Type', description: 'A collection type with 0 collections of this type').gid
 # inuse_gid = create_collection_type('inuse_collection_type', title: 'Test In-Use Collection Type', description: 'A collection type with at least one collection of this type').gid
 
-puts 'Create collections for QA'
-# inuse_col = create_public_collection(genuser, inuse_gid, 'inuse_col1', title: ['Public Collection of type In-Use'], description: ['Public collection of the type Test In-Use Collection Type.'])
-
-# puts 'create works for QA'
-# 3.times do |i|
-#   create_public_work(genuser, "qa_pu_gw_#{i}",
-#                      title: ["QA Public #{i}"],
-#                      description: ["Public work #{i} for QA testing"],
-#                      creator: ['Joan Smith'], keyword: ['test'], rights_statement: 'http://rightsstatements.org/vocab/InC/1.0/',
-#                      member_of_collections_attributes: collection_attributes_for([inuse_col.id]))
-# end
-# 2.times do |i|
-#   create_authenticated_work(genuser, "qa_auth_gw_#{i}",
-#                             title: ["QA Authenticated #{i}"],
-#                             description: ["Authenticated work #{i} for QA testing"],
-#                             creator: ['John Smith'], keyword: ['test'], rights_statement: 'http://rightsstatements.org/vocab/InC/1.0/',
-#                             member_of_collections_attributes: collection_attributes_for([inuse_col.id]))
-# end
-# 1.times do |i|
-#   create_private_work(genuser, "qa_priv_gw_#{i}",
-#                       title: ["QA Private #{i}"],
-#                       description: ["Proviate work #{i} for QA testing"],
-#                       creator: ['Jean Smith'], keyword: ['test'], rights_statement: 'http://rightsstatements.org/vocab/InC/1.0/',
-#                       member_of_collections_attributes: collection_attributes_for([inuse_col.id]))
-# end
-
-puts "-------------------------------------------------------------"
-puts " Create seeded objects for collection nesting ad hoc testing"
-puts "-------------------------------------------------------------"
-
-
 puts 'Create users for collection nesting ad hoc testing'
-user = create_user('digital@wpi.edu', "change_me")
+
 
 
 
@@ -198,17 +166,30 @@ puts 'Create collections for collection nesting ad hoc testing'
 # mqp = create_public_collection(user, nestable_gid, 'mqp', title: ['MQP'], description: ['MQPs ONLY'])
 special_collection = create_public_collection(user, nestable_gid, 'special_collection', title: ['Special Collection'], description: ['special_collections ONLY'])
 gps = create_public_collection(user, nestable_gid, 'gps', title: ['Great Problems Seminar'], description: ['GPS\'s ONLY'])
+gps.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
+gps.save()
 iqp = create_public_collection(user, nestable_gid, 'iqp', title: ['IQP'], description: ['IQPs ONLY'])
+iqp.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
+iqp.save()
 mqp = create_public_collection(user, nestable_gid, 'mqp', title: ['MQP'], description: ['MQPs ONLY'])
+mqp.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
+mqp.save()
 etd = create_public_collection(user, nestable_gid, 'etd', title: ['Electronic Theses and Diessertation'], description: ['ETDs ONLY'])
 thes = create_public_collection(user, nestable_gid, 'thesis', title: ['Thesis'], description: ['Theses ONLY'])# and Diessertation
+thes.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
+thes.save()
+thes_r = create_public_collection(user, nestable_gid, 'masters_report', title: ['Masters Report'], description: ['Fake Theses ONLY'])# and Diessertation
+thes_r.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
+thes_r.save()
 diser = create_public_collection(user, nestable_gid, 'dissertation', title: ['Dissertation'], description: ['Dissertations ONLY'])
-
+diser.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
+diser.save()
+diser_r = create_public_collection(user, nestable_gid, 'phd_report', title: ['PhD Report'], description: ['Wannabe Dissertations ONLY'])
+diser_r.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
+diser_r.save()
 
 Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: etd, child: thes)
 Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: etd, child: diser)
-
-
-puts "Adding Users to Groups in CanCan"
-admin_role.users << user
+Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: etd, child: thes_r)
+Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(parent: etd, child: diser_r)
 
