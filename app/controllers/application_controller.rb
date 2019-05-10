@@ -29,4 +29,15 @@ class ApplicationController < ActionController::Base
     def parameter_set?
       session['user_return_to'] == '/'
     end
+
+    def append_info_to_payload(payload)
+      super
+      payload[:host] = request.host
+      payload[:remote_ip] = request.remote_ip
+      payload[:user_id] = current_user.try(:id)
+      payload[:referer] = request.referer.to_s
+      payload[:request_id] = request.uuid
+      payload[:user_agent] = request.user_agent
+      payload[:xhr] = request.xhr? ? 'true' : 'false'
+    end
 end
