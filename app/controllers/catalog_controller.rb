@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
+
+  include BlacklightRangeLimit::ControllerOverride
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior
 
@@ -56,7 +58,7 @@ class CatalogController < ApplicationController
     config.add_facet_field solr_name("degree", :facetable), label: "Degree", limit: 5
     config.add_facet_field solr_name("department", :facetable), label: "Unit", limit: 5
     config.add_facet_field solr_name("sponsor", :facetable), label: "Sponsor", limit: 5
-    config.add_facet_field solr_name("year", :facetable), label: "Year", limit: 5
+    config.add_facet_field solr_name("year", :facetable), label: "Year", range: true
     config.add_facet_field solr_name("center", :facetable), label: "Center", limit: 5
 
 

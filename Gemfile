@@ -42,7 +42,8 @@ group :production, :development, :test do
   gem 'active_attr'
   gem 'active_fedora-noid'
   gem "bootstrap-sass", ">= 3.4.1"
-  gem "devise", ">= 4.6.0"
+  gem "blacklight_range_limit"
+  gem 'devise'
   gem 'devise-guests', '~> 0.6'
   gem 'devise-multi_auth', git: 'https://github.com/DigitalWPI/devise-multi_auth', branch: 'rails-5-1'
   gem 'hydra-role-management'

@@ -2,6 +2,7 @@
 
 require 'sidekiq/web'
 Rails.application.routes.draw do
+  concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
 
@@ -9,6 +10,8 @@ Rails.application.routes.draw do
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
     concerns :searchable
+    concerns :range_searchable
+
   end
 
   devise_for :users, controllers: { omniauth_callbacks: 'callbacks', registrations: "registrations" }
