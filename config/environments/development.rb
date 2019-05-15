@@ -28,7 +28,7 @@ Rails.application.configure do
   end
 
   # Execute jobs immediately inline rather than executing them in the background
-  config.active_job.queue_adapter = :inline
+  config.active_job.queue_adapter = :sidekiq
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
