@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190427045014) do
+ActiveRecord::Schema.define(version: 20190523143551) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -100,6 +100,16 @@ ActiveRecord::Schema.define(version: 20190427045014) do
     t.index ["expires_at"], name: "index_devise_multi_auth_authentications_on_expires_at"
     t.index ["provider", "uid"], name: "index_devise_multi_auth_authentications_on_provider_and_uid", unique: true
     t.index ["user_id"], name: "index_devise_multi_auth_authentications_on_user_id"
+  end
+
+  create_table "eproject_records", force: :cascade do |t|
+    t.string "eprojects_id"
+    t.string "work_id"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["eprojects_id"], name: "index_eproject_records_on_eprojects_id"
+    t.index ["work_id"], name: "index_eproject_records_on_work_id"
   end
 
   create_table "featured_works", force: :cascade do |t|
