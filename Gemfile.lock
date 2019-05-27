@@ -401,6 +401,7 @@ GEM
     hashie (3.6.0)
     hiredis (0.6.3)
     honeybadger (4.2.2)
+    honeypot-captcha (1.0.1)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -952,6 +953,7 @@ DEPENDENCIES
   fcrepo_wrapper
   ffaker
   honeybadger (~> 4.0)
+  honeypot-captcha
   hydra-role-management
   hyrax!
   jbuilder (~> 2.5)
