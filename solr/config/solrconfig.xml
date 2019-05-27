@@ -198,7 +198,22 @@
     </arr>
   </requestHandler>
 
-<!-- Spell Check
+  <requestHandler name="/replication" class="solr.ReplicationHandler">
+    <lst name="master">
+      <str name="replicateAfter">optimize</str>
+      <str name="backupAfter">optimize</str>
+      <str name="confFiles">schema.xml,stopwords.txt,elevate.xml</str>
+      <str name="commitReserveDuration">00:00:10</str>
+    </lst>
+    <int name="maxNumberOfBackups">2</int>
+    <lst name="invariants">
+      <str name="maxWriteMBPerSec">16</str>
+    </lst>
+  </requestHandler>
+  
+  
+  
+  <!-- Spell Check
 
         The spell check component can return a list of alternative spelling
         suggestions.  
