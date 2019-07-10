@@ -12,7 +12,7 @@
 <%= presenter.attribute_to_html(:alternate_title, html_dl: true) %>
 <%= presenter.attribute_to_html(:award, render_as: :faceted, html_dl:true ) %>
 <%= presenter.attribute_to_html(:includes, render_as: :faceted, html_dl:true ) %>
-<%= presenter.attribute_to_html(:advisor, render_as: :Linked, search_field: :advisor, html_dl:true) %>
+<%= presenter.attribute_to_html(:advisor, render_as: :faceted, search_field: :advisor, html_dl:true) %>
 <%= presenter.attribute_to_html(:orcid, render_as: :Linked, search_field: :orcid, html_dl:true ) %>
 <%= presenter.attribute_to_html(:committee, render_as: :Linked, search_field: :committee, html_dl:true ) %>
 <%= presenter.attribute_to_html(:defense_date, render_as: :faceted, html_dl:true ) %>
