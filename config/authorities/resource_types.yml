@@ -25,6 +25,8 @@ terms:
     term: Masters Thesis
   - id: Part of Book
     term: Part of Book
+  - id: Phd Report
+    term: Phd Report
   - id: Poster
     term: Poster
   - id: Presentation
@@ -37,7 +39,10 @@ terms:
     term: Research Paper
   - id: Software or Program Code
     term: Software or Program Code
+  - id: Thesis
+    term: Thesis
   - id: Video
     term: Video
   - id: Other
     term: Other
+
