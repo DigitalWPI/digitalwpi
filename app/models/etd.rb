@@ -22,7 +22,7 @@ class Etd < ActiveFedora::Base
   end
 
   property :advisor, predicate: "http://id.loc.gov/vocabulary/relators/ths" do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :facetable
   end
 
   property :sponsor, predicate: "http://id.loc.gov/vocabulary/relators/spn" do |index|
