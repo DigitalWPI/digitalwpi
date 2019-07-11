@@ -47,6 +47,7 @@ group :production, :development, :test do
   gem 'devise-multi_auth', git: 'https://github.com/DigitalWPI/devise-multi_auth', branch: 'rails-5-1'
   gem 'hydra-role-management'
   gem 'hyrax', git: 'https://github.com/samvera/hyrax.git', tag: 'v2.5.0'
+  gem 'honeypot-captcha'
   gem 'jquery-rails'
   gem 'lograge'
   gem 'logstash-event'
