@@ -68,7 +68,7 @@ Hyrax.config do |config|
   # config.temp_file_base = '/home/developer1'
 
   # Hostpath to be used in Endnote exports
-  # config.persistent_hostpath = 'http://localhost/files/'
+  config.persistent_hostpath = 'https://' + ENV["SERVERNAME"] + '/show/'
 
   # If you have ffmpeg installed and want to transcode audio and video set to true
   config.enable_ffmpeg = true
@@ -205,7 +205,7 @@ Hyrax.config do |config|
   # If you use a multi-server architecture, this MUST be a shared volume.
   # config.working_path = Rails.root.join( 'tmp', 'uploads')
   config.working_path = Pathname.new(ENV["NFS_DIR"]+ '/')  + 'rails' + 'uploads'
-  
+
   # Should the media display partial render a download link?
   # config.display_media_download_link = true
 
