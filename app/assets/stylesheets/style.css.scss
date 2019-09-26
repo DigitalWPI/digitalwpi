@@ -1,0 +1,67 @@
+.image-masthead{
+    height:489px;
+}
+
+.background-container{
+    background-image: url(asset_path("TestBackground@2x.png")) !important;
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+}
+
+.site-title-container{
+    height: 100%;
+    background: #4f6272ba;
+    z-index: 10000;
+    position: relative;
+    width: 100%;
+}
+
+.navbar.navbar-default.navbar-static-top{
+    height: 100%;
+    width:100%;
+    position: absolute;
+    top: 0;
+    z-index: 1000000000;
+    background: none;
+
+    .container-fluid{
+        width:100%;
+        .nav.navbar-nav.col-sm-5{
+            width:20%;
+            float:right;
+            li.active{
+                a{
+                background:none;
+                color:#ccc;
+                font-weight: 900;
+                }
+            }
+        }
+    }
+
+    .searchbar-right.navbar-right.col-sm-7{
+        position: absolute;
+        width: 860px;
+        height: 50px;
+        top: 50%;
+        left: 50%;
+        margin-left: -430px;
+        margin-top: -25px;
+
+        &:before{
+            content: "Explore, Discover, Share";
+            width: 100%;
+            display: inline-block;
+            text-align: center;
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+    }
+
+}
+
+
+.site-footer{
+    background: #222;
+    height: 100px;
+}
