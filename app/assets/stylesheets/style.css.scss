@@ -1,3 +1,11 @@
+$color-black-1: #353535;
+$color-blue-1: #607A96;
+$color-black: #000;
+$color-red: #AC2B37;
+$color-gray: #A9B0B7;
+$color-dark-gray: #707070;
+$color-red: #FF0000;
+
 .image-masthead{
     height:489px;
 }
@@ -62,6 +70,17 @@
 
 
 .site-footer{
-    background: #222;
+    background-color: #353535;
     height: 100px;
 }
+
+
+/*overriding*/
+
+
+#search-submit-header{
+    background-color:#AC2B37;
+    border-color:#AC2B37;
+}
+
+
