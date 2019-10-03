@@ -10,6 +10,7 @@
       <%= link_to "Skip to Content", "#skip-to-content" %>
     </div>
     <%= content_for(:navbar) %>
+    <%= render 'shared/slider' if controller_name == 'homepage' %>
     <%= content_for(:precontainer_content) %>
     <div id="content-wrapper" class="container" role="main">
       <%= render '/flash_msg' %>
@@ -21,7 +22,6 @@
           </div>
         </div>
       <% end %>
-
         <a name="skip-to-content" id="skip-to-content"></a>
         <%= content_for?(:content) ? yield(:content) : yield %>
 

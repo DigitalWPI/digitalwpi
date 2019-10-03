@@ -7,45 +7,67 @@ $color-dark-gray: #707070;
 $color-red: #FF0000;
 
 .image-masthead{
-    height:489px;
-}
-
-.background-container{
+    height:480px;
+    margin-bottom:0px;
+    border-bottom:none;
     background-image: url(asset_path("TestBackground@2x.png")) !important;
     background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover; /* Resize the background image to cover the entire container */
+
+    &:before{
+        content:"";
+        height: 100%;
+        background: #4f6272ba;
+        z-index: 0;
+        position: relative;
+        width: 100%;
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    &.shortstack{
+        height: 250px;
+        .large-header-nav{
+            margin-top: 80px;
+        }
+        
+    }
 }
 
-.site-title-container{
-    height: 100%;
-    background: #4f6272ba;
-    z-index: 10000;
-    position: relative;
-    width: 100%;
+#logo{
+    color:white;
+    font-size: 45px;
+    span{
+        color:white;
+        display: inline-block;
+        position: relative;
+    }
+}
+
+.large-header-nav{
+    margin-top: 175px;
 }
 
 .navbar.navbar-default.navbar-static-top{
-    height: 100%;
-    width:100%;
-    position: absolute;
-    top: 0;
-    z-index: 1000000000;
     background: none;
+    border:none;
 
-    .container-fluid{
-        width:100%;
-        .nav.navbar-nav.col-sm-5{
-            width:20%;
-            float:right;
+ 
+        .nav.navbar-nav{
+            font-size: 20px;
+            margin-top: 10px;
+            font-size: 20px;
             li.active{
                 a{
                 background:none;
-                color:#ccc;
+                color:white;
                 font-weight: 900;
                 }
             }
         }
-    }
+    
 
     .searchbar-right.navbar-right.col-sm-7{
         position: absolute;
@@ -72,6 +94,10 @@ $color-red: #FF0000;
 .site-footer{
     background-color: #353535;
     height: 100px;
+
+    .text-right{
+        color:#ddd;
+    }
 }
 
 
@@ -82,5 +108,49 @@ $color-red: #FF0000;
     background-color:#AC2B37;
     border-color:#AC2B37;
 }
+
+
+
+
+//slide show overides
+.carousel-inner > .item > img, .carousel-inner > .item > a > img{
+    width:100%;
+}
+
+.carousel-caption{
+    background: #ffffffc2;
+    text-align: left;
+    padding: 20px;
+    box-shadow: 0px 3px 6px -4px #525252;
+
+    @media screen and (min-width: 768px){
+        width: 35%;
+        bottom: 100px;
+    }
+
+    h3{
+        color: #AC2B37;
+        background: none;
+        text-shadow: none;
+        margin-top: 10px;
+    }
+
+    p{
+        font-size: 18px;
+        text-shadow: none;
+        color: #333;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
