@@ -52,9 +52,6 @@ $color-red: #FF0000;
     }
 }
 
-.large-header-nav{
-    margin-top: 175px;
-}
 
 .navbar.navbar-default.navbar-static-top{
     background: none;
@@ -117,7 +114,17 @@ $color-red: #FF0000;
 }
 
 
-
+.search-holder{
+    margin-top:120px;
+    h3{
+    ext-align: center;
+    margin-bottom: 30px;
+    color: white;
+    font-size: 40px;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    }
+}
 
 //slide show overides
 
