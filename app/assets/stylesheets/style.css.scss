@@ -172,11 +172,101 @@ $color-red: #FF0000;
 
 
 
+.content-wrapper{
+    margin-top:50px;
+}
+
+
+
+/// search screen styles
+
+
+#sort-dropdown .dropdown-toggle, #per_page-dropdown .dropdown-toggle {
+	background: #AC2B37;
+	color: white;
+	border: none;
+	border-radius: 7px;
+	box-shadow: none;
+}
+
+#sort-dropdown .dropdown-toggle .caret, #per_page-dropdown .dropdown-toggle .caret {
+	color: white;
+}
+
+
+.search-result-wrapper {
+	border-bottom: 1px solid #AC2B37;;
+}
+
+
+
+#sortAndPerPage, .pagination-search-widgets {
+	border-bottom: 1px solid #AC2B37;
+	padding-bottom: 5px;
+}
+
+
+.panel-group .panel {
+	border: none;
+	border-bottom: 1px solid #AC2B37;
+	border-radius: 0px;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+}
+
+
+
+.panel-heading{
+	color: #AC2B37;
+}
+
+.top-panel-heading.panel-heading .facets-heading{
+	font-size:28px;
+	font-weight: 400;
+}
+
+
+div.facets h3{
+	color: #4F6272;
+	border: none;
+}
+
+
+
+.panel-default > .panel-heading{
+	border: none;
+	box-shadow: none;
+	border-bottom: none;
+}
+
+
+
+
+.panel-title > a, .panel-title > small, .panel-title > .small, .panel-title > small > a, .panel-title > .small > a{
+	border: none;
+}
 
 
 
 
 
+.panel-group .panel-heading + .panel-collapse > .panel-body, .panel-group .panel-heading + .panel-collapse > .list-group{
+	border-top: none;
+}
+
+a{
+	color:#4F6272;
+}
+
+
+.container{
+	padding-top: 25px;
+}
+
+.text-success, .facet-values li .selected {
+    color: #335273;
+    font-weight: 800;
+}
 
 
 
