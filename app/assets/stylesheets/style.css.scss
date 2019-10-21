@@ -255,7 +255,7 @@ div.facets h3{
 }
 
 a{
-	color:#4F6272;
+	color:#4F6272 !important;
 }
 
 
@@ -269,5 +269,18 @@ a{
 }
 
 
+span.appliedFilter .remove {
+    color: #fff;
+    background-color: #AC2B37;
+    border-color: #AC2B37;
+}
 
-
+.facet_limit-active>.panel-heading {
+    background-color: #4F6272;
+    h3{
+        color:white;
+        &:after{
+            color:white;
+        }
+    }
+}
