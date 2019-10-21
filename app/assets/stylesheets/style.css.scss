@@ -254,7 +254,10 @@ div.facets h3{
 	border-top: none;
 }
 
-a{
+div#search-results a,
+div#sidebar a,
+#sortAndPerPage a
+{
 	color:#4F6272 !important;
 }
 
@@ -279,8 +282,12 @@ span.appliedFilter .remove {
     background-color: #4F6272;
     h3{
         color:white;
+
+        a{
+            color:white !important;
+        }
         &:after{
-            color:white;
+            color:white !important;
         }
     }
 }
