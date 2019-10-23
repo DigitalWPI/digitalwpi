@@ -340,13 +340,15 @@ h2.sr-only{
 #featured_works{
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 
     .featured-item-block{
-        width: 28%;
+        width: 45%;
+        margin-bottom: 30px;
 
             @media (min-width: 1200px){
-            width: 45%;
-            min-width: 400px;
+            width: 28%;
+            min-width: 350px;
             max-width:470px;
         }
     }
