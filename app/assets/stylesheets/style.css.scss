@@ -258,7 +258,7 @@ div#search-results a,
 div#sidebar a,
 #sortAndPerPage a
 {
-	color:#4F6272 !important;
+	color:#4F6272;
 }
 
 
@@ -306,3 +306,49 @@ span.appliedFilter .remove {
     }
 }
 
+//home page 
+
+h2.sr-only{
+	color:#607A96;
+	position: relative;
+	width:auto;
+    height:auto;
+    margin-bottom: 40px;
+}
+.featured-container{
+    padding:80px;
+}
+
+.featured-image-header{
+    height: 210px;
+    overflow: hidden;
+    a img{
+        width:100%;
+    }
+}
+
+.featured-item-title{
+    margin-bottom: 45px;
+    a{
+        color:#AC2B37;
+        
+    }
+} 
+.featured-item-description{
+    margin-bottom:20px;
+}
+#featured_works{
+    display: flex;
+    justify-content: space-between;
+
+    .featured-item-block{
+        width: 28%;
+
+            @media (min-width: 1200px){
+            width: 45%;
+            min-width: 400px;
+            max-width:470px;
+        }
+    }
+
+}
