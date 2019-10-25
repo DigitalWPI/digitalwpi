@@ -322,7 +322,6 @@ h2.sr-only{
 .featured-image-header{
     height: 210px;
     overflow: hidden;
-    border: 1px solid #ddd;
     a img{
         width:100%;
     }
@@ -338,7 +337,8 @@ h2.sr-only{
 .featured-item-description{
     margin-bottom:20px;
 }
-#featured_works{
+#featured_works,
+#featured-collections{
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
