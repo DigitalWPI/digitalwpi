@@ -7,12 +7,16 @@ $color-dark-gray: #707070;
 $color-red: #FF0000;
 
 .image-masthead{
-    height:480px;
+    height:200px;
     margin-bottom:0px;
     border-bottom:none;
     background-image: url(asset_path("TestBackground@2x.png")) !important;
     background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover; /* Resize the background image to cover the entire container */
+
+    @media screen and (min-width: 1023px){
+        height:480px;
+    }
 
     &:before{
         content:"";
@@ -28,7 +32,7 @@ $color-red: #FF0000;
     }
 
     &.shortstack{
-        height: 250px;
+        height: 150px;
         .large-header-nav{
             margin-top: 80px;
 
@@ -36,9 +40,13 @@ $color-red: #FF0000;
             display:none;
             }
         }
-        
+        @media screen and (min-width: 1023px){
+            height: 250px;            
+        }        
     }
 }
+
+
 
 #logo{
     color:white;
@@ -56,7 +64,19 @@ $color-red: #FF0000;
     }
 }
 
+.large-header-nav {
+    margin-top: 0px;
 
+    @media screen and (min-width: 768px){
+        margin-top: 10px;
+    }
+
+    @media screen and (min-width: 1280px){
+        margin-top: 180px;
+    }
+
+  }
+  
 .navbar.navbar-default.navbar-static-top{
     background: none;
     border:none;
@@ -132,16 +152,16 @@ $color-red: #FF0000;
 
 //slide show overides
 
-#myCarousel{
-    margin-bottom:50px;
-}
+// #myCarousel{
+//     margin-bottom:50px;
+// }
 
 .carousel-inner > .item > img, .carousel-inner > .item > a > img{
     width:100%;
 }
 
 .carousel-inner > .item {
-    height:750px;
+    max-height:750px;
 }
 
 .carousel-caption{
@@ -149,9 +169,17 @@ $color-red: #FF0000;
     text-align: left;
     padding: 20px;
     box-shadow: 0px 3px 6px -4px #525252;
+    left:10%;
+    width:70%;
+    bottom:10px;
 
     @media screen and (min-width: 768px){
-        width: 35%;
+        width: 55%;
+        bottom: 50px;
+    }
+
+    @media screen and (min-width: 1280px){
+        width: 45%;
         bottom: 100px;
     }
 
@@ -315,28 +343,46 @@ h2.sr-only{
     height:auto;
     margin-bottom: 40px;
 }
-.featured-container{
-    padding:80px;
+.featured-container-flex{
+    padding:20px;
+    @media (min-width: 960px){
+        padding:40px;
+    }
+    @media (min-width: 1200px){
+        padding:80px;
+    }
 }
 
 .featured-image-header{
     height: 210px;
     overflow: hidden;
-    border:1px solid #ddd;
+    border: 1px solid #ddd;
     a img{
         width:100%;
     }
 }
 
 .featured-item-title{
-    margin-bottom: 45px;
+    margin-bottom: 35px;
     a{
         color:#AC2B37;
+        font-size: 26px;
         
     }
 } 
 .featured-item-description{
     margin-bottom:20px;
+}
+
+.featured-container{
+    max-width:1600px;
+    margin:auto;
+    >h2{
+        text-align:center;
+        @media (min-width: 760px){
+            text-align: left;
+        }
+    }
 }
 #featured_works,
 #featured-collections{
@@ -344,14 +390,21 @@ h2.sr-only{
     justify-content: space-between;
     flex-wrap: wrap;
 
-    .featured-item-block{
-        width: 45%;
-        margin-bottom: 30px;
 
-            @media (min-width: 1200px){
-            width: 28%;
-            min-width: 350px;
-            max-width:470px;
+    .featured-item-block{
+        width: 80%;
+        margin-bottom: 30px;
+        margin-left:10%;
+        
+        @media (min-width: 760px){
+            width: 45%;
+            margin-left:0%;
+        }
+       
+        @media (min-width: 1200px){
+        width: 28%;
+        min-width: 350px;
+        max-width:470px;
         }
     }
 

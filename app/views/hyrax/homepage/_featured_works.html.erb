@@ -1,4 +1,5 @@
-<h2 class="sr-only"><%= t('hyrax.homepage.featured_works.title') %></h2>
+
+ <h2 class="sr-only"><%= t('hyrax.homepage.featured_works.title') %></h2>
 <% if @featured_work_list.empty? %>
   <p><%= t('hyrax.homepage.featured_works.no_works') %></p>
 <% elsif can? :update, FeaturedWork %>
@@ -17,3 +18,5 @@
     <%= render partial: 'featured', collection: @featured_work_list.featured_works %>
   </div>
 <% end %>
+<%= render 'explore_collections', collections: @presenter.collections %> 
+<%
