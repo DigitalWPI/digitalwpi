@@ -11,7 +11,6 @@
     <nav class="navbar navbar-default navbar-static-top col-sm-3 col-sm-offset-3" role="navigation">  
 
       <ul class="nav navbar-nav">
-      <h2>Goose, go, Goose</h2>
         <li <%= 'class=active' if current_page?(hyrax.root_path) %>>
           <%= link_to t(:'hyrax.controls.contact'), hyrax.root_path, aria: current_page?(hyrax.root_path) ? {current: 'page'} : nil %></li>
         <li <%= 'class=active' if current_page?(hyrax.about_path) %>>
