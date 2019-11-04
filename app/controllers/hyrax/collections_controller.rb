@@ -2,10 +2,10 @@
 
 require Hyrax::Engine.root.join('app/controllers/hyrax/collections_controller.rb')
 module Hyrax
-
-  copy_blacklight_config_from(CatalogController)
-
   class CollectionsController < ApplicationController
+  
+    copy_blacklight_config_from(CatalogController)
+  
     def show
       presenter
       query_collection_members
