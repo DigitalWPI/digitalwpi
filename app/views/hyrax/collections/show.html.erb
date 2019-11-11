@@ -68,34 +68,41 @@
     </div>
   <% end %>
 
-
+  <div id="content" class="col-md-9 col-md-push-3 col-sm-8 col-sm-push-4">
 
   <!-- Subcollections -->
   <% if @presenter.collection_type_is_nestable? && @subcollection_count > 0 %>
-      <div class="hyc-blacklight hyc-bl-title">
-        <h4><%= t('.subcollection_count') %> (<%= @subcollection_count %>)</h4>
-      </div>
-      <div class="hyc-blacklight hyc-bl-results">
-        <%= render 'subcollection_list', collection: @subcollection_docs %>
-      </div>
+	  <div class="hyc-blacklight hyc-bl-title">
+		<h4><%= t('.subcollection_count') %> (<%= @subcollection_count %>)</h4>
+	  </div>
+	  <div class="hyc-blacklight hyc-bl-results">
+		<%= render 'subcollection_list', collection: @subcollection_docs %>
+	  </div>
   <% end %>
 
   <!-- Works -->
   <% if @members_count > 0 %>
-      <div class="hyc-blacklight hyc-bl-title">
-        <h4><%= t('.works_in_collection') %> (<%= @members_count %>)</h4>
-      </div>
+	  <div class="hyc-blacklight hyc-bl-title">
+		<h4><%= t('.works_in_collection') %> (<%= @members_count %>)</h4>
+	  </div>
 
-      <div class="hyc-blacklight hyc-bl-sort">
-        <%= render 'sort_and_per_page', collection: @presenter %>
-      </div>
+	  <div class="hyc-blacklight hyc-bl-sort">
+		<%= render 'sort_and_per_page', collection: @presenter %>
+	  </div>
 
-      <div class="hyc-blacklight hyc-bl-results">
-        <%= render_document_index @member_docs %>
-      </div>
+	  <div class="hyc-blacklight hyc-bl-results">
+		<%= render_document_index @member_docs %>
+	  </div>
 
-      <div class="hyc-blacklight hyc-bl-pager">
-        <%= render 'paginate' %>
-      </div>
+	  <div class="hyc-blacklight hyc-bl-pager">
+		<%= render 'paginate' %>
+	  </div>
   <% end # if @members_count > 0 %>
+  
+  </div>
+  
+  <div id="sidebar" class="col-md-3 col-md-pull-9 col-sm-4 col-sm-pull-8">
+    <%= render partial: '/catalog/facets' %>
+  </div>
+  
 </div>
