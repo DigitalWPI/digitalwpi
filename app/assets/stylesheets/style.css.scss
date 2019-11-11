@@ -559,3 +559,48 @@ h2.sr-only{
     }
 
 }
+
+#info-top{
+    .post{
+        border-bottom: 4px solid;
+        width: 70%;
+        border-color: #AC2B37;
+        padding-left: 10px;
+        transition:.3s ease all;
+        cursor: pointer;
+        &:hover{
+            color:#aaa;
+        }
+    }
+
+    .returnlink{
+        .post{
+            padding-left:0px;
+            border-bottom:none;
+            background: rgb(171, 42, 56);
+            padding: 3px;
+            color: #e4e4e4;
+            font-weight: 400;
+            border-top-right-radius: 2px;
+            border-top-left-radius: 2px;
+            box-shadow: 0px -4px 8px -5px #676767;
+            transition:.3s ease all;
+
+            &:hover{
+            box-shadow:none;
+            color:white;
+
+            }
+        }
+        padding-bottom:0px;
+    }
+    .information h1{
+        border: 1px solid #ccc;
+        background: #4d5b65;
+        padding: 10px;
+        color: white;
+        font-weight: 300;
+        margin-bottom: 35px;
+    }
+}
+

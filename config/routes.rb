@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { omniauth_callbacks: 'callbacks', registrations: "registrations" }
   get 'login' => 'static#login'
+  get 'about-page' => 'static#about-page'
 
   mount Hydra::RoleManagement::Engine => '/'
 
