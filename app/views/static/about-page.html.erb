@@ -1,3 +1,20 @@
+<script>
+    $(function () {
+
+      console.log('self-invoked function fired');
+
+    $('.nav-stacked, .returnlink').on('click', '.post', function (e) {
+        var data_id = $(this).data('id');
+        console.log(data_id);
+        e.preventDefault();
+        $('html, body').animate({
+            scrollTop: $('#' + data_id).offset().top
+          }, 'slow');   
+    });
+
+  });
+</script>
+
 <div id="info-top">
   <div class="container">
     <div class="row">

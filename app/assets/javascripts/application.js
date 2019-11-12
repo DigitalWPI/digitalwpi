@@ -22,15 +22,3 @@
 
 //= require_tree .
 //= require hyrax
-$(function () {
-
-    $('.nav-stacked, .returnlink').on('click', '.post', function (e) {
-        var data_id = $(this).data('id');
-        console.log(data_id);
-        e.preventDefault();
-        $('html, body').animate({
-            scrollTop: $('#' + data_id).offset().top
-          }, 'slow');   
-    });
-
-  });
