@@ -17,5 +17,20 @@ module Hyrax
       permalink_message = "Permanent link to this page"
       @permalinks_presenter = PermalinksPresenter.new(main_app.common_object_path(locale: nil), permalink_message)
     end
+
+    private
+
+      def additional_response_formats(format)
+        format.endnote do
+          send_data(presenter.solr_document.export_as_endnote,
+                    type: "application/x-endnote-refer",
+                    filename: presenter.solr_document.endnote_filename)
+        end
+        format.ris do
+          send_data(presenter.solr_document.export_as_ris,
+                    type: "application/x-research-info-systems",
+                    filename: presenter.solr_document.ris_filename)
+        end
+      end
   end
 end

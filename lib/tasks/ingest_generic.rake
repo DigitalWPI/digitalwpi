@@ -247,8 +247,14 @@ namespace :wpi do
     # set the attributes of the work
     # File.open('log.txt', 'w') { |file| file.write(item_attributes.inspect) }
 
-
+    based_near_values = item_attributes['based_near']
+    item_attributes.delete('based_near')
     gww.attributes = item_attributes
+    if based_near_values.present?
+      based_near_values.each do |loc|
+        gww.based_near << Hyrax::ControlledVocabularies::Location.new(loc)
+      end
+    end
     gww.visibility = if visibility_private
                        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
                      else
