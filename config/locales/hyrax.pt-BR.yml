@@ -53,6 +53,6 @@ pt-BR:
       copyright_html: "<strong>Copyright © 2018 Samvera Licenciado</strong> sob a Licença Apache, Versão 2.0"
       service_html: Um serviço de <a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a> .
     institution_name: WPI
-    institution_name_full: Worcester Polytechnic Institute
+    institution_name_full: Instituto Politécnico de Worcester
     product_name: Hyrax
     product_twitter_handle: "@SamveraRepo"
