@@ -6,6 +6,8 @@ en:
       student_work:
         description:        "Student work works"
         name:               "Student Work"
+    citations:
+      citation: Citation
   simple_form:
     labels:
       student_work:
