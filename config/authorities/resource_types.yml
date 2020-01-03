@@ -15,8 +15,12 @@ terms:
     term: Dissertation
   - id: Image
     term: Image
+  - id: Interactive Qualifying Project
+    term: Interactive Qualifying Project
   - id: Journal
     term: Journal
+  - id: Major Qualifying Project
+    term: Major Qualifying Project
   - id: Manuscript
     term: Manuscript
   - id: Map or Cartographic Material
@@ -45,4 +49,3 @@ terms:
     term: Video
   - id: Other
     term: Other
-

@@ -31,6 +31,11 @@ module Hyrax
                     type: "application/x-research-info-systems",
                     filename: presenter.solr_document.ris_filename)
         end
+        format.bib do
+          send_data(presenter.solr_document.export_as_bib,
+                    type: "application/x-bibtex",
+                    filename: presenter.solr_document.bib_filename)
+        end
       end
   end
 end

@@ -54,5 +54,6 @@ zh:
       service_html: 的服务<a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a>.
     institution_name: WPI
     institution_name_full: 伍斯特工业学院
+    institution_address: "100 Institute Road, Worcester MA 01609-2280 USA"
     product_name: 蹄兔
     product_twitter_handle: "@SamveraRepo"

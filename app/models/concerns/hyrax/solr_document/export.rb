@@ -7,9 +7,14 @@ module Hyrax
       RIS_LINE_END = "\r\n"
       RIS_END_RECORD = "ER  -#{RIS_LINE_END}"
 
+      # Used https://en.wikipedia.org/wiki/RIS_(file_format) and
+      # http://refdb.sourceforge.net/manual-0.9.6/sect1-ris-format.html as reference
+
       def export_as_ris
         lines = []
-        # TY needs to be first
+        # all ris exports should begin with empty line
+        lines << ""
+        # TY needs to be second line
         lines << "TY  - #{ris_type}"
 
         ris_format.each_pair do |tag, value|
@@ -74,7 +79,7 @@ module Hyrax
       end
 
       def home_url
-        'https://' + ENV["SERVERNAME"] + '/'
+        Rails.application.config.application_root_url + '/'
       end
 
       def to_url(rep_id)
@@ -133,6 +138,128 @@ module Hyrax
           '%W' => Institution.name
         }
       end
+
+      # Used https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management and
+      # http://newton.ex.ac.uk/tex/pack/bibtex/btxdoc/node6.html as reference
+
+      def export_as_bib
+        text = []
+        if resource_type[0] == "Thesis"
+          text << "@mastersthesis{" + unique_key + ","
+          (text << masters_format).flatten!
+        elsif resource_type[0] == "Dissertation"
+          text << "@phdthesis{" + unique_key + ","
+          (text << phd_format).flatten!
+        elsif report.include? resource_type[0]
+          text << "@techreport{" + unique_key + ","
+          (text << report_format).flatten!
+        else
+          text << "@unpublished{" + unique_key + ","
+          (text << other_format).flatten!
+        end
+        text << "}"
+        text.join("\n")
+      end
+
+      def masters_format
+        format = []
+        format << format_author unless format_author.blank?
+        format << format_title unless format_title.blank?
+        format << format_school
+        format << "\t%type = \"" + resource_type[0] + "\""
+        format << format_address
+        format << format_year unless format_year.blank?
+        format << format_month unless format_month.blank?
+        format
+      end
+
+      def phd_format
+        format = []
+        format << format_author unless format_author.blank?
+        format << format_title unless format_title.blank?
+        format << format_school
+        format << format_address
+        format << format_year unless format_year.blank?
+        format << format_month unless format_month.blank?
+        format
+      end
+
+      def report_format
+        format = []
+        format << format_author unless format_author.blank?
+        format << format_title unless format_title.blank?
+        format << format_school
+        format << format_address unless format_address.blank?
+        format << format_year unless format_year.blank?
+        format << format_month unless format_month.blank?
+        format
+      end
+
+      def other_format
+        format = []
+        format << format_author unless format_author.blank?
+        format << format_title unless format_title.blank?
+        format << format_year unless format_year.blank?
+        format << format_month unless format_month.blank?
+        format
+      end
+
+      def format_author
+        work_author = "\tauthor = \""
+        creator.each do |val|
+          unless val == creator.last
+            work_author = work_author + val + " and "
+          else
+            work_author = work_author + val
+          end
+        end
+        work_author = work_author + "\""
+      end
+
+      def format_title
+        unless title.blank?
+          "\ttitle = \"" + title.first + "\""
+        end
+      end
+
+      def format_school
+        "\tschool = \"" + Institution.name_full + "\""
+      end
+
+      def format_address
+        "\t%address = \"" + Institution.address + "\""
+      end
+
+      def format_year
+        unless year.blank?
+          "\tyear = \"" + year[0] + "\""
+        end
+      end
+
+      def format_month
+        if date_created[0].length == 10
+          "\t%month = \"" + Date::MONTHNAMES[DateTime.parse(date_created[0]).month] + "\""
+        end
+      end
+
+      def unique_key
+        unique_key = ""
+        unless creator.blank?
+          creator.each do |key|
+            unique_key = unique_key + key.split(",").first.gsub(/\s+/, "")
+          end
+          unique_key = unique_key + year[0]
+        end
+      end
+
+      def report
+        ["Interactive Qualifying Project", "Major Qualifying Project", "Report", "PhD Report"]
+      end
+
+      def bib_filename
+        "#{id}.bib"
+      end
+
 
     end
   end
