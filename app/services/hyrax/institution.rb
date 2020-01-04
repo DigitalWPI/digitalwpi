@@ -9,7 +9,7 @@ module Hyrax
     def self.name_full
       I18n.t('hyrax.institution_name_full', default: name)
     end
-    
+
     def self.address
       I18n.t('hyrax.institution_address')
     end
