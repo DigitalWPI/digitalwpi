@@ -60,6 +60,7 @@ group :production, :development, :test do
   gem 'rsolr', '>= 1.0'
   gem 'sidekiq'
   gem 'xray-rails'
+  gem 'yajl-ruby', require: 'yajl'
 end
 
 group :development, :test do
