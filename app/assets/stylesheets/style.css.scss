@@ -6,101 +6,26 @@ $color-gray: #A9B0B7;
 $color-dark-gray: #707070;
 $color-red: #FF0000;
 
-.image-masthead {
-    height: 550px;
-    margin-bottom: 0px;
-    border-bottom: none;
-    background-image: url(asset_path("TestBackground@2x.png")) !important;
-    background-repeat: no-repeat;
-    /* Do not repeat the image */
-    background-size: cover;
-    /* Resize the background image to cover the entire container */
-  }
   
-  .image-masthead:before {
-    content: "";
-    height: 100%;
-    background: #4f6272ba;
-    z-index: 0;
-    position: relative;
-    width: 100%;
-    display: inline-block;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  
-  .image-masthead.shortstack {
-    height: 250px;
-  }
-  
-  .image-masthead.shortstack .large-header-nav {
-    margin-top: 80px;
-  }
-  
-  #logo {
-    color: white;
-    font-size: 45px;
-  }
-  
-  #logo span {
-    color: white;
-    display: inline-block;
-    position: relative;
-  }
-  
-  #logo .glyphicon {
-    top: 6px;
-  }
-  
-  #logo .institution_name {
-    font-weight: 300;
-  }
-  
-  .navbar.navbar-default.navbar-static-top {
-    background: none;
-    border: none;
-  }
-  
-  .navbar.navbar-default.navbar-static-top .nav.navbar-nav {
-    font-size: 20px;
+
+  .logo_image img{
+    float:left;
     margin-top: 10px;
-    font-size: 20px;
+    max-width:150px;
+    @media (min-width:768px){
+    max-width: 330px;
+    }
   }
-  
-  .navbar.navbar-default.navbar-static-top .nav.navbar-nav li.active a {
-    background: none;
-    color: white;
-    font-weight: 900;
-  }
-  
-  .navbar.navbar-default.navbar-static-top .searchbar-right.navbar-right.col-sm-7 {
-    position: absolute;
-    width: 860px;
-    height: 50px;
-    top: 50%;
-    left: 50%;
-    margin-left: -430px;
-    margin-top: -25px;
-  }
-  
-  .navbar.navbar-default.navbar-static-top .searchbar-right.navbar-right.col-sm-7:before {
-    content: "Explore, Discover, Share";
-    width: 100%;
-    display: inline-block;
-    text-align: center;
-    font-size: 23px;
-    margin-bottom: 10px;
-  }
+
   
   .site-footer {
     background-color: #353535;
-    height: 100px;
+    min-height: 100px;
+       .text-right{
+        color:#ddd;
+    }
   }
   
-  .site-footer .text-right {
-    color: #ddd;
-  }
   
   /*overriding*/
   #search-submit-header {
@@ -108,37 +33,7 @@ $color-red: #FF0000;
     border-color: #AC2B37;
   }
   
-  .carousel-inner > .item > img, .carousel-inner > .item > a > img {
-    width: 100%;
-  }
-  
-  .carousel-caption {
-    background: #ffffffc2;
-    text-align: left;
-    padding: 20px;
-    -webkit-box-shadow: 0px 3px 6px -4px #525252;
-            box-shadow: 0px 3px 6px -4px #525252;
-  }
-  
-  @media screen and (min-width: 768px) {
-    .carousel-caption {
-      width: 35%;
-      bottom: 100px;
-    }
-  }
-  
-  .carousel-caption h3 {
-    color: #AC2B37;
-    background: none;
-    text-shadow: none;
-    margin-top: 10px;
-  }
-  
-  .carousel-caption p {
-    font-size: 18px;
-    text-shadow: none;
-    color: #333;
-  }
+
   
   .hyc-logos img {
     width: 100%;
@@ -152,7 +47,7 @@ $color-red: #FF0000;
 
 
 .image-masthead{
-    height:200px;
+    min-height:200px;
     margin-bottom:0px;
     border-bottom:none;
     background-image: url(asset_path("TestBackground@2x.png")) !important;
@@ -177,16 +72,21 @@ $color-red: #FF0000;
     }
 
     &.shortstack{
-        height: 150px;
+        min-height: 150px;
         .large-header-nav{
-            margin-top: 80px;
+            margin-top: 20px;
+
+            @media (min-width: 1023px){
+                margin-top: 80px;
+            }
 
             h3{
             display:none;
             }
         }
         @media screen and (min-width: 1023px){
-            height: 250px;            
+            min-height: 250px;
+            max-height:250px;          
         }        
     }
 }
@@ -195,7 +95,7 @@ $color-red: #FF0000;
 
 #logo{
     color:white;
-    font-size: 45px;
+    font-size: 25px;
     span{
         color:white;
         display: inline-block;
@@ -207,6 +107,12 @@ $color-red: #FF0000;
     .institution_name{
         font-weight: 300;
     }
+
+    
+    @media (min-width: 1023px){
+         font-size: 45px;
+    }
+
 }
 
 .large-header-nav {
@@ -241,21 +147,24 @@ $color-red: #FF0000;
 .navbar.navbar-default.navbar-static-top{
     background: none;
     border:none;
-    display:flex;
-    justify-content:flex-end;
+
+    @media screen and (min-width:769px){
+        display:flex;
+        justify-content:flex-end;
+    }
  
-        .nav.navbar-nav{
-            font-size: 20px;
-            margin-top: 10px;
-            font-size: 20px;
-            li.active{
-                a{
-                background:none;
-                color:white;
-                font-weight: 900;
-                }
+    .nav.navbar-nav{
+        font-size: 20px;
+        margin-top: 10px;
+        font-size: 20px;
+        li.active{
+            a{
+            background:none;
+            color:white;
+            font-weight: 900;
             }
         }
+    }
     
 
     .searchbar-right.navbar-right.col-sm-7{
@@ -280,15 +189,6 @@ $color-red: #FF0000;
 }
 
 
-.site-footer{
-    background-color: #353535;
-    height: 100px;
-
-    .text-right{
-        color:#ddd;
-    }
-}
-
 
 /*overriding*/
 
@@ -302,9 +202,25 @@ $color-red: #FF0000;
 
 //slide show overides
 
+
 // #myCarousel{
 //     margin-bottom:50px;
 // }
+
+
+
+  .carousel-caption {
+    background-color: rgba(255, 255, 255, 0.75);
+    text-align: left;
+    -webkit-box-shadow: 0px 3px 6px -4px #525252;
+            box-shadow: 0px 3px 6px -4px #525252;
+  }
+  
+
+  
+
+
+
 
 .carousel-inner > .item > img, .carousel-inner > .item > a > img{
     width:100%;
@@ -315,38 +231,46 @@ $color-red: #FF0000;
 }
 
 .carousel-caption{
-    background: #ffffffc2;
+    background-color: rgba(255, 255, 255, 0.75);
     text-align: left;
-    padding: 20px;
     box-shadow: 0px 3px 6px -4px #525252;
-    left:10%;
+    /*left:10%;*/
     width:70%;
-    bottom:10px;
+    bottom:30%;
+    padding-left:10px;
 
     @media screen and (min-width: 768px){
         width: 55%;
         bottom: 50px;
-    }
-
-    @media screen and (min-width: 1280px){
-        width: 45%;
+        padding: 20px;
+        width: 55%;
         bottom: 100px;
     }
+
 
     h3{
         color: #AC2B37;
         background: none;
         text-shadow: none;
         margin-top: 10px;
+        font-size:16px;
+
+        @media screen and (min-width: 768px){
+            font-size: 24px;
+        }
     }
 
     p{
-        font-size: 18px;
-        text-shadow: none;
-        color: #333;
+        display: none;
+
+        @media screen and (min-width: 768px){
+            display:inline-block;
+            font-size: 18px;
+            text-shadow: none;
+            color: #333;
+        }
     }
 }
-
 
 
 
@@ -506,7 +430,6 @@ h2.sr-only{
 .featured-image-header{
     height: 210px;
     overflow: hidden;
-    border: 1px solid #ddd;
     a img{
         width:100%;
     }
@@ -563,13 +486,18 @@ h2.sr-only{
 #info-top{
     .post{
         border-bottom: 4px solid;
-        width: 70%;
+        
         border-color: #AC2B37;
         padding-left: 10px;
         transition:.3s ease all;
         cursor: pointer;
+        width:100%;
         &:hover{
             color:#aaa;
+        }
+
+        @media (min-width:768px){
+            width: 70%;
         }
     }
 
@@ -603,4 +531,39 @@ h2.sr-only{
         margin-bottom: 35px;
     }
 }
+
+
+.navbar-nav > li {
+
+    @media (max-width:767px){
+        border-bottom:1px solid;
+    }
+
+
+    a{
+        font-size:14px;
+        padding:15px;
+        font-weight: 500;
+        @media (min-width: 768px){
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        @media (min-width: 980px){
+            font-size: 18px;
+        }
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
