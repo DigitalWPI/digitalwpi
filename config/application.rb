@@ -18,5 +18,9 @@ module DigitalWpi
 
     config.middleware.use Rack::Attack
     config.eager_load_paths << Rails.root.join('lib')
+    config.time_zone = "Eastern Time (US & Canada)"
+    # Sometimes, just setting above config doesn't work.
+    # Set following as well
+    config.active_record.default_timezone = :local
   end
 end

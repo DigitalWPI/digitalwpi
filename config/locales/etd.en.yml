@@ -6,6 +6,8 @@ en:
       etd:
         description:        "Etd works"
         name:               "Etd"
+    citations:
+      citation: Citation
   simple_form:
     labels:
       etd:
