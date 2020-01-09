@@ -57,3 +57,10 @@ en:
     institution_address: "100 Institute Road, Worcester MA 01609-2280 USA"
     product_name: Digital WPI
     product_twitter_handle: "@SamveraRepo"
+    search:
+      button:
+        html: <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+        text: Search
+      form:
+        q:
+          placeholder: Search Digital WPI

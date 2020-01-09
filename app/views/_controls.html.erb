@@ -1,0 +1,48 @@
+  <% if controller_name=='homepage' %>
+  <div class="image-masthead">
+  <% else %>
+  <div class="image-masthead shortstack">
+  <% end %>
+
+    <div class="col-sm-6 logo_image">  
+        <%= image_tag "DigitalWPILogo_2019.png" %>
+    </div>
+
+    <nav class="navbar navbar-default navbar-static-top col-sm-6" role="navigation">  
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="top-navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li <%= 'class=active' if current_page?(hyrax.root_path) %>>
+              <%= link_to t(:'hyrax.controls.home'), hyrax.root_path, aria: current_page?(hyrax.root_path) ? {current: 'page'} : nil %></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Browse <span class="caret"></span></a>
+              <ul class="dropdown-menu" style="background-color:transparent">
+                <li><a href="#">Browse by Topic</a></li>
+                <li><a href="#">Browse by Collection</a></li>
+                <li><a href="#">Browse by Project Center</a></li>
+              </ul>
+            </li>
+            <li <%= 'class=active' if current_page?(hyrax.about_path) %>>
+              <a href="/about-page">About</a></li>
+              
+            <li <%= 'class=active' if current_page?(hyrax.help_path) %>>
+              <%= link_to t(:'hyrax.controls.help'), hyrax.help_path, aria: current_page?(hyrax.help_path) ? {current: 'page'} : nil %></li>
+          </ul><!-- /.nav -->        
+        </div>
+    </nav><!-- /.navbar -->
+        <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="large-header-nav col-sm-6 col-sm-offset-3 search-holder">
+        <h3>Explore, Discover, Share</h3>
+        <%= render partial: 'catalog/search_form' %>
+    </div>
+    </div>
+
+    
+</div>

@@ -1,0 +1,146 @@
+<script>
+    $(function () {
+
+      console.log('self-invoked function fired');
+
+    $('.nav-stacked, .returnlink').on('click', '.post', function (e) {
+        var data_id = $(this).data('id');
+        console.log(data_id);
+        e.preventDefault();
+        $('html, body').animate({
+            scrollTop: $('#' + data_id).offset().top
+          }, 'slow');   
+    });
+
+  });
+</script>
+
+<div id="info-top">
+  <div class="container">
+    <div class="row">
+      <nav class="col-sm-3">
+        <ul class="nav nav-pills nav-stacked">
+            <div class="post" data-id="content-one">
+                <h3>Overview</h3>
+            </div>
+            <div class="post" data-id="content-two">
+                <h3>Project Team</h3>
+            </div>
+            <div class="post" data-id="content-three">
+                <h3>FAQ's</h3>
+            </div>
+            <div class="post" data-id="content-four">
+                <h3>Policies</h3>
+            </div>
+        </ul>
+      </nav>
+      <div class="col-sm-9">
+        <div class="information" id="content-one">
+          <h1>Overview</h1>
+            <p>Digital WPI is an open access digital repository for publishing and sharing digital resources unique to WPI.  Digital WPI:</p>
+            <ul>
+                <li>Enhances the global availability and persistence of these unique contributions and resources</li>
+                <li>Enables future research and teaching</li>
+                <li>Reflects and enhances the reputation and visibility of WPI’s unique culture, interdisciplinary practices, and global impact</li>
+            </ul>
+            
+           <h3>Digital WPI includes:</h3>
+            <ul>
+                <li>Creative and research products of our community such as undergraduate and graduate student projects and research</li>
+                <li>Records and artifacts reflecting WPI’s institutional history and culture, such as historic photographs, yearbooks, and manuscripts</li>
+                <li>Cultural and intellectual resources curated by WPI, such as diaries and manuscripts of engineers at WPI, and rare publications of Charles Dickens</li>
+            </ul>
+        </div>
+        <div class="returnlink" style="text-align:right;padding:15px;padding-bottom:0px; margin-top:40px;margin-bottom:40px;border-bottom:2px solid rgb(172, 42, 55);">
+            <span class="post" data-id="info-top">Return to Top</span>
+        </div>
+        <div class="information" id="content-two">
+            <h1>Project Team</h1>
+            <p>Digital WPI is jointly managed by the Gordon Library and by the Web Applications Development group in Information Technology.</p>
+            <p>The Library is responsible for Digital WPI content selection and curation, including digitization and submission; metadata, discovery, and analytics; and user experience.</p>
+            <p>Information Technology is responsible for Digital WPI’s technical implementation, authentication, security, and integration with other WPI systems and workflows as part of our digital campus ecosystem.</p>
+            <ul>
+                <li>Bob Brown, Director, Web Applications Development group, Information Technology (co-lead)</li>
+                <li>Arthur Carlson, Assistant Director, Archives & Special Collections, Gordon Library </li>
+                <li>Lori Ostapowicz Critz, Associate Director, Library Academic Strategies, Gordon Library (co-lead)</li>
+                <li>Jayanth (Jay) Dungavath, Library Application Developer, Information Technology</li>
+                <li>Anna Gold, University Librarian, Gordon Library (co-lead)</li>
+                <li>Derek Murphy, Web Applications Developer, Information Technology</li>
+                <li>Anna Newman, Digital Academic Strategies Librarian, Gordon Library</li>
+                <li>Emily Ping O’Brien, Digital Programs and Archives Assistant, Gordon Library</li>
+            </ul>
+            <p>Previous contributors and team members:</p>
+            <ul>
+                <li>Aaron Neslin, Digital Academic Strategies and Metadata Librarian, Gordon Library (2018-2019)</li>
+                <li>Alfred Scott, Systems Developer, Information Technology (2018-2019)</li>
+            </ul>
+        </div>
+        <div class="returnlink" style="text-align:right;padding:15px;padding-bottom:0px; margin-top:40px;margin-bottom:40px;border-bottom:2px solid rgb(172, 42, 55);">
+                <span class="post" data-id="info-top">Return to Top</span>
+        </div>
+        <div class="information" id="content-three">
+            <h1>FAQ</h1>
+            <div class="questions">
+                <p><strong>Is every WPI student project and dissertation in Digital WPI?</strong></p>
+                <p>Yes, but only since 2003 for graduate work and 2007 for undergraduate work. Graduate theses and dissertations before 2003 can be found in the library in print. Undergraduate projects before 2007 are only selectively available: the library digitized print copies of IQPs and MQPs from 2002-2007, but most earlier IQPs and MQPs were returned to the departments and may not have been retained. A few IQPs and MQPs are available in print in the library’s Archives.</p>
+            </div>
+            <div class="questions">
+                    <p><strong>Why can't I see the full text of a specific student project, thesis, or dissertation?</strong></p>
+                    <p>Full-text access to some student projects is restricted to the WPI community, usually because the project was digitized before WPI began requiring digital submission of projects. If you are interested in accessing a project that is restricted to the WPI community, please contact digitalwpi@wpi.edu.</p>
+                    <p>For some projects, theses, and dissertations, concerns about confidentiality or intellectual property have led the author and their advisor to choose to restrict access to the full text, for a limited period of time of up to 5 years (embargo).  The date the material will be made fully available is provided.  If you are interested in accessing a student work that is embargoed, please contact digitalwpi@wpi.edu.</p>
+                    <p>If you have questions about the availability of student work that you don’t find in Digital WPI, please contact us at digitalwpi@wpi.edu. </p>
+            </div>
+            <div class="questions">
+                    <p><strong>How do I extend an embargo on my thesis/dissertation/IQP/MQP that is currently in Digital WPI?</strong></p>
+                    <p>For graduate research, the decision to extend an embargo resides with advisors, departments, and the Office of Graduate Studies. Contact the Office of Graduate Studies with your request.</p>
+                    <p>For undergraduate research, the decision to extend an embargo resides with advisors, departments, and the Office of Undergraduate Studies. Contact the Office of Undergraduate Studies with your request.</p>
+            </div>
+            <div class="questions">
+                    <p><strong>Does Digital WPI have a policy for removing content?</strong></p>
+                    <p>To make a take-down request, please contact digitalwpi@wpi.edu. Each request will be evaluated on a case-by-case basis, with due consideration of WPI policies and U.S. copyright law.</p>
+            </div>
+            <div class="questions">
+                    <p><strong>How do I get permission to use a resource from Digital WPI in another publication, on another website, or elsewhere?</strong></p>
+                    <p>Look for the copyright or rights statement associated with the resource for guidance on how you can reuse an item. If there is a Creative Commons license associated with the resource, you may use the resource according to the terms of the license. Commercial use is generally prohibited. For questions about specific resources, contact digitalwpi@wpi.edu.</p>
+            </div>
+            <div class="questions">
+                    <p><strong>Does Digital WPI provide high quality prints of images in its collections?</strong></p>
+                    <p>To request scans and digital files, please contact digitalwpi@wpi.edu or visit the “digitization” section of our Archives & Special Collections policies.</p>
+            </div>
+            <div class="questions">
+                    <p><strong>What platform does Digital WPI use?</strong></p>
+            </div>
+            <div class="questions">
+                    <p><strong>Is every WPI student project and dissertation in Digital WPI?</strong></p>
+                    <p>Digital WPI uses Hyrax, a community-supported repository front end that uses the Samvera framework, built on top of the Fedora repository for digital asset management and using Apache Solr for searching and indexing. </p>
+            </div>
+            <div class="questions">
+                    <p><strong>When did this project start?</strong></p>
+                    <p>Development work on the current Digital WPI platform began in 2018.  This version of Digital WPI using the Hyrax platform replaces several older digital platforms. Data from these older platforms is being migrated to Digital WPI.</p>
+            </div>
+
+        </div>
+        <div class="returnlink" style="text-align:right;padding:15px;padding-bottom:0px; margin-top:40px;margin-bottom:40px;border-bottom:2px solid rgb(172, 42, 55);">
+                <span class="post" data-id="info-top">Return to Top</span>
+        </div>
+        <div class="information" id="content-four">
+            <h1>Policies</h1>
+            <p>Digital WPI policies follow relevant university policies including policies of  Information Technology and the Library. </p>
+            <p>Key policies include:</p>
+            <ul>
+                <li><a href="#">Acceptable Use (computing resources)</a></li>
+                <li><a href="#">Archives (digitization and reproduction)</a></li>
+                <li><a href="#">Copyright (ownership and compliance)</a></li>
+                <li><a href="#">Submission of student work </a></li>
+                <li><a href="#">Web accessibility</a></li>                    
+            </ul>
+        </div>
+        <div class="returnlink" style="text-align:right;padding:15px;padding-bottom:0px; margin-top:40px;margin-bottom:40px;border-bottom:2px solid rgb(172, 42, 55);">
+                <span class="post" data-id="info-top">Return to Top</span>
+        </div>    
+      </div> <!-- End of content section -->
+
+      
+    </div>
+  </div>
+</div>
