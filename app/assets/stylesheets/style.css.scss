@@ -537,6 +537,7 @@ h2.sr-only{
 
     @media (max-width:767px){
         border-bottom:1px solid;
+
     }
 
 
@@ -544,6 +545,7 @@ h2.sr-only{
         font-size:14px;
         padding:15px;
         font-weight: 500;
+        color:white !important;
         @media (min-width: 768px){
             padding-top: 15px;
             padding-bottom: 15px;
@@ -556,6 +558,11 @@ h2.sr-only{
 
 }
 
+
+
+.dropdown-menu{
+    background-color: rgba(91, 105, 116, 0.9);
+}
 
 
 
