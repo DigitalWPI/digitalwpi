@@ -627,7 +627,7 @@ GEM
     powerpack (0.1.2)
     public_suffix (3.0.3)
     pul_uv_rails (2.0.1)
-    puma (3.12.1)
+    puma (3.12.3)
     qa (2.2.0)
       activerecord-import
       deprecation
@@ -967,7 +967,7 @@ DEPENDENCIES
   omniauth
   omniauth-saml
   orcid!
-  puma (~> 3.7)
+  puma (~> 3.12)
   rack-attack
   rails (~> 5.1.6.1)
   redis (~> 4.0)
