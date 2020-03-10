@@ -87,34 +87,34 @@
             </div>
             <div class="questions">
                     <p><strong>Why can't I see the full text of a specific student project, thesis, or dissertation?</strong></p>
-                    <p>Full-text access to some student projects is restricted to the WPI community, usually because the project was digitized before WPI began requiring digital submission of projects. If you are interested in accessing a project that is restricted to the WPI community, please contact digitalwpi@wpi.edu.</p>
-                    <p>For some projects, theses, and dissertations, concerns about confidentiality or intellectual property have led the author and their advisor to choose to restrict access to the full text, for a limited period of time of up to 5 years (embargo).  The date the material will be made fully available is provided.  If you are interested in accessing a student work that is embargoed, please contact digitalwpi@wpi.edu.</p>
-                    <p>If you have questions about the availability of student work that you don’t find in Digital WPI, please contact us at digitalwpi@wpi.edu. </p>
+                    <p>Full-text access to some student projects is restricted to the WPI community, usually because the project was digitized before WPI began requiring digital submission of projects. If you are interested in accessing a project that is restricted to the WPI community, please contact <%= mail_to "digitalwpi@wpi.edu" %>.</p>
+                    <p>For some projects, theses, and dissertations, concerns about confidentiality or intellectual property have led the author and their advisor to choose to restrict access to the full text, for a limited period of time of up to 5 years (embargo).  The date the material will be made fully available is provided.  If you are interested in accessing a student work that is embargoed, please contact <%= mail_to "digitalwpi@wpi.edu" %>.</p>
+                    <p>If you have questions about the availability of student work that you don’t find in Digital WPI, please contact us at <%= mail_to "digitalwpi@wpi.edu" %>.</p>
             </div>
             <div class="questions">
                     <p><strong>How do I extend an embargo on my thesis/dissertation/IQP/MQP that is currently in Digital WPI?</strong></p>
-                    <p>For graduate research, the decision to extend an embargo resides with advisors, departments, and the Office of Graduate Studies. Contact the Office of Graduate Studies with your request.</p>
-                    <p>For undergraduate research, the decision to extend an embargo resides with advisors, departments, and the Office of Undergraduate Studies. Contact the Office of Undergraduate Studies with your request.</p>
+                    <p>For graduate research, the decision to extend an embargo resides with advisors, departments, and the Office of Graduate Studies. Contact the <%= link_to "Office of Graduate Studies", "https://www.wpi.edu/academics/graduate" %> with your request.</p>
+                    <p>For undergraduate research, the decision to extend an embargo resides with advisors, departments, and the Office of Undergraduate Studies. Contact the <%= link_to "Office of Undergraduate Studies", "https://www.wpi.edu/academics/undergraduate" %> with your request.</p>
             </div>
             <div class="questions">
                     <p><strong>Does Digital WPI have a policy for removing content?</strong></p>
-                    <p>To make a take-down request, please contact digitalwpi@wpi.edu. Each request will be evaluated on a case-by-case basis, with due consideration of WPI policies and U.S. copyright law.</p>
+                    <p>To make a take-down request, please contact <%= mail_to "digitalwpi@wpi.edu" %>. Each request will be evaluated on a case-by-case basis, with due consideration of WPI policies and U.S. copyright law.</p>
             </div>
             <div class="questions">
                     <p><strong>How do I get permission to use a resource from Digital WPI in another publication, on another website, or elsewhere?</strong></p>
-                    <p>Look for the copyright or rights statement associated with the resource for guidance on how you can reuse an item. If there is a Creative Commons license associated with the resource, you may use the resource according to the terms of the license. Commercial use is generally prohibited. For questions about specific resources, contact digitalwpi@wpi.edu.</p>
+                    <p>Look for the copyright or rights statement associated with the resource for guidance on how you can reuse an item. If there is a Creative Commons license associated with the resource, you may use the resource according to the terms of the license. Commercial use is generally prohibited. For questions about specific resources, contact <%= mail_to "digitalwpi@wpi.edu" %>.</p>
             </div>
             <div class="questions">
                     <p><strong>Does Digital WPI provide high quality prints of images in its collections?</strong></p>
-                    <p>To request scans and digital files, please contact digitalwpi@wpi.edu or visit the “digitization” section of our Archives & Special Collections policies.</p>
+                    <p>To request scans and digital files, please contact <%= mail_to "digitalwpi@wpi.edu" %> or visit the “<%= link_to "digitization", "https://www.wpi.edu/library/archives-special-collections/about/policies" %>” section of our Archives & Special Collections policies.</p>
             </div>
             <div class="questions">
                     <p><strong>What platform does Digital WPI use?</strong></p>
-                    <p>Digital WPI uses Hyrax, a community-supported repository front end that uses the Samvera framework, built on top of the Fedora repository for digital asset management and using Apache Solr for searching and indexing. </p>
+                    <p>Digital WPI uses <%= link_to "Hyrax", "https://hyrax.samvera.org/about/" %>, a community-supported repository front end that uses the Samvera framework, built on top of the Fedora repository for digital asset management and using Apache Solr for searching and indexing. </p>
             </div>
             <div class="questions">
                     <p><strong>When did this project start?</strong></p>
-                    <p>Development work on the current Digital WPI platform began in 2018.  This version of Digital WPI using the Hyrax platform replaces several older digital platforms. Data from these older platforms is being migrated to Digital WPI.</p>
+                    <p>Development work on the current Digital WPI platform began in 2018. This version of Digital WPI using the Hyrax platform replaces several older digital platforms. Data from these older platforms is being migrated to Digital WPI.</p>
             </div>
 
         </div>
@@ -123,15 +123,16 @@
         </div>
         <div class="information" id="content-four">
             <h1>Policies</h1>
-            <p>Digital WPI policies follow relevant university policies including policies of  Information Technology and the Library. </p>
-            <p>Key policies include:</p>
+            <p>Digital WPI follows and implements relevant <%= link_to "university policies", "https://www.wpi.edu/about/policies" %> developed and implemented at WPI, by <%= link_to "IT", "https://its.wpi.edu/article/139/it-policies-standards-and-procedures" %>, or by the <%= link_to "Library", "https://www.wpi.edu/library/about/policies" %>.</p>
+            <p>Among the policies most relevant to Digital WPI and its use are:</p>
             <ul>
-                <li><a href="#">Acceptable Use (computing resources)</a></li>
-                <li><a href="#">Archives (digitization and reproduction)</a></li>
-                <li><a href="#">Copyright (ownership and compliance)</a></li>
-                <li><a href="#">Submission of student work </a></li>
-                <li><a href="#">Web accessibility</a></li>                    
+                <li><%= link_to "Acceptable Use (computing resources)", "https://www.wpi.edu/about/policies/acceptable-use" %></li>
+                <li><%= link_to "Archives (digitization and reproduction)", "https://www.wpi.edu/library/archives-special-collections/about/policies" %></li>
+                <li><%= link_to "Copyright (ownership and compliance)", "https://www.wpi.edu/about/policies/copyright-compliance" %></li>
+                <li><%= link_to "Submission of theses and dissertations", "http://libguides.wpi.edu/c.php?g=882677&p=6343697" %></li>
+                <li><%= link_to "Web accessibility", "https://www.wpi.edu/academics/faculty/disability-services/accessibility-guidelines-resources" %></li>
             </ul>
+            <p>For policy questions not addressed by these links, please email <%= mail_to "digitalwpi@wpi.edu" %>.</p>
         </div>
         <div class="returnlink" style="text-align:right;padding:15px;padding-bottom:0px; margin-top:40px;margin-bottom:40px;border-bottom:2px solid rgb(172, 42, 55);">
                 <span class="post" data-id="info-top">Return to Top</span>
