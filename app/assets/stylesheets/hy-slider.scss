@@ -8,8 +8,8 @@
   align-items: center;
   overflow: hidden;
   margin:auto auto;
-  margin-top:50px;
-  margin-bottom:50px;
+  margin-top:25px;
+  margin-bottom:40px;
    // box-shadow:inset 12px 12px 12px #ddd;
 }
 .hy-slide-container {
@@ -50,4 +50,8 @@
   100% {
     transform: translate(-66.5%);
   }
+}
+
+h2.slider {
+  margin-bottom: 25px;
 }
