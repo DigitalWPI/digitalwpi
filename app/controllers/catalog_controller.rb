@@ -51,7 +51,7 @@ class CatalogController < ApplicationController
     config.add_facet_field solr_name("department", :facetable), label: "Unit", limit: 5
     config.add_facet_field solr_name("publisher", :facetable), limit: 5
     config.add_facet_field solr_name("subject", :facetable), limit: 5
-    config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5, collapse: false
+    config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
     #config.add_facet_field solr_name("language", :facetable), limit: 5
 
 
