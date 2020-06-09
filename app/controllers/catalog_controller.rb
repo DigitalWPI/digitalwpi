@@ -43,19 +43,16 @@ class CatalogController < ApplicationController
     #   The ordering of the field names is the order of the display
     # config.add_facet_field solr_name("human_readable_type", :facetable), label: "Type", limit: 5
     config.add_facet_field solr_name('member_of_collection_ids', :symbol), limit: 5, label: 'Collections', collapse: false, helper_method: :collection_title_by_id
-    config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5, collapse: false
-    config.add_facet_field solr_name("creator", :facetable), limit: 5
-    config.add_facet_field solr_name("contributor", :facetable), label: "Contributor", limit: 5
     config.add_facet_field solr_name("year", :facetable), label: "Year", limit: 5
-    config.add_facet_field solr_name("language", :facetable), limit: 5
-    config.add_facet_field solr_name("subject", :facetable), limit: 5
+    config.add_facet_field solr_name("creator", :facetable), limit: 5
     config.add_facet_field solr_name("advisor", :facetable), label: "Advisor", limit: 5
-    config.add_facet_field solr_name("department", :facetable), label: "Unit", limit: 5
-    config.add_facet_field solr_name("sponsor", :facetable), label: "Sponsor", limit: 5
-    config.add_facet_field solr_name("degree", :facetable), label: "Degree", limit: 5
-    config.add_facet_field solr_name("publisher", :facetable), limit: 5
+    config.add_facet_field solr_name("contributor", :facetable), label: "Contributor", limit: 5
     config.add_facet_field solr_name("center", :facetable), label: "Project Center", limit: 5
-    config.add_facet_field solr_name("based_near_label", :facetable), label: "Geo Location", limit: 5
+    config.add_facet_field solr_name("department", :facetable), label: "Unit", limit: 5
+    config.add_facet_field solr_name("publisher", :facetable), limit: 5
+    config.add_facet_field solr_name("subject", :facetable), limit: 5
+    config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
+    #config.add_facet_field solr_name("language", :facetable), limit: 5
 
 
     # The generic_type isn't displayed on the facet list
@@ -74,7 +71,8 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name("keyword", :stored_searchable), itemprop: 'keywords', link_to_search: solr_name("keyword", :facetable)
     # config.add_index_field solr_name("subject", :stored_searchable), itemprop: 'about', link_to_search: solr_name("subject", :facetable)
     config.add_index_field solr_name("creator", :stored_searchable), itemprop: 'creator', link_to_search: solr_name("creator", :facetable)
-    config.add_index_field solr_name("contributor", :stored_searchable), itemprop: 'contributor', link_to_search: solr_name("contributor", :facetable)
+    #config.add_index_field solr_name("contributor", :stored_searchable), itemprop: 'contributor', link_to_search: solr_name("contributor", :facetable)
+    config.add_index_field solr_name("advisor", :stored_searchable), label: "Advisor", itemprop: 'advisor', link_to_search: solr_name("advisor", :facetable)
     # config.add_index_field solr_name("proxy_depositor", :symbol), label: "Depositor", helper_method: :link_to_profile
     # config.add_index_field solr_name("depositor"), label: "Owner", helper_method: :link_to_profile
     config.add_index_field solr_name("publisher", :stored_searchable), itemprop: 'publisher', link_to_search: solr_name("publisher", :facetable)
