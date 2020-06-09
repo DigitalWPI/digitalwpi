@@ -558,17 +558,20 @@ h2.sr-only{
 
 }
 
-
-
-.dropdown-menu{
+.navbar-nav .dropdown-menu{
     background-color: rgba(91, 105, 116, 0.9);
 }
 
+h2.slider {
+  margin-bottom: 25px;
+}
 
-
-
-
-
+.facet-values .sub-collection {
+  padding-left:30px;
+  display:list-item;
+  list-style-type:disc;
+  list-style-position:inside;
+}
 
 
 
