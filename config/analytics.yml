@@ -2,6 +2,11 @@
 # To integrate your app with Matomo
 #
 analytics: 
-  matomo_url: <%= ENV['matomo_url'] %> 
-  matomo_token: <%= ENV['matomo_token'] %> 
-  matomo_site_id: <%= ENV['matomo_site_id'] %> 
+#  matomo_url: <%= ENV['matomo_url'] %> 
+#  matomo_token: <%= ENV['matomo_token'] %> 
+#  matomo_site_id: <%= ENV['matomo_site_id'] %> 
+   app_name: Digital
+   app_version: 1.0
+   privkey_path: /var/digitalwpi/cert/digital-wpi-5364e7081c20.p12
+   privkey_secret: notasecret
+   client_email: digital-wpi@digital-wpi.iam.gserviceaccount.com
