@@ -70,7 +70,7 @@ RSpec.feature 'Create a Etd', js: false do
       check('agreement')
 
       click_on('Save')
-      click_on('Go')
+      #click_on('Go')
       results = page.find('div', id: 'search-results')
       div = results.find('div', class: 'metadata')
       dl = div.find('dl', class: 'dl-horizontal')
