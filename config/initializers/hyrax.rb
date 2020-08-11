@@ -59,6 +59,7 @@ Hyrax.config do |config|
   # Leaving it blank will set the start date to when ever the file was uploaded by
   # NOTE: if you have always sent analytics to GA for downloads and page views leave this commented out
   # config.analytic_start_date = DateTime.new(2014, 9, 10)
+  config.analytic_start_date = DateTime.new(2020, 1, 1)
 
   # Enables a link to the citations page for a work
   # Default is false
