@@ -32,7 +32,8 @@
               <a href="/about-page">About</a></li>
               
             <li <%= 'class=active' if current_page?(hyrax.help_path) %>>
-              <%= link_to t(:'hyrax.controls.help'), hyrax.help_path, aria: current_page?(hyrax.help_path) ? {current: 'page'} : nil %></li>
+              <a href="/help-page">Help</a></li>
+              <!--<%= link_to t(:'hyrax.controls.help'), hyrax.help_path, aria: current_page?(hyrax.help_path) ? {current: 'page'} : nil %></li> -->
           </ul><!-- /.nav -->        
         </div>
     </nav><!-- /.navbar -->

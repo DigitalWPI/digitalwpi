@@ -15,6 +15,10 @@ class StaticController < ApplicationController
     render "static/about-page"
   end
 
+  def helps
+    render "static/help-page"
+  end
+
   def centers
     render "static/project-centers"
   end
