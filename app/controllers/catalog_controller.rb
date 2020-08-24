@@ -48,6 +48,7 @@ class CatalogController < ApplicationController
     config.add_facet_field solr_name("advisor", :facetable), label: "Advisor", limit: 5, sort: 'index', index_range: 'A'..'Z'
     config.add_facet_field solr_name("contributor", :facetable), label: "Contributor", limit: 5, sort: 'index', index_range: 'A'..'Z'
     config.add_facet_field solr_name("center", :facetable), label: "Project Center", limit: 5, sort: 'index', index_range: 'A'..'Z'
+    config.add_facet_field solr_name("major", :facetable), label: "Major", limit: 5, sort: 'index', index_range: 'A'..'Z'
     config.add_facet_field solr_name("department", :facetable), label: "Unit", limit: 5, sort: 'index', index_range: 'A'..'Z'
     config.add_facet_field solr_name("publisher", :facetable), limit: 5
     config.add_facet_field solr_name("subject", :facetable), limit: 5, sort: 'index', index_range: 'A'..'Z'
