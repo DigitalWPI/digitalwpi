@@ -212,6 +212,10 @@ GEM
       bootstrap-sass (~> 3.0)
       openseadragon (>= 0.2.0)
       rails
+    blacklight_oai_provider (6.0.0)
+      blacklight (~> 6.0)
+      oai (~> 0.4)
+      rails (>= 4.2, < 6)
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
@@ -360,6 +364,8 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-encoding (0.0.4)
       faraday
+    faraday_middleware (0.14.0)
+      faraday (>= 0.7.4, < 1.0)
     fcrepo_wrapper (0.9.0)
       ruby-progressbar
     ffaker (2.11.0)
@@ -596,6 +602,10 @@ GEM
       mini_portile2 (~> 2.4.0)
     nokogumbo (1.5.0)
       nokogiri
+    oai (0.4.0)
+      builder (>= 3.1.0)
+      faraday
+      faraday_middleware
     oauth (0.5.4)
     oauth2 (1.4.1)
       faraday (>= 0.8, < 0.16.0)
@@ -939,6 +949,7 @@ DEPENDENCIES
   active_fedora-noid
   autometal-piwik (>= 1.0)
   bixby
+  blacklight_oai_provider
   bootstrap-sass (>= 3.4.1)
   byebug
   capistrano (~> 3.11)
@@ -993,4 +1004,4 @@ DEPENDENCIES
   yajl-ruby
 
 BUNDLED WITH
-   1.16.6
+   1.17.2
