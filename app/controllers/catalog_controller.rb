@@ -303,6 +303,24 @@ class CatalogController < ApplicationController
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
     config.spell_max = 5
+
+    # Add Blacklight OAI provider Configuration for Primo
+    config.oai = {
+        provider: {
+            repository_name: 'digitalwpi',
+            repository_url: 'https://digital.wpi.edu/catalog/oai',
+            record_prefix: 'oai:digitalwpi',
+            admin_email: 'zchen12@wpi.edu',
+            sample_id: '109660'
+        },
+        document: {
+            limit: 25,            # number of records returned with each request, default: 15
+            set_fields: [        # ability to define ListSets, optional, default: nil
+                { label: 'language', solr_field: 'language_facet' }
+            ]
+        }
+    }
+
   end
 
   # disable the bookmark control from displaying in gallery view

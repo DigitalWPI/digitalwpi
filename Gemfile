@@ -34,6 +34,7 @@ group :production, :development, :test do
 
   # Use Capistrano for deployment
   # gem 'capistrano-rails', group: :development
+  gem 'blacklight_oai_provider' # add Blacklight oai for Primo 
   gem 'autometal-piwik', '>= 1.0'
   gem 'factory_bot_rails' # #comment from besss: Needed so we can load fixtures for demos in production
   gem 'faker' # #comment from besss: Needed so we can load fixtures for demos in production
