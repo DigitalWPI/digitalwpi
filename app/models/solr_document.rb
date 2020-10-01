@@ -9,6 +9,8 @@ class SolrDocument
   include Hyrax::SolrDocumentBehavior
 
   # self.unique_key = 'id'
+  # Added OAI setting in SolrDocument
+  self.timestamp_key = 'record_creation_date'
 
   # Email uses the semantic field mappings below to generate the body of an email.
   SolrDocument.use_extension(Blacklight::Document::Email)
@@ -21,6 +23,25 @@ class SolrDocument
   # single valued. See Blacklight::Document::SemanticFields#field_semantics
   # and Blacklight::Document::SemanticFields#to_semantic_values
   # Recommendation: Use field names from Dublin Core
+
+  field_semantics.merge!(
+      creator: "author_display",
+      date: "pub_date",
+      subject: "subject_topic_facet",
+      title: "title_display",
+      language: "language_facet",
+      format: "format"
+  )
+
+  config.oai = {
+      document: {
+          set_model: NewListSet,
+          set_fields: [
+              { label: 'language', solr_field: 'language_facet' }
+          ]
+      }
+  }
+
   use_extension(Blacklight::Document::DublinCore)
 
   # Do content negotiation for AF models.
@@ -109,5 +130,9 @@ class SolrDocument
 
   def extent
     self[Solrizer.solr_name('extent')]
+  end
+
+  def sets
+    NewListSet.sets_for(self)
   end
 end
