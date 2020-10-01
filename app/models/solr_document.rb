@@ -33,15 +33,6 @@ class SolrDocument
       format: "format"
   )
 
-  config.oai = {
-      document: {
-          set_model: NewListSet,
-          set_fields: [
-              { label: 'language', solr_field: 'language_facet' }
-          ]
-      }
-  }
-
   use_extension(Blacklight::Document::DublinCore)
 
   # Do content negotiation for AF models.
