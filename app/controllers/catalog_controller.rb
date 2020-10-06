@@ -309,7 +309,7 @@ class CatalogController < ApplicationController
     config.oai = {
         provider: {
             repository_name: 'digitalwpi',
-            repository_url: 'https://digital.wpi.edu/catalog/oai',
+            repository_url: 'https://' + Rails.application.config.application_root_url.to_s + '/catalog/oai',
             record_prefix: 'oai:digitalwpi',
             admin_email: 'zchen12@wpi.edu',
             sample_id: '109660'
