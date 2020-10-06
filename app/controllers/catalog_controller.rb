@@ -317,7 +317,7 @@ class CatalogController < ApplicationController
         document: {
             limit: 25,            # number of records returned with each request, default: 15
             set_fields: [        # ability to define ListSets, optional, default: nil
-                { label: 'language', solr_field: 'language_facet' }
+                { label: 'language', solr_field: 'language_tesim' }
             ]
         }
     }
