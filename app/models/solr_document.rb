@@ -25,11 +25,20 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
 
   field_semantics.merge!(
+      contributor: "contributor_tesim",
       creator: "creator_tesim",
       date: "date_created_tesim",
+      description: "description_tesim",
+      format: "file_format_tesim",
+      identifier: "identifier_tesim",
+      language: "language_tesim",
+      publisher: "publisher_tesim",
+      relation: "member_ids_ssim",
+      rights: "rights_statement_tesim",
+      source: "source_tesim",
       subject: "subject_tesim",
       title: "title_tesim",
-      language: "language_tesim"
+      type: "resource_type_tesim"
   )
 
   use_extension(Blacklight::Document::DublinCore)
