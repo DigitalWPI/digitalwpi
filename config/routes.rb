@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   concern :exportable, Blacklight::Routes::Exportable.new
 
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
+    concerns :oai_provider
     concerns :exportable
   end
 
