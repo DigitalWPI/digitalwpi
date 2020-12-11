@@ -20,7 +20,7 @@
 <%= presenter.attribute_to_html(:center, render_as: :Linked, search_field: :center,html_dl:true ) %>
 <%= presenter.attribute_to_html(:funding, render_as: :faceted, html_dl:true ) %>
 <%= presenter.attribute_to_html(:sponsor, render_as: :faceted, html_dl:true ) %>
-<%= presenter.attribute_to_html(:institute, render_as: :faceted, html_dl:true ) %>
+<%= presenter.attribute_to_html(:institute, render_as: :faceted, html_dl:true, label: "UN Sustainable Development Goals" ) %>
 <%= presenter.attribute_to_html(:date_created, html_dl: true) %>
 <%= presenter.attribute_to_html(:based_near_label, html_dl: true) %>
 <%= presenter.attribute_to_html(:related_url, render_as: :external_link, html_dl: true) %>
