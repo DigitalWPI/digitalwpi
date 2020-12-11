@@ -46,6 +46,7 @@ en:
           subject_tesim: Subject
           title_tesim: Title
           institute_tesim: UN Sustainable Development Goals
+          institute_sim: UN Sustainable Development Goals
   hyrax:
     account_name: My Institution Account Id
     directory:
