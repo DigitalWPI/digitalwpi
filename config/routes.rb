@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     concerns :searchable
   end
 
+  resources :bepress
+
   devise_for :users, controllers: { omniauth_callbacks: 'callbacks', registrations: "registrations" }
   get 'login' => 'static#login'
   get 'about-page' => 'static#about-page'

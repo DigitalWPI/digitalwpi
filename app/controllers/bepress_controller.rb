@@ -1,0 +1,2 @@
+class BepressController < ApplicationController
+end

@@ -1,0 +1,2 @@
+class Bepress < ApplicationRecord
+end
