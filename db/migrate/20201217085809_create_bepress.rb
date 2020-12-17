@@ -15697,7 +15697,7 @@ class CreateBepress < ActiveRecord::Migration[5.1]
     Bepress.create(:hyrax_id => nil, :resource_type => "mqp", :bepress_id => "6131", :download_id => "7130")
     Bepress.create(:hyrax_id => nil, :resource_type => "mqp", :bepress_id => "6250", :download_id => "7249")
     Bepress.create(:hyrax_id => nil, :resource_type => "mqp", :bepress_id => "5179", :download_id => "6178")
-    Bepress.create(:hyrax_id => nil, :resource_type => "mqp", :bepress_id => "5062", :download_id => "ni")
+    Bepress.create(:hyrax_id => nil, :resource_type => "mqp", :bepress_id => "5062", :download_id => nil)
     Bepress.create(:hyrax_id => nil, :resource_type => "mqp", :bepress_id => "4223", :download_id => "5222")
     Bepress.create(:hyrax_id => nil, :resource_type => "mqp", :bepress_id => "6389", :download_id => "7388")
     Bepress.create(:hyrax_id => nil, :resource_type => "mqp", :bepress_id => "6582", :download_id => "7581")
