@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :bepress
 
   get '/bepress/r/:resource_type/:bepress_id', to: 'bepress#record'
-  get '/bepress/d/:resource_type/:document_id', to: 'bepress#document'
+  get '/bepress/d/:resource_type/:download_id', to: 'bepress#document'
 
   devise_for :users, controllers: { omniauth_callbacks: 'callbacks', registrations: "registrations" }
   get 'login' => 'static#login'
