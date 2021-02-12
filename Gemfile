@@ -62,6 +62,7 @@ group :production, :development, :test do
   gem 'sidekiq'
   gem 'xray-rails'
   gem 'yajl-ruby', require: 'yajl'
+  gem 'pdfjs_viewer-rails', git: 'https://github.com/TuftsUniversity/pdfjs_viewer-rails.git', tag: 'tdl-20200428'
 end
 
 group :development, :test do

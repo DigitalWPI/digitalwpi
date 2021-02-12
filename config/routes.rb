@@ -40,6 +40,8 @@ Rails.application.routes.draw do
   curation_concerns_basic_routes
   concern :exportable, Blacklight::Routes::Exportable.new
 
+  mount PdfjsViewer::Rails::Engine => "/pdfjs", as: 'pdfjs'
+
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
     concerns :oai_provider
     concerns :exportable
