@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale.to_s %>" prefix="og:http://ogp.me/ns#">
+  <head>
+   <style>
+     html, body, iframe { height: 100%; }
+     #content, body {
+       background-color: #4e4e4e;
+     }
+a:link
+{
+    color:#FFFFFF;
+}
+
+a:visited
+{
+    color:#FFFFFF;
+}
+
+a:hover 
+{
+    color:#FFFFFF;
+}
+
+   </style>
+  </head>
+
+  <body>
+<div id="content" class="container" role="main">
+    <%= content_for?(:content) ? yield(:content) : yield %>
+</div>
+  </body>
+</html>
