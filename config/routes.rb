@@ -15,6 +15,11 @@ Rails.application.routes.draw do
     concerns :searchable
   end
 
+  resources :bepress
+
+  get '/bepress/r/:resource_type/:bepress_id', to: 'bepress#record'
+  get '/bepress/d/:resource_type/:download_id', to: 'bepress#document'
+
   devise_for :users, controllers: { omniauth_callbacks: 'callbacks', registrations: "registrations" }
   get 'login' => 'static#login'
   get 'about-page' => 'static#about-page'
