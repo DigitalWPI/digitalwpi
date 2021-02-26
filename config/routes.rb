@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   concern :exportable, Blacklight::Routes::Exportable.new
 
   mount PdfjsViewer::Rails::Engine => "/pdfjs", as: 'pdfjs'
-  match '/pdfviewer/:id/:parent', to: 'pdfviewer#index', constraints: { id: /.*/ }, as: 'pdfviewer', via: [:get]
+  match '/pdfviewer/:id', to: 'pdfviewer#index', constraints: { id: /.*/ }, as: 'pdfviewer', via: [:get]
 
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
     concerns :oai_provider
