@@ -5,7 +5,7 @@
                     class: "representative-media",
                     alt: "",
                     role: "presentation" %>
-      <%= link_to "/pdfviewer/#{file_set.id}/#{@presenter.id}", data: { turbolinks: false } do %>
+      <%= link_to "/pdfviewer/#{file_set.id}", data: { turbolinks: false } do %>
         open in viewer <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
       <% end %>
     </div>
