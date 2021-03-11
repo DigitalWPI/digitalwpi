@@ -131,6 +131,10 @@ class SolrDocument
     self[Solrizer.solr_name('extent')]
   end
 
+  def sdg
+    self[Solrizer.solr_name('sdg')]
+  end
+
   def sets
     NewListSet.sets_for(self)
   end

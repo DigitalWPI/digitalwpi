@@ -7,7 +7,7 @@ module Hyrax
     self.model_class = ::StudentWork
     self.terms += [:resource_type, :alternate_title, :award, :includes]
     self.terms += [:advisor, :sponsor, :center, :year]
-    self.terms += [:funding, :institute, :school, :major]
+    self.terms += [:funding, :institute, :sdg, :school, :major]
     self.required_fields -= [:keyword]
     # self.required_fields += [:member_of_collection_ids]
   end

@@ -53,6 +53,10 @@ class StudentWork < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
+  property :sdg, predicate: "http://metadata.un.org/sdg/ontology#Goal" do |index|
+    index.as :stored_searchable, :facetable
+  end
+
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
   include ::Hyrax::BasicMetadata
