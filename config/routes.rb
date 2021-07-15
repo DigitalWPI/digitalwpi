@@ -15,6 +15,16 @@ Rails.application.routes.draw do
     concerns :searchable
   end
 
+  get '/collections/upub', to: redirect('/collections/k0698b37j')
+  get '/collections/cmag', to: redirect('/collections/70795b489')
+  get '/collections/yearbook', to: redirect('/collections/vt150n121')
+  get '/collections/fpe', to: redirect('/collections/p5547v039')
+  get '/collections/ms51', to: redirect('/collections/w0892d411')
+  get '/collections/ms54', to: redirect('/collections/3197xp59j')
+  get '/collections/ms55', to: redirect('/collections/vx021h564')
+  get '/collections/boz', to: redirect('/collections/sq87bv394')
+  get '/collections/summits', to: redirect('/collections/b8515q79x')
+
   resources :bepress
 
   get '/bepress/r/:resource_type/:bepress_id', to: 'bepress#record'
