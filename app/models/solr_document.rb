@@ -33,7 +33,6 @@ class SolrDocument
       identifier: "identifier_tesim",
       language: "language_tesim",
       publisher: "publisher_tesim",
-      relation: "member_ids_ssim",
       rights: "rights_statement_tesim",
       source: "source_tesim",
       subject: "subject_tesim",

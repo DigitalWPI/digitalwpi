@@ -68,6 +68,8 @@ class Etd < ActiveFedora::Base
   property :defense_date, predicate: "http://purl.org/dc/terms/dateAccepted", multiple: false do |index|
     index.as :stored_searchable
   end
+  
+    property :url, predicate: "http://www.europeana.eu/schemas/edm/isShownAt"
 
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)

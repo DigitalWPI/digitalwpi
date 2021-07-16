@@ -56,6 +56,10 @@ class StudentWork < ActiveFedora::Base
   property :sdg, predicate: "http://metadata.un.org/sdg/ontology#Goal" do |index|
     index.as :stored_searchable, :facetable
   end
+  
+  property :url, predicate: "http://www.europeana.eu/schemas/edm/isShownAt"
+  
+  property :note, predicate: "http://www.w3.org/2006/vcard/ns#hasNote"
 
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
