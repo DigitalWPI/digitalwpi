@@ -608,11 +608,7 @@ GEM
     noid-rails (3.0.1)
       actionpack (>= 5.0.0, < 6)
       noid (~> 0.9)
-<<<<<<< HEAD
-    nokogiri (1.10.4)
-=======
     nokogiri (1.10.5)
->>>>>>> dependabot/bundler/loofah-2.3.1
       mini_portile2 (~> 2.4.0)
     nokogumbo (1.5.0)
       nokogiri
