@@ -57,9 +57,9 @@ class StudentWork < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
   
-  property :url, predicate: "http://www.europeana.eu/schemas/edm/isShownAt"
+  property :url, predicate: "http://www.w3.org/2006/vcard/ns#URL"
   
-  property :note, predicate: "http://www.w3.org/2006/vcard/ns#hasNote"
+  property :note, predicate: "http://www.w3.org/2006/vcard/ns#Note"
 
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
