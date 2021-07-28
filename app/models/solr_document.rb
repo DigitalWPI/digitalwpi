@@ -139,6 +139,10 @@ class SolrDocument
     self[Solrizer.solr_name('note')]
   end
 
+  def url
+    self[Solrizer.solr_name('url')]
+  end
+
   def sets
     NewListSet.sets_for(self)
   end

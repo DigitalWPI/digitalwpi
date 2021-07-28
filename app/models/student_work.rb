@@ -60,6 +60,10 @@ class StudentWork < ActiveFedora::Base
   property :note, predicate: "http://www.w3.org/2006/vcard/ns#Note", multiple: false do |index|
     index.as :stored_searchable
   end
+  
+  property :url, predicate: "http://www.w3.org/2006/vcard/ns#URL", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
