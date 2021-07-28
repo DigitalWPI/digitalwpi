@@ -135,6 +135,10 @@ class SolrDocument
     self[Solrizer.solr_name('sdg')]
   end
 
+  def note
+    self[Solrizer.solr_name('note')]
+  end
+
   def sets
     NewListSet.sets_for(self)
   end

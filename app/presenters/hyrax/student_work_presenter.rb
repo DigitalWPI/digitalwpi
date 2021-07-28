@@ -3,6 +3,7 @@
 #  `rails generate hyrax:work StudentWork`
 module Hyrax
   class StudentWorkPresenter < Hyrax::WorkShowPresenter
+    delegate :note, to: :solr_document
     delegate :advisor, to: :solr_document
     delegate :alternate_title, to: :solr_document
     delegate :award, to: :solr_document
