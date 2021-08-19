@@ -47,6 +47,13 @@ zh:
           title_tesim: 标题
   hyrax:
     account_name: 我的机构帐户标识符
+    base:
+      items:
+        embargo_release_date: Embargo Release Date
+    dashboard:
+      my:
+        heading:
+          embargo_release_date: Embargo Release Date
     directory:
       suffix: "@example.org"
     footer:

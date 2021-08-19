@@ -49,6 +49,13 @@ en:
           institute_sim: UN Sustainable Development Goals
   hyrax:
     account_name: My Institution Account Id
+    base:
+      items:
+        embargo_release_date: Embargo Release Date
+    dashboard:
+      my:
+        heading:
+          embargo_release_date: Embargo Release Date
     directory:
       suffix: "@example.org"
     footer:
