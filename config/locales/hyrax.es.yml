@@ -47,6 +47,13 @@ es:
           title_tesim: Título
   hyrax:
     account_name: Mi identificador de cuenta institucional
+    base:
+      items:
+        embargo_release_date: Embargo Release Date
+    dashboard:
+      my:
+        heading:
+          embargo_release_date: Embargo Release Date
     directory:
       suffix: "@example.org"
     footer:
