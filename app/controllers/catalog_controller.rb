@@ -326,7 +326,6 @@ class CatalogController < ApplicationController
                 { label: 'identifier', solr_field: 'identifier_tesim' },
                 { label: 'language', solr_field: 'language_tesim' },
                 { label: 'publisher', solr_field: 'publisher_tesim' },
-                { label: 'relation', solr_field: 'member_ids_ssim' },
                 { label: 'rights', solr_field: 'rights_statement_tesim' },
                 { label: 'source', solr_field: 'source_tesim' },
                 { label: 'subject', solr_field: 'subject_tesim' },
