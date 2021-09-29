@@ -54,7 +54,7 @@ class CatalogController < ApplicationController
     config.add_facet_field solr_name("department", :facetable), label: "Unit", limit: 5, sort: 'index', index_range: 'A'..'Z'
     config.add_facet_field solr_name("publisher", :facetable), limit: 5
     config.add_facet_field solr_name("subject", :facetable), limit: 5, sort: 'index', index_range: 'A'..'Z'
-    config.add_facet_field solr_name('sdg', :facetable), label: "UN SDG", limit: 5
+    config.add_facet_field solr_name('sdg', :facetable), label: "UN SDG", limit: 5, helper_method: :sdg_facet_display
     config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
     #config.add_facet_field solr_name("language", :facetable), limit: 5
 

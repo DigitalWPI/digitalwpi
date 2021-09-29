@@ -3,6 +3,8 @@
 #  `rails generate hyrax:work StudentWork`
 module Hyrax
   class StudentWorkPresenter < Hyrax::WorkShowPresenter
+    include ::SdgService
+    
     delegate :note, to: :solr_document
     delegate :advisor, to: :solr_document
     delegate :alternate_title, to: :solr_document
@@ -25,5 +27,10 @@ module Hyrax
     delegate :series, to: :solr_document
     delegate :sponsor, to: :solr_document
     delegate :year, to: :solr_document
+
+    def sdg_display
+      SdgService.label(sdg.id)
+    end
+
   end
 end
