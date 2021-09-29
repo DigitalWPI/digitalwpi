@@ -77,6 +77,9 @@ terms:
 - id: "17 - Partnerships for the Goals"
   term: "17 - Partnerships for the Goals"
   active: true
+- id: "None of the Above"
+  term: "None of the Above"
+  active: false
 - id: "Not Specified"
   term: "Not Specified"
   active: true
