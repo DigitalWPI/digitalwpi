@@ -1,31 +1,4 @@
 terms:
-- id: "1 - No Poverty"
-  term: "1 - No Poverty"
-  active: false
-- id: "2 - Zero Hunger"
-  term: "2 - Zero Hunger"
-  active: false
-- id: "3 - Good Health and Well-being"
-  term: "3 - Good Health and Well-being"
-  active: false
-- id: "4 - Quality Education"
-  term: "4 - Quality Education"
-  active: false
-- id: "5 - Gender Equality"
-  term: "5 - Gender Equality"
-  active: false
-- id: "6 - Clean Water and Sanitation"
-  term: "6 - Clean Water and Sanitation"
-  active: false
-- id: "7 - Affordable and Clean Energy"
-  term: "7 - Affordable and Clean Energy"
-  active: false
-- id: "8 - Decent Work and Economic Growth"
-  term: "8 - Decent Work and Economic Growth"
-  active: false
-- id: "9 - Industry, Innovation and Infrastructure"
-  term: "9 - Industry, Innovation and Infrastructure"
-  active: false
 - id: "01 - No Poverty"
   term: "1 - No Poverty"
   active: true
@@ -77,9 +50,6 @@ terms:
 - id: "17 - Partnerships for the Goals"
   term: "17 - Partnerships for the Goals"
   active: true
-- id: "None of the Above"
-  term: "None of the Above"
-  active: false
 - id: "Not Specified"
   term: "Not Specified"
   active: true

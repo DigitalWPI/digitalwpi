@@ -39,13 +39,11 @@ module Hyrax
       private
       
       def attribute_value_to_html(value)
-        #SdgService.label(value)
         li_value(value)
       end
 
       def li_value(value)
         link_to(ERB::Util.h(SdgService.label(value)), search_path(value))
-        #link_to(ERB::Util.h("test"), search_path(value))
       end
 
       def search_path(value)
