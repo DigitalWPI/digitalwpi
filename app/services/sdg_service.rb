@@ -9,22 +9,10 @@ module SdgService
 	end
 	
 	def self.label(id)
-		old_sdg = [
-			"1 - No Poverty",
-			"2 - Zero Hunger",
-			"3 - Good Health and Well-being",
-			"4 - Quality Education",
-			"5 - Gender Equality",
-			"6 - Clean Water and Sanitation",
-			"7 - Affordable and Clean Energy",
-			"8 - Decent Work and Economic Growth",
-			"9 - Industry, Innovation and Infrastructure"
-		]
-
-		if old_sdg.include?(id)
-			id
-		else
+		if authority.find(id).present?
 			authority.find(id).fetch('term')
+		else
+			id
 		end
 	end
 end
