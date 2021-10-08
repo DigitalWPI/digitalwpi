@@ -318,18 +318,18 @@ class CatalogController < ApplicationController
         document: {
             limit: 25,            # number of records returned with each request, default: 15
             set_fields: [        # ability to define ListSets, optional, default: nil
-                { label: 'contributor', solr_field: 'contributor_tesim' },
+                { label: 'identifier', solr_field: 'identifier_tesim' },
+                { label: 'title', solr_field: 'title_tesim' },
                 { label: 'creator', solr_field: 'creator_tesim' },
                 { label: 'date', solr_field: 'date_created_tesim' },
                 { label: 'description', solr_field: 'description_tesim' },
+                { label: 'subject', solr_field: 'subject_tesim' },
+                { label: 'contributor', solr_field: 'contributor_tesim' },
                 { label: 'format', solr_field: 'file_format_tesim' },
-                { label: 'identifier', solr_field: 'identifier_tesim' },
                 { label: 'language', solr_field: 'language_tesim' },
                 { label: 'publisher', solr_field: 'publisher_tesim' },
                 { label: 'rights', solr_field: 'rights_statement_tesim' },
                 { label: 'source', solr_field: 'source_tesim' },
-                { label: 'subject', solr_field: 'subject_tesim' },
-                { label: 'title', solr_field: 'title_tesim' },
                 { label: 'type', solr_field: 'resource_type_tesim' }
             ]
         }
