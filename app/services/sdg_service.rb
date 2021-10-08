@@ -21,7 +21,7 @@ module SdgService
 	    "9 - Industry, Innovation and Infrastructure"
 	  ]
 
-	  if old_sdg.include(id)
+	  if old_sdg.include?(id)
 	    id
 	  else
 		  authority.find(id).fetch('term')
