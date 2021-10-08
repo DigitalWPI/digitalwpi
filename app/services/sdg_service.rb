@@ -9,6 +9,10 @@ module SdgService
 	end
 	
 	def self.label(id)
-		authority.find(id).fetch('term')
+		if authority.find(id).present?
+			authority.find(id).fetch('term')
+		else
+			id
+		end
 	end
 end
