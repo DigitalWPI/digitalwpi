@@ -5,7 +5,7 @@ class PdfviewerController < ApplicationController
       @id = params[:id]
       @parent_id = FileSet.find(@id).parent_id
     else
-      redirect_to root_path, notice: "Document not found"
+      redirect_to root_path, alert: "Document not found"
     end
   end
 end
