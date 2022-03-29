@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190427045014) do
+ActiveRecord::Schema.define(version: 20201217085809) do
+
+  create_table "bepress", force: :cascade do |t|
+    t.string "bepress_id"
+    t.string "download_id"
+    t.string "resource_type"
+    t.string "hyrax_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer "user_id", null: false
