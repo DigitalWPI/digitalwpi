@@ -43,7 +43,7 @@ module Hyrax
           "A2" => contributor,
           "AB" => description,
           "CY" => based_near_label,
-          "DA" => date_created[0].gsub('-','/'),
+          "DA" => (date_created[0].gsub('-','/') unless date_created[0].nil?),
           "DB" => I18n.t('hyrax.product_name'),
           "DP" => Institution.name_full,
           "ID" => identifier,
