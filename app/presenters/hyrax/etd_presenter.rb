@@ -17,6 +17,7 @@ module Hyrax
     delegate :funding, to: :solr_document
     delegate :includes, to: :solr_document
     delegate :institute, to: :solr_document
+    delegate :sdg, to: :solr_document
     delegate :major, to: :solr_document
     delegate :orcid, to: :solr_document
     delegate :school, to: :solr_document
