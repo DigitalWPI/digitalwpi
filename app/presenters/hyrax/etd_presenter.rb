@@ -24,5 +24,31 @@ module Hyrax
     delegate :series, to: :solr_document
     delegate :sponsor, to: :solr_document
     delegate :year, to: :solr_document
+
+    def sdg_display
+      SdgService.label(sdg.id)
+    end
+
+    def attribute_to_html(field, options = {})
+      unless respond_to?(field)
+        Rails.logger.warn("#{self.class} attempted to render #{field}, but no method exists with that name.")
+        return
+      end
+
+      if options[:sort]
+        if options[:html_dl]
+          renderer_for(field, options).new(field, send(field), options).render_dl_row_sort
+        else
+          renderer_for(field, options).new(field, send(field), options).render_sort
+        end
+      else
+        if options[:html_dl]
+          renderer_for(field, options).new(field, send(field), options).render_dl_row
+        else
+          renderer_for(field, options).new(field, send(field), options).render
+        end
+      end
+    end
+
   end
 end
