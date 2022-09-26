@@ -1,0 +1,15 @@
+en:
+  hyrax:
+    icons:
+      student_work:     'fa fa-file-text-o'
+    select_type:
+      student_work:
+        description:        "Student work works"
+        name:               "Student Work"
+    citations:
+      citation: Citation
+  simple_form:
+    labels:
+      student_work:
+        advisor: "Faculty Advisor"
+        funding: "Funding Organization"

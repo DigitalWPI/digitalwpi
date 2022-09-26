@@ -1,0 +1,45 @@
+    <h2 class="block-heading">Collections</h2>
+
+<div class="list-group list-group-striped" id="featured-collections">
+    <% collections.each do |collection| %>
+
+          <div class="featured-item-block">
+  <div class="featured-item-title">
+    <span class="sr-only"><%= t('hyrax.homepage.featured_works.document.title_label') %></span>
+  
+
+              <div class="featured-image-header">
+                <%= render_thumbnail_tag(collection,{ suppress_link: true }) %>
+
+              </div>
+              <h2 class="featured-item-title">  
+              <%= link_to [hyrax, collection] do %>
+                <%= collection.title.first %>
+              <% end %>
+            </h2>
+          </div>
+
+          <div class="featured-field featured-item-description">
+            <p><%= collection.description.first %></p> 
+          </div>
+            <h4>
+            <%= link_to [hyrax, collection] do %>
+              EXPLORE THE COLLECTION
+            <% end %>
+          </h4>
+    </div>
+
+    <% end %>
+
+</div>
+<%
+=begin%>
+ <ul class="list-inline collection-highlights-list">
+  <li>
+    <%= link_to t('hyrax.homepage.admin_sets.link'),
+                main_app.search_catalog_path(f: { human_readable_type_sim: ["Collection"]}),
+                class: 'btn btn-default' %>
+  </li>
+</ul> 
+<%
+=end%>

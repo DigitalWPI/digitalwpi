@@ -1,0 +1,31 @@
+development:
+  all_group:
+    - awscott@wpi.edu
+    - foo@example.com
+    - mgr1@example.com
+  mqp_banana:
+    - awscott@wpi.edu
+  archivist:
+    - archivist1@example.com
+  admin:
+    - foo@example.com
+test:
+  archivist:
+    - archivist1@example.com
+    - archivist2@example.com
+    - leland_himself@example.com
+  admin_policy_object_editor:
+    - archivist1@example.com
+  donor:
+    - donor1@example.com
+    - leland_himself@example.com
+  researcher:
+    - archivist1@example.com
+    - researcher1@example.com
+  patron:
+    - patron1@example.com
+    - leland_himself@example.com
+
+production:
+  admin:
+    - <%= ENV['HYRAX_ADMIN_USER'] %>

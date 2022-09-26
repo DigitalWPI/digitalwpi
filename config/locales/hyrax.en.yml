@@ -1,0 +1,75 @@
+---
+en:
+  blacklight:
+    search:
+      fields:
+        facet:
+          based_near_label_sim: Location
+          creator_sim: Creator
+          file_format_sim: Format
+          generic_type_sim: Type
+          keyword_sim: Keyword
+          language_sim: Language
+          publisher_sim: Publisher
+          subject_sim: Subject
+        index:
+          based_near_tesim: Location
+          contributor_tesim: Contributor
+          creator_tesim: Creator
+          date_created_tesim: Date Created
+          date_modified_dtsi: Date Modified
+          date_uploaded_dtsi: Date Uploaded
+          description_tesim: Description
+          file_format_tesim: File Format
+          identifier_tesim: Identifier
+          keyword_tesim: Keyword
+          language_tesim: Language
+          license_tesim: License
+          publisher_tesim: Publisher
+          rights_statement_tesim: Rights Statement
+          subject_tesim: Subject
+        show:
+          based_near_tesim: Location
+          contributor_tesim: Contributor
+          creator_tesim: Creator
+          date_created_tesim: Date Created
+          date_modified_dtsi: Date Modified
+          date_uploaded_dtsi: Date Uploaded
+          description_tesim: Description
+          file_format_tesim: File Format
+          identifier_tesim: Identifier
+          keyword_tesim: Keyword
+          language_tesim: Language
+          license_tesim: License
+          publisher_tesim: Publisher
+          rights_statement_tesim: Rights Statement
+          subject_tesim: Subject
+          title_tesim: Title
+          institute_tesim: UN Sustainable Development Goals
+          institute_sim: UN Sustainable Development Goals
+  hyrax:
+    account_name: My Institution Account Id
+    base:
+      items:
+        embargo_release_date: Embargo Release Date
+    dashboard:
+      my:
+        heading:
+          embargo_release_date: Embargo Release Date
+    directory:
+      suffix: "@example.org"
+    footer:
+      copyright_html: "<strong>Copyright &copy; 2018 Samvera</strong> Licensed under the Apache License, Version 2.0"
+      service_html: A service of <a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a>.
+    institution_name: WPI
+    institution_name_full: Worcester Polytechnic Institute
+    institution_address: "100 Institute Road, Worcester MA 01609-2280 USA"
+    product_name: Digital WPI
+    product_twitter_handle: "@SamveraRepo"
+    search:
+      button:
+        html: <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+        text: Search
+      form:
+        q:
+          placeholder: Search Digital WPI

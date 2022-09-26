@@ -1,0 +1,8 @@
+pt-BR:
+  hyrax:
+    icons:
+      etd:     'fa fa-file-text-o'
+    select_type:
+      etd:
+        description:        "Etd trabalhos"
+        name:               "Etd"
