@@ -47,6 +47,16 @@ Hyrax.config do |config|
   #   maxFileSize: 500.megabytes
   # }
 
+  # Enable displaying usage statistics in the UI
+  # Defaults to false
+  # Requires a Google Analytics id and OAuth2 keyfile.  See README for more info
+  config.analytics = true
+
+  # Google Analytics tracking ID to gather usage statistics
+  #config.google_analytics_id = 'UA-169704692-1'
+
+  #config.analytic_start_date = DateTime.new(2020, 9, 1)
+
   # Enables a link to the citations page for a work
   # Default is false
   config.citations = true
@@ -77,7 +87,7 @@ Hyrax.config do |config|
   # config.redis_namespace = "hyrax"
 
   # Path to the file characterization tool
-  config.fits_path = ENV['FITS_PATH'] || "/fits/fits-1.5.0/fits.sh"
+  # config.fits_path = ENV['FITS_PATH'] || "/fits/fits-1.5.0/fits.sh"
 
   # Path to the file derivatives creation tool
   # config.libreoffice_path = "soffice"
@@ -129,11 +139,12 @@ Hyrax.config do |config|
   #
   # Default is false
   config.iiif_image_server = true
-  if ENV.fetch('IIIF_TO_SERVE_SSL_URLS', 'false') == 'true'
-    protocol = 'https'
-  else
-    protocol = 'http'
-  end
+  protocol = 'https'
+  #if ENV.fetch('IIIF_TO_SERVE_SSL_URLS', 'false') == 'true'
+  #  protocol = 'https'
+  #else
+  #  protocol = 'http'
+  #end
 
   if Rails.env.development?
     port = ENV.fetch('PORT', 3000)
@@ -183,12 +194,16 @@ Hyrax.config do |config|
 
   # Temporary paths to hold uploads before they are ingested into FCrepo
   # These must be lambdas that return a Pathname. Can be configured separately
-  config.upload_path = ->() { ENV.fetch('UPLOADS_PATH', Rails.root.join('tmp', 'uploads')) }
-  config.cache_path = ->() { ENV.fetch('CACHE_PATH', Rails.root.join('tmp', 'uploads', 'cache')) }
+  #config.upload_path = ->() { ENV.fetch('UPLOADS_PATH', Rails.root.join('tmp', 'uploads')) }
+  #config.cache_path = ->() { ENV.fetch('CACHE_PATH', Rails.root.join('tmp', 'uploads', 'cache')) }
+  config.upload_path = ->() { Pathname.new(File.absolute_path(ENV["NFS_DIR"]+ '/')) + 'rails' + 'uploads' }
+  config.cache_path = ->() { Pathname.new(File.absolute_path(ENV["NFS_DIR"]+ '/')) + 'rails' + 'uploads' + 'cache' }
+
 
   # Location on local file system where derivatives will be stored
   # If you use a multi-server architecture, this MUST be a shared volume
-  config.derivatives_path = ENV.fetch('DERIVATIVES_PATH', Rails.root.join('tmp', 'derivatives'))
+  #config.derivatives_path = ENV.fetch('DERIVATIVES_PATH', Rails.root.join('tmp', 'derivatives'))
+  config.derivatives_path = Pathname.new(File.absolute_path(ENV["NFS_DIR"]+ '/'))  + 'rails' + 'derivatives'
 
   # Should schema.org microdata be displayed?
   # config.display_microdata = true
@@ -200,7 +215,8 @@ Hyrax.config do |config|
   # Location on local file system where uploaded files will be staged
   # prior to being ingested into the repository or having derivatives generated.
   # If you use a multi-server architecture, this MUST be a shared volume.
-  config.working_path = ENV.fetch('UPLOADS_PATH', Rails.root.join('tmp', 'uploads'))
+  #config.working_path = ENV.fetch('UPLOADS_PATH', Rails.root.join('tmp', 'uploads'))
+  config.working_path = Pathname.new(ENV["NFS_DIR"]+ '/')  + 'rails' + 'uploads'
 
   # Should the media display partial render a download link?
   # config.display_media_download_link = true
@@ -309,7 +325,7 @@ Hyrax.config do |config|
   # config.identifier_registrars = {}
 end
 
-DEFAULT_DATE_FORMAT = ENV['DEFAULT_DATE_FORMAT'] || '%m/%d/%Y'
+DEFAULT_DATE_FORMAT = ENV['DEFAULT_DATE_FORMAT'] || '%Y-%m-%d'
 Date::DATE_FORMATS[:standard] = DEFAULT_DATE_FORMAT
 DateTime::DATE_FORMATS[:standard] = DEFAULT_DATE_FORMAT
 Date::DATE_FORMATS[:default] = DEFAULT_DATE_FORMAT
