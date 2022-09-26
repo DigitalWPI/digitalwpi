@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 class SolrDocument
   include Blacklight::Solr::Document
-  # include BlacklightOaiProvider::SolrDocument
+  include BlacklightOaiProvider::SolrDocument
 
   include Blacklight::Gallery::OpenseadragonSolrDocument
 
   # Adds Hyrax behaviors to the SolrDocument.
   include Hyrax::SolrDocumentBehavior
 
-
   # self.unique_key = 'id'
   # Added OAI setting in SolrDocument
-  # self.timestamp_key = 'system_create_dtsi'
+  self.timestamp_key = 'system_create_dtsi'
 
   # Email uses the semantic field mappings below to generate the body of an email.
   SolrDocument.use_extension(Blacklight::Document::Email)
@@ -42,7 +41,7 @@ class SolrDocument
   )
   use_extension(Blacklight::Document::DublinCore)
 
-  # Do content negotiation for AF models. 
+  # Do content negotiation for AF models.
 
   use_extension( Hydra::ContentNegotiation )
 
@@ -60,6 +59,10 @@ class SolrDocument
 
   def identifier
     self[Solrizer.solr_name('identifier')]
+  end
+
+  def alternative_title
+    self[Solrizer.solr_name('alternative_title')]
   end
 
   def alternate_title
