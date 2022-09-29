@@ -16,7 +16,7 @@ module DigitalWpi
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
-    # config.middleware.use Rack::Attack
+    config.middleware.use Rack::Attack
     config.eager_load_paths << Rails.root.join('lib')
     config.time_zone = "Eastern Time (US & Canada)"
     # Sometimes, just setting above config doesn't work.

@@ -1,4 +1,5 @@
-# NB: the URLs in this file should match those in blacklight.yml
+
+# This is a sample config file that points to a solr server for each environment
 development:
   url: <%= ENV['SOLR_HOST'] || "http://127.0.0.1:#{ENV.fetch('SOLR_TEST_PORT', 8983)}/solr/hydra-development" %>
 test:

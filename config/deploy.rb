@@ -2,8 +2,7 @@
 lock "~> 3.11.0"
 my_app_name = "digitalwpi"
 set :application, "#{my_app_name}"
-set :repo_url, "https://github.com/CottageLabs/hyrax3_app.git"
-set :repo_tree, "hyrax"
+set :repo_url, "https://github.com/DigitalWPI/digitalwpi.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
