@@ -14,7 +14,7 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  config.secret_key = ENV['DEVISE_SECRET_KEY'] || '70727dee31e389416785e18afc87fe427892f5019192dd193e07917880eb9f494af846cc979be51c711b48da9b9fd24ba883cefbd1ecc081ecf9a04b0655c0a0'
+  config.secret_key = ENV['DEVISE_SECRET_KEY']
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -24,7 +24,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = ENV['USER_MANAGEMENT_EMAIL_FROM_ADDRESS'] || 'please-change-me-at-config-initializers-devise@example.com'
+  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
@@ -46,7 +46,7 @@ Devise.setup do |config|
   # session. If you need permissions, you should implement that in a before filter.
   # You can also supply a hash where the value is a boolean determining whether
   # or not authentication should be aborted when the value is not present.
-  # config.authentication_keys = [:email]
+  config.authentication_keys = [:email]
 
   # Configure parameters from the request object used for authentication. Each entry
   # given should be a request method and it will automatically be passed to the
@@ -295,6 +295,19 @@ Devise.setup do |config|
   # When using OmniAuth, Devise cannot automatically set OmniAuth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
+
+  OneLogin::RubySaml::Attributes.single_value_compatibility = false
+  config.omniauth :saml,
+    idp_cert_fingerprint: ENV['SAML_IDP_CERT_FINGERPRINT'],
+    idp_sso_target_url: ENV['SAML_IDP_TARGET_URL'],
+    issuer: ENV['SAML_SP_ISSUER'],
+    assertion_consumer_service_url: ENV['SAML_SERVICE_URL'],
+    name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+    single_value_compatibility: false,
+    attribute_statements: {
+      email: ['urn:oid:1.3.6.1.4.1.5923.1.1.1.6'],
+      name: ['urn:oid:2.16.840.1.113730.3.1.241'],
+    }
 
   # ==> Turbolinks configuration
   # If your app is using Turbolinks, Turbolinks::Controller needs to be included to make redirection work correctly:

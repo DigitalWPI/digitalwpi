@@ -1,0 +1,34 @@
+<h2>Local Account Log in</h2>
+
+<% if AUTH_CONFIG['sso_enabled'] %>
+  <p>Note: If you are affiliated with WPI, use the <a href="/users/auth/saml">Central Login form</a> instead.</p>
+<% end %>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.password_field :password, autocomplete: "off" %>
+  </div>
+
+  <% if devise_mapping.rememberable? -%>
+    <div class="field">
+      <%= f.check_box :remember_me %>
+      <%= f.label :remember_me %>
+    </div>
+  <% end -%>
+
+  <div class="actions">
+    <p><%= f.submit "Log in" %></p>
+  </div>
+<% end %>
+
+<% if AUTH_CONFIG['signups_enabled'] %>
+  <a href="/users/sign_up">Sign up</a><br />
+<% end %>
+
+<p><a href="/users/password/new">Reset/Forgot your password?</a></p>

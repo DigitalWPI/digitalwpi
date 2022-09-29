@@ -2,7 +2,7 @@
 class CatalogController < ApplicationController
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior
-  # include BlacklightOaiProvider::Controller
+  include BlacklightOaiProvider::Controller
 
   # This filter applies the hydra access controls
   before_action :enforce_show_permissions, only: :show
@@ -77,30 +77,29 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
     config.add_index_field solr_name("title", :stored_searchable), label: "Title", itemprop: 'name', if: false
-    config.add_index_field solr_name("keyword", :stored_searchable), itemprop: 'keywords', link_to_search: solr_name("keyword", :facetable)
-    config.add_index_field solr_name("creator", :stored_searchable), itemprop: 'creator', link_to_search: solr_name("creator", :facetable)
-    config.add_index_field solr_name("advisor", :stored_searchable), label: "Advisor", itemprop: 'advisor', link_to_search: solr_name("advisor", :facetable)
-    config.add_index_field solr_name("publisher", :stored_searchable), itemprop: 'publisher', link_to_search: solr_name("publisher", :facetable)
-    config.add_index_field solr_name("date_created", :stored_searchable), itemprop: 'dateCreated'
-    config.add_index_field solr_name("resource_type", :stored_searchable), label: "Resource Type", link_to_search: solr_name("resource_type", :facetable)
-    config.add_index_field solr_name("degree", :stored_searchable), label: "Degree"
-    config.add_index_field solr_name("department", :stored_searchable), label: "Unit"
     # config.add_index_field solr_name("description", :stored_searchable), itemprop: 'description', helper_method: :iconify_auto_link
+    config.add_index_field solr_name("keyword", :stored_searchable), itemprop: 'keywords', link_to_search: solr_name("keyword", :facetable)
     # config.add_index_field solr_name("subject", :stored_searchable), itemprop: 'about', link_to_search: solr_name("subject", :facetable)
+    config.add_index_field solr_name("creator", :stored_searchable), itemprop: 'creator', link_to_search: solr_name("creator", :facetable)
     # config.add_index_field solr_name("contributor", :stored_searchable), itemprop: 'contributor', link_to_search: solr_name("contributor", :facetable)
+    config.add_index_field solr_name("advisor", :stored_searchable), label: "Advisor", itemprop: 'advisor', link_to_search: solr_name("advisor", :facetable)
     # config.add_index_field solr_name("proxy_depositor", :symbol), label: "Depositor", helper_method: :link_to_profile
     # config.add_index_field solr_name("depositor"), label: "Owner", helper_method: :link_to_profile
+    config.add_index_field solr_name("publisher", :stored_searchable), itemprop: 'publisher', link_to_search: solr_name("publisher", :facetable)
     # config.add_index_field solr_name("based_near_label", :stored_searchable), itemprop: 'contentLocation', link_to_search: solr_name("based_near_label", :facetable)
     # config.add_index_field solr_name("language", :stored_searchable), itemprop: 'inLanguage', link_to_search: solr_name("language", :facetable)
     # config.add_index_field solr_name("date_uploaded", :stored_sortable, type: :date), itemprop: 'datePublished', helper_method: :human_readable_date
     # config.add_index_field solr_name("date_modified", :stored_sortable, type: :date), itemprop: 'dateModified', helper_method: :human_readable_date
+    config.add_index_field solr_name("date_created", :stored_searchable), itemprop: 'dateCreated'
     # config.add_index_field solr_name("rights_statement", :stored_searchable), helper_method: :rights_statement_links
     # config.add_index_field solr_name("license", :stored_searchable), helper_method: :license_links
+    config.add_index_field solr_name("resource_type", :stored_searchable), label: "Resource Type", link_to_search: solr_name("resource_type", :facetable)
     # config.add_index_field solr_name("file_format", :stored_searchable), link_to_search: solr_name("file_format", :facetable)
     # config.add_index_field solr_name("identifier", :stored_searchable), helper_method: :index_field_link, field_name: 'identifier'
     # config.add_index_field solr_name("embargo_release_date", :stored_sortable, type: :date), label: "Embargo release date", helper_method: :human_readable_date
     # config.add_index_field solr_name("lease_expiration_date", :stored_sortable, type: :date), label: "Lease expiration date", helper_method: :human_readable_date
-
+    config.add_index_field solr_name("degree", :stored_searchable), label: "Degree"
+    config.add_index_field solr_name("department", :stored_searchable), label: "Unit"
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
@@ -314,33 +313,33 @@ class CatalogController < ApplicationController
     config.spell_max = 5
 
     # Add Blacklight OAI provider Configuration for Primo
-    # config.oai = {
-    #     provider: {
-    #         repository_name: 'digitalwpi',
-    #         repository_url: Rails.application.config.application_root_url.to_s + '/catalog/oai',
-    #         record_prefix: 'oai:digitalwpi',
-    #         admin_email: 'zchen12@wpi.edu',
-    #         sample_id: '109660'
-    #     },
-    #     document: {
-    #         limit: 25,            # number of records returned with each request, default: 15
-    #         set_fields: [        # ability to define ListSets, optional, default: nil
-    #             { label: 'identifier', solr_field: 'identifier_tesim' },
-    #             { label: 'title', solr_field: 'title_tesim' },
-    #             { label: 'creator', solr_field: 'creator_tesim' },
-    #             { label: 'date', solr_field: 'date_created_tesim' },
-    #             { label: 'description', solr_field: 'description_tesim' },
-    #             { label: 'subject', solr_field: 'subject_tesim' },
-    #             { label: 'contributor', solr_field: 'contributor_tesim' },
-    #             { label: 'format', solr_field: 'file_format_tesim' },
-    #             { label: 'language', solr_field: 'language_tesim' },
-    #             { label: 'publisher', solr_field: 'publisher_tesim' },
-    #             { label: 'rights', solr_field: 'rights_statement_tesim' },
-    #             { label: 'source', solr_field: 'source_tesim' },
-    #             { label: 'type', solr_field: 'resource_type_tesim' }
-    #         ]
-    #     }
-    # }
+    config.oai = {
+        provider: {
+            repository_name: 'digitalwpi',
+            repository_url: Rails.application.config.application_root_url.to_s + '/catalog/oai',
+            record_prefix: 'oai:digitalwpi',
+            admin_email: 'zchen12@wpi.edu',
+            sample_id: '109660'
+        },
+        document: {
+            limit: 25,            # number of records returned with each request, default: 15
+            set_fields: [        # ability to define ListSets, optional, default: nil
+                { label: 'identifier', solr_field: 'identifier_tesim' },
+                { label: 'title', solr_field: 'title_tesim' },
+                { label: 'creator', solr_field: 'creator_tesim' },
+                { label: 'date', solr_field: 'date_created_tesim' },
+                { label: 'description', solr_field: 'description_tesim' },
+                { label: 'subject', solr_field: 'subject_tesim' },
+                { label: 'contributor', solr_field: 'contributor_tesim' },
+                { label: 'format', solr_field: 'file_format_tesim' },
+                { label: 'language', solr_field: 'language_tesim' },
+                { label: 'publisher', solr_field: 'publisher_tesim' },
+                { label: 'rights', solr_field: 'rights_statement_tesim' },
+                { label: 'source', solr_field: 'source_tesim' },
+                { label: 'type', solr_field: 'resource_type_tesim' }
+            ]
+        }
+    }
 
   end
 

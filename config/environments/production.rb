@@ -30,7 +30,7 @@ Rails.application.configure do
   end
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
+  config.assets.js_compressor = Uglifier.new(harmony: true)
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
@@ -71,7 +71,21 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "wpirepo_#{Rails.env}"
 
   config.action_mailer.perform_caching = false
-
+  
+  config.action_mailer.default_url_options = { :host => ENV['SERVERNAME']}
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+  address: ENV['MAILSERVER'],
+  port: ENV['MAILPORT'] || '587'
+  }
+  if not ENV['MAILPASS'].nil? and not ENV['MAILPASS'].empty? # if there is a passphrase, add the auth stuff, otherwise F off
+    config.action_mailer.smtp_settings.merge!({
+      user_name: ENV['MAILUSER'],
+      password: ENV['MAILPASS'],
+      enable_starttls_auto: true
+    })
+  end
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
@@ -98,20 +112,6 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  if ENV["RAILS_FORCE_SSL"].present? && (ENV["RAILS_FORCE_SSL"].to_s.downcase == 'false') then
-    config.force_ssl = false
-    Rails.application.routes.default_url_options = \
-      Hyrax::Engine.routes.default_url_options = \
-      {protocol: 'http', host: ENV['APP_HOST']}
-    config.application_url = "http://#{ENV['APP_HOST']}"
-  else
-    config.force_ssl = true #default if nothing specified is more secure.
-    Rails.application.routes.default_url_options = \
-      Hyrax::Engine.routes.default_url_options = \
-      {protocol: 'https', host: ENV['APP_HOST']}
-    config.application_url = "https://#{ENV['APP_HOST']}"
-  end
 
   config.action_controller.allow_forgery_protection = true
 end

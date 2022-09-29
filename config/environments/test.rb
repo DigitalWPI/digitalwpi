@@ -33,10 +33,27 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  config.action_mailer.default_url_options = { :host => ENV['SERVERNAME']}
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+  address: ENV['MAILSERVER'],
+  port: ENV['MAILPORT'] || '587'
+  }
+  if not ENV['MAILPASS'].nil? and not ENV['MAILPASS'].empty? # if there is a passphrase, add the auth stuff, otherwise F off
+    config.action_mailer.smtp_settings.merge!({
+      user_name: ENV['MAILUSER'],
+      password: ENV['MAILPASS'],
+      enable_starttls_auto: true
+    })
+  end
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
+
+  # Built-in test adapter to store and enque jobs
+  config.active_job.queue_adapter = :test
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
@@ -44,19 +61,6 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  if ENV['APP_HOST'].present?
-    Rails.application.routes.default_url_options = {protocol: 'http', host: ENV['APP_HOST']}
-    Hyrax::Engine.routes.default_url_options = {protocol: 'http', host: ENV['APP_HOST']}
-    config.application_url = "http://#{ENV['APP_HOST']}"
-  else
-    Rails.application.routes.default_url_options = {protocol: 'http', host: "localhost"}
-    Hyrax::Engine.routes.default_url_options = {protocol: 'http', host: "localhost"}
-    config.application_url = "http://localhost"
-  end
-
-  # Built-in test adapter to store and enque jobs
-  config.active_job.queue_adapter = :test
-
   # Remove rack-attack so tests aren't rate limited
-  # config.middleware.delete Rack::Attack
+  config.middleware.delete Rack::Attack
 end
