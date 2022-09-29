@@ -138,13 +138,15 @@ module Hyrax
       hash.each_pair do |key, val|
         unless val.blank?
           unless val.kind_of?(Array)
-            csv[0][col] = if key.length < val.length then "\"#{key.chomp}\"" + " " * (val.length-key.length) else "\"#{key.chomp}\"" end
-            csv[1][col] = if key.length < val.length then "\"#{val.chomp}\"" else "\"#{val.chomp}\"" + " " * (key.length-val.length) end
-            col = col + 1
+            unless val.kind_of?(Hash)
+              csv[0][col] = if key.length < val.length then "\"#{key.chomp}\"" + " " * (val.length-key.length) else "\"#{key.chomp}\"" end
+              csv[1][col] = if key.length < val.length then "\"#{val.chomp.tr("\r"," ").tr("\n","")}\"" else "\"#{val.chomp.tr("\r"," ").tr("\n","")}\"" + " " * (key.length-val.length) end
+              col = col + 1
+            end
           else
             val.each do |v|
               csv[0][col] = if key.length < v.to_s.length then "\"#{key.chomp}\"" + " " * (v.to_s.length-key.length) else "\"#{key.chomp}\"" end
-              csv[1][col] = if key.length < v.to_s.length then "\"#{v.to_s.chomp}\"" else "\"#{v.to_s.chomp}\"" + " " * (key.length-v.to_s.length) end
+              csv[1][col] = if key.length < v.to_s.length then "\"#{v.to_s.chomp.tr("\r"," ").tr("\n","")}\"" else "\"#{v.to_s.chomp.tr("\r"," ").tr("\n","")}\"" + " " * (key.length-v.to_s.length) end
               col = col + 1
             end
           end
