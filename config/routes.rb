@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'sidekiq/web'
 Rails.application.routes.draw do
+  concern :oai_provider, BlacklightOaiProvider::Routes.new
 
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
@@ -8,6 +11,8 @@ Rails.application.routes.draw do
   concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
+    concerns :oai_provider
+
     concerns :searchable
   end
 
@@ -27,7 +32,7 @@ Rails.application.routes.draw do
   get '/bepress/r/:resource_type/:bepress_id', to: 'bepress#record'
   get '/bepress/d/:resource_type/:download_id', to: 'bepress#document'
 
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'callbacks', registrations: "registrations" }
   get 'login' => 'static#login'
   get 'about-page' => 'static#about-page'
   get 'help-page' => 'static#help-page'
@@ -53,6 +58,7 @@ Rails.application.routes.draw do
   get '/pdfviewer/:id/:parent', to: 'pdfviewer#index', constraints: { id: /[a-z0-9]{9}/ }
 
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
+    concerns :oai_provider
     concerns :exportable
   end
 
