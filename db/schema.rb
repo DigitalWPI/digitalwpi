@@ -15,6 +15,15 @@ ActiveRecord::Schema.define(version: 2022_02_18_044917) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "bepress", force: :cascade do |t|
+    t.string "bepress_id"
+    t.string "download_id"
+    t.string "resource_type"
+    t.string "hyrax_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "bookmarks", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "user_type"
@@ -89,6 +98,20 @@ ActiveRecord::Schema.define(version: 2022_02_18_044917) do
     t.index ["parent_id"], name: "index_curation_concerns_operations_on_parent_id"
     t.index ["rgt"], name: "index_curation_concerns_operations_on_rgt"
     t.index ["user_id"], name: "index_curation_concerns_operations_on_user_id"
+  end
+
+  create_table "devise_multi_auth_authentications", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "provider", null: false
+    t.string "uid", null: false
+    t.string "access_token"
+    t.string "refresh_token"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expires_at"], name: "index_devise_multi_auth_authentications_on_expires_at"
+    t.index ["provider", "uid"], name: "index_devise_multi_auth_authentications_on_provider_and_uid", unique: true
+    t.index ["user_id"], name: "index_devise_multi_auth_authentications_on_user_id"
   end
 
   create_table "featured_works", force: :cascade do |t|
@@ -520,6 +543,11 @@ ActiveRecord::Schema.define(version: 2022_02_18_044917) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "guest", default: false
@@ -547,8 +575,11 @@ ActiveRecord::Schema.define(version: 2022_02_18_044917) do
     t.binary "zotero_token"
     t.string "zotero_userid"
     t.string "preferred_locale"
+    t.string "provider"
+    t.string "uid"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["uid"], name: "index_users_on_uid"
   end
 
   create_table "version_committers", force: :cascade do |t|
