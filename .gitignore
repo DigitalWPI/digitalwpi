@@ -31,3 +31,5 @@ fits.log
 fresh_start.sh
 
 .DS_Store
+
+/config/credentials.yml.enc
