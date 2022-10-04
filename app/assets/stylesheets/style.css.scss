@@ -438,6 +438,15 @@ h2.block-heading{
 .featured-image-header{
     height: 210px;
     overflow: hidden;
+    display: grid;
+    justify-content: center;
+    background-color: #607a96;
+    img{
+      height: 300px;
+    }
+    img.portrait{
+      height: 210px;
+    }
     a img{
         width:100%;
     }
