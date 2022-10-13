@@ -40,9 +40,8 @@ module ControllerUtils
       end
     end
 
-    # KTODO undefined common_object_path
-    # @permalinks_presenter = PermalinksPresenter.new(main_app.common_object_path(locale: nil),
-    #                                                 "Permanent link to this page")
+    permalink_message = "Permanent link to this page"
+    @permalinks_presenter = PermalinksPresenter.new(main_app.common_object_path(locale: nil), permalink_message)
   end
 
 end
