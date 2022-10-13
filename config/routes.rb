@@ -4,6 +4,7 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   concern :oai_provider, BlacklightOaiProvider::Routes.new
 
+  mount Bulkrax::Engine, at: '/'
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
   # mount BrowseEverything::Engine => '/browse'
