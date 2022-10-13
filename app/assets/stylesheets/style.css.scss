@@ -55,7 +55,11 @@ $color-red: #FF0000;
     background-size: cover; /* Resize the background image to cover the entire container */
 
     @media screen and (min-width: 1280px){
-        height:480px;
+        height:250px;
+    }
+
+    .navbar .navbar-nav li {
+        background-color: transparent;
     }
 
     &:before{
@@ -134,7 +138,7 @@ $color-red: #FF0000;
     }
 
     @media screen and (min-width: 1280px){
-        margin-top: 180px;
+        margin-top: -7px;
        
        h3{
         margin-bottom: 30px;
@@ -162,6 +166,10 @@ $color-red: #FF0000;
             background:none;
             color:white;
             font-weight: 900;
+            }
+            a:hover,
+            a:active {
+            background-color:rgba(255,255,255,0.15);
             }
         }
     }
@@ -430,6 +438,15 @@ h2.block-heading{
 .featured-image-header{
     height: 210px;
     overflow: hidden;
+    display: grid;
+    justify-content: center;
+    background-color: #607a96;
+    img{
+      height: 300px;
+    }
+    img.portrait{
+      height: 210px;
+    }
     a img{
         width:100%;
     }
