@@ -5,3 +5,5 @@ production:
 :queues:
   - default
   - ingest
+  - import # added
+  - export # added
