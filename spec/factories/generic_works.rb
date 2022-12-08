@@ -44,5 +44,9 @@ FactoryBot.define do
         work.embargo = FactoryBot.create(:public_embargo, embargo_release_date: evaluator.embargo_release_date)
       end
     end
+
+    trait :with_editorial_note do
+      editorial_note { 'First edit of work' }
+    end
   end
 end

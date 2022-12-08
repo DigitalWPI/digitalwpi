@@ -8,6 +8,7 @@ module Hyrax
     self.terms += [:resource_type, :award, :includes, :alternate_title]
     self.terms += [:digitization_date, :series, :event, :year]
     self.terms += [:extent, :school]
+    self.terms += [:editorial_note]
     self.required_fields -= [:keyword]
   end
 end
