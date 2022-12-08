@@ -27,6 +27,7 @@ RSpec.describe Hyrax::StudentWorkPresenter do
   let(:institute) { ['Thailand Research Institute'] }
   let(:school) { ['School of Engineering'] }
   let(:major) { ['Theatre'] }
+  let(:editorial_note) { 'My editorial note' }
 
   let :student_work do
     StudentWork.create(
@@ -47,6 +48,7 @@ RSpec.describe Hyrax::StudentWorkPresenter do
       institute: institute,
       school: school,
       major: major
+      editorial_note: editorial_note
     )
   end
 
@@ -101,6 +103,59 @@ RSpec.describe Hyrax::StudentWorkPresenter do
   it "delegates major to solr document" do
     expect(solr_document).to receive(:major)
     presenter.major
+  end
+  it "delegates editorial_note to solr document" do
+    expect(solr_document).to receive(:editorial_note)
+    presenter.editorial_note
+  end
+
+  describe '#export' do
+    let(:host) { double(host: 'http://example.org') }
+    let(:user) { nil }
+    let(:presenter) { described_class.new(solr_document, Ability.new(user), host) }
+
+    describe "export as ttl" do
+      subject { presenter.export_as_ttl }
+      let(:model_regex)          { %r(<info:fedora/fedora-system:def/model#hasModel> "StudentWork")}
+      let(:editorial_note_regex) { %r(<http://www.w3.org/2004/02/skos/core#editorialNote> "My editorial note") }
+
+      it "should have model triple" do
+        is_expected.to match(model_regex)
+      end
+      it "should not have editorial note triple" do
+        is_expected.not_to match(editorial_note_regex)
+      end
+    end
+
+    describe "export as nt" do
+      subject { presenter.export_as_nt }
+      let(:model_regex)          { %r(<http://example.org/concern/student_works/#{student_work.id}> <info:fedora/fedora-system:def/model#hasModel> "StudentWork" )}
+      let(:editorial_note_regex) { %r(<http://example.org/concern/student_works/#{student_work.id}> <http://www.w3.org/2004/02/skos/core#editorialNote> "My editorial note") }
+      it "should have model triple" do
+        is_expected.to match(model_regex)
+      end
+      it "should not have editorial note triple" do
+        is_expected.not_to match(editorial_note_regex)
+      end
+    end
+
+    describe '#export_as_jsonld' do
+      subject { JSON.parse(presenter.export_as_jsonld) }
+      it "should have model" do
+        expect(subject["@context"]).to include(
+                                         "pcdmterms" => "http://pcdm.org/models#",
+                                         "worksterms" => "http://projecthydra.org/works/models#",
+                                         "dc" => "http://purl.org/dc/terms/",
+                                         "acl" => "http://www.w3.org/ns/auth/acl#",
+                                         "system" => "info:fedora/fedora-system:",
+                                         "model" => "system:def/model#"
+                                       )
+        expect(subject["model:hasModel"]).to eql "StudentWork"
+      end
+      it "should not have editorial note triple" do
+        is_expected.not_to include("skos:editorialNote" => "My editorial note")
+      end
+    end
   end
 end
 
