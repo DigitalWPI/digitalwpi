@@ -156,4 +156,13 @@ RSpec.describe GenericWork do
       end
     end
   end
+  describe '#editorial_note' do
+    context 'with a new Generic Work' do
+      it "can assign and retrieve the admin note of Generic Work works" do
+        generic_work = described_class.new
+        generic_work.editorial_note = "My note"
+        expect(generic_work.editorial_note).to eq('My note')
+      end
+    end
+  end
 end

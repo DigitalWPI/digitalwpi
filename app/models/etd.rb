@@ -68,6 +68,10 @@ class Etd < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :editorial_note, predicate: ::RDF::Vocab::SKOS.editorialNote, multiple: false do |index|
+    index.as :displayable
+  end
+
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
   include ::Hyrax::BasicMetadata
