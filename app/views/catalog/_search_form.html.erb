@@ -36,6 +36,8 @@
         </ul>
       </div><!-- /.input-group-btn -->
     </div><!-- /.input-group -->
-    
+    <div class="input-group">
+      <%= link_to 'Advanced search', blacklight_advanced_search_engine.advanced_search_path(search_state.to_h), class: 'advanced_search btn btn-default'%>
+    </div>
   </div><!-- /.form-group -->
 <% end %>

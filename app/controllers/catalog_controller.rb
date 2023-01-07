@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
+w
+  include BlacklightRangeLimit::ControllerOverride
+  include BlacklightAdvancedSearch::Controller
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior
   include BlacklightOaiProvider::Controller
@@ -13,11 +16,22 @@ class CatalogController < ApplicationController
     solr_name('system_create', :stored_sortable, type: :date)
   end
 
+  def self.created_field
+    solr_name('date_created', :stored_sortable, type: :date)
+  end
+
   def self.modified_field
     solr_name('system_modified', :stored_sortable, type: :date)
   end
 
   configure_blacklight do |config|
+    # default advanced config values
+    config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
+    # config.advanced_search[:qt] ||= 'advanced'
+    config.advanced_search[:url_key] ||= 'advanced'
+    config.advanced_search[:query_parser] ||= 'dismax'
+    config.advanced_search[:form_solr_parameters] ||= {}
+
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
     config.view.slideshow.partials = [:index]
@@ -51,7 +65,12 @@ class CatalogController < ApplicationController
     # config.add_facet_field solr_name("human_readable_type", :facetable), label: "Type", limit: 5
     config.add_facet_field solr_name('member_of_collection_ids', :symbol), limit: 5, label: 'Collections', sort: 'count', collapse: false, helper_method: :collection_title_by_id
     #config.add_facet_field solr_name("member_of_collections", :symbol), limit: 5, label: 'Collections', collapse: false
-    config.add_facet_field solr_name("year", :facetable), label: "Year", limit: 5, sort: 'index desc'
+    config.add_facet_field solr_name("year", :facetable), label: "Year", range: {
+      num_segments: 6,
+      assumed_boundaries: [1350, Time.now.year + 2],
+      segments: false,
+      maxlength: 10
+    }
     config.add_facet_field solr_name("creator", :facetable), limit: 5, sort: 'index', index_range: 'A'..'Z'
     config.add_facet_field solr_name("advisor", :facetable), label: "Advisor", limit: 5, sort: 'index', index_range: 'A'..'Z'
     config.add_facet_field solr_name("contributor", :facetable), label: "Contributor", limit: 5, sort: 'index', index_range: 'A'..'Z'
@@ -233,6 +252,7 @@ class CatalogController < ApplicationController
     end
 
     config.add_search_field('format') do |field|
+      field.include_in_advanced_search = false
       solr_name = solr_name("format", :stored_searchable)
       field.solr_local_parameters = {
         qf: solr_name,
