@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
-w
   include BlacklightRangeLimit::ControllerOverride
   include BlacklightAdvancedSearch::Controller
   include Hydra::Catalog

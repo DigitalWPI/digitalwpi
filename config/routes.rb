@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'sidekiq/web'
 Rails.application.routes.draw do
+  concern :oai_provider, BlacklightOaiProvider::Routes.new
 
   concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new
   mount Bulkrax::Engine, at: '/'
@@ -12,6 +15,7 @@ Rails.application.routes.draw do
   concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
+    concerns :oai_provider
     concerns :searchable
     concerns :range_searchable
 
