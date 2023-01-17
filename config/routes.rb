@@ -1,20 +1,20 @@
-# frozen_string_literal: true
-
 require 'sidekiq/web'
 Rails.application.routes.draw do
-  concern :oai_provider, BlacklightOaiProvider::Routes.new
 
+  concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new
   mount Bulkrax::Engine, at: '/'
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
+  mount BlacklightAdvancedSearch::Engine => '/'
+
   # mount BrowseEverything::Engine => '/browse'
 
   concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
-    concerns :oai_provider
-
     concerns :searchable
+    concerns :range_searchable
+
   end
 
   get '/collections/upub', to: redirect('/collections/k0698b37j')
