@@ -264,7 +264,8 @@ namespace :wpi do
     gww.date_uploaded = now
 
     # Add to Default Administrative Set
-    default_admin_set_id = AdminSet.find_or_create_default_admin_set_id
+    #default_admin_set_id = AdminSet.find_or_create_default_admin_set_id
+    default_admin_set_id = Hyrax::AdminSetCreateService.find_or_create_default_admin_set.id.to_s
     default_admin_set = AdminSet.find(default_admin_set_id)
     gww.admin_set = default_admin_set
     gww.set_edit_groups(["content-admin"], [])
@@ -308,7 +309,7 @@ namespace :wpi do
     if embargo_info['embargo'] == true
       embargo_info['embargo_release_date'] = metadata['embargo_release_date'].nil? ? '2100-01-01' : metadata['embargo_release_date']
       visibilities = []
-      metadata['embargo_visibility'].each do |item| 
+      metadata['embargo_visibility'].each do |item|
         if item == "public"
           visibilities << Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
         elsif item == "authenticated"
