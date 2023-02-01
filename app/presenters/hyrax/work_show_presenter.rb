@@ -136,6 +136,7 @@ module Hyrax
       csv = [[],[]]
       col = 0
       hash.each_pair do |key, val|
+        next if key == 'editorial_note'
         unless val.blank?
           unless val.kind_of?(Array)
             unless val.kind_of?(Hash)

@@ -44,4 +44,17 @@ module ControllerUtils
     @permalinks_presenter = PermalinksPresenter.new(main_app.common_object_path(locale: nil), permalink_message)
   end
 
+  private
+
+  def add_date_and_creator_to_note(model)
+    if params[model].include?('editorial_note') and params[model]['editorial_note'].present?
+      notes = []
+      notes = JSON.parse(@curation_concern.editorial_note) if @curation_concern.editorial_note.present?
+      notes = [notes] unless notes.is_a? Array
+      params[model]['editorial_note'] = notes.append(
+        {'note': params[model]['editorial_note'], created: Time.now, user_id: current_user.email, user_name: current_user.name}
+      ).to_json
+    end
+  end
+
 end

@@ -25,5 +25,6 @@ RSpec.describe Hyrax::EtdForm do
     expect(form.terms).to include(:funding)
     expect(form.terms).to include(:sponsor)
     expect(form.terms).to include(:institute)
+    expect(form.terms).to include(:editorial_note)
   end
 end

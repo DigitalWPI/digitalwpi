@@ -16,5 +16,21 @@ module Hyrax
       show_common_works
     end
 
+    def edit
+      # We do not want to edit previous values of editorial note
+      @curation_concern.editorial_note = ''
+      super
+    end
+
+    def create
+      add_date_and_creator_to_note('etd')
+      super
+    end
+
+    def update
+      add_date_and_creator_to_note('etd')
+      super
+    end
+
   end
 end
