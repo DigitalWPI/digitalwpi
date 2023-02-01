@@ -18,5 +18,6 @@ RSpec.describe Hyrax::GenericWorkForm do
     expect(form.terms).to include(:year)
     expect(form.terms).to include(:extent)
     expect(form.terms).to include(:school)
+    expect(form.terms).to include(:editorial_note)
   end
 end

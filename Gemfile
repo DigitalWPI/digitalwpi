@@ -112,8 +112,8 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
-  # gem 'faker' # #comment from besss: Needed so we can load fixtures for demos in production
-  # gem 'ffaker'
+  gem 'faker' # #comment from besss: Needed so we can load fixtures for demos in production
+  gem 'ffaker'
 end
 
 group :deployment, :development do

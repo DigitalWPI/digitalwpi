@@ -20,5 +20,6 @@ RSpec.describe Hyrax::StudentWorkForm do
     expect(form.terms).to include(:institute)
     expect(form.terms).to include(:school)
     expect(form.terms).to include(:major)
+    expect(form.terms).to include(:editorial_note)
   end
 end

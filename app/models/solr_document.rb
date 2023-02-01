@@ -140,4 +140,8 @@ class SolrDocument
   def sets
     NewListSet.sets_for(self)
   end
+
+  def editorial_note
+    self[Solrizer.solr_name('editorial_note', :displayable)]
+  end
 end
