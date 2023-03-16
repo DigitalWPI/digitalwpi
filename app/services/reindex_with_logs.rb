@@ -11,6 +11,7 @@ class ReindexWithLogs
 
   def reindex_everything(from, dir_path: nil, files_to_process: [], uri: nil, batch_size: 50, softCommit: true, progress_bar: false, final_commit: true, dry_run: false)
     """
+    based on https://github.com/samvera/active_fedora/blob/v13.2.5/lib/active_fedora/indexing.rb#L98
     from: How do you want to reindex?
     active_fedora_base: All records in Fedora, starting from the base URI
     solr_results: The ids od the docs will be retrieved from solr response(s) and indexed.
