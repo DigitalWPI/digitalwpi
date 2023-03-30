@@ -54,7 +54,7 @@ RSpec.describe Hyrax::EtdPresenter do
       center: center,
       funding: funding,
       sponsor: sponsor,
-      institute: institute
+      institute: institute,
       editorial_note: editorial_note
     )
   end

@@ -47,7 +47,7 @@ RSpec.describe Hyrax::StudentWorkPresenter do
       funding: funding,
       institute: institute,
       school: school,
-      major: major
+      major: major,
       editorial_note: editorial_note
     )
   end
