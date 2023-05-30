@@ -32,6 +32,17 @@ class Ability
     specific_collection = Collection.find(collection_id)
     recursive_edit_and_deposit(specific_collection)
   end
+
+  # Added functions for Bulkrax 5
+  def can_import_works?
+    can_create_any_work?
+  end
+
+  def can_export_works?
+    can_create_any_work?
+  end
+  # Bulkrax end
+
   private
     def recursive_edit_and_deposit(specific_collection)
       can [:show,:edit,:deposit], specific_collection
