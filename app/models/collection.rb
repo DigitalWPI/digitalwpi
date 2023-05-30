@@ -6,4 +6,14 @@ class Collection < ActiveFedora::Base
   include Hyrax::BasicMetadata
 
   self.indexer = Hyrax::CollectionWithBasicMetadataIndexer
+
+  def after_update_nested_collection_relationship_indices
+    @during_save = false
+    # reindex_nested_relationships_for(id: id, extent: reindex_extent)
+  end
+
+  def update_nested_collection_relationship_indices
+    return if @during_save
+    # reindex_nested_relationships_for(id: id, extent: reindex_extent)
+  end
 end
