@@ -47,38 +47,19 @@
               <%= render 'show_parent_collections', presenter: @presenter %>
             </div>
         <% end %>
-        <!-- Search bar -->
-        <div class="hyc-blacklight hyc-bl-search hyc-body row" style="margin-top:30px; margin-left:-30px;">
-          <div class="col-sm-9">
-            <%= render 'search_form', presenter: @presenter, url: hyrax.collection_path(@presenter.id) %>
+
+        <!-- Subcollections -->
+        <% if @presenter.collection_type_is_nestable? && @subcollection_count > 0 %>
+          <div class="hyc-blacklight hyc-bl-title">
+            <h4><%= t('.subcollection_count') %> (<%= @subcollection_count %>)</h4>
           </div>
-        </div>
+          <div class="hyc-blacklight hyc-bl-results">
+            <%= render 'subcollection_list', collection: @subcollection_docs %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
-
-  <!-- Search results label -->
-  <% if @members_count > 0 || @presenter.subcollection_count > 0 %>
-    <div class="hyc-blacklight hyc-bl-title">
-      <h2>
-        <% if has_collection_search_parameters? %>
-            <%= t('hyrax.dashboard.collections.show.search_results') %>
-        <% end %>
-      </h2>
-    </div>
-  <% end %>
-
-
-
-  <!-- Subcollections -->
-  <% if @presenter.collection_type_is_nestable? && @subcollection_count > 0 %>
-      <div class="hyc-blacklight hyc-bl-title">
-        <h4><%= t('.subcollection_count') %> (<%= @subcollection_count %>)</h4>
-      </div>
-      <div class="hyc-blacklight hyc-bl-results">
-        <%= render 'subcollection_list', collection: @subcollection_docs %>
-      </div>
-  <% end %>
 
   <!-- Works -->
   <% if @members_count > 0 %>
