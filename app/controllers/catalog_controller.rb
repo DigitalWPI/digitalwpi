@@ -29,7 +29,6 @@ class CatalogController < ApplicationController
     # config.advanced_search[:qt] ||= 'advanced'
     config.advanced_search[:url_key] ||= 'advanced'
     config.advanced_search[:query_parser] ||= 'dismax'
-    config.advanced_search[:form_solr_parameters] ||= {}
 
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
@@ -62,23 +61,23 @@ class CatalogController < ApplicationController
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
     # config.add_facet_field solr_name("human_readable_type", :facetable), label: "Type", limit: 5
-    config.add_facet_field solr_name('member_of_collection_ids', :symbol), limit: 5, label: 'Collections', sort: 'count', collapse: false, helper_method: :collection_title_by_id
+    config.add_facet_field solr_name('member_of_collection_ids', :symbol), label: 'Collections', sort: 'count', collapse: false, helper_method: :collection_title_by_id, limit: 5
     #config.add_facet_field solr_name("member_of_collections", :symbol), limit: 5, label: 'Collections', collapse: false
-    config.add_facet_field solr_name("year", :facetable), label: "Year", limit: 5, sort: 'index desc'
-    #config.add_facet_field solr_name("year", :facetable), label: "Year", range: {
-    #  num_segments: 6,
-    #  assumed_boundaries: [1350, Time.now.year + 2],
-    #  segments: false,
-    #  maxlength: 10
-    #}
-    config.add_facet_field solr_name("creator", :facetable), limit: 5, sort: 'index', index_range: 'A'..'Z'
-    config.add_facet_field solr_name("advisor", :facetable), label: "Advisor", limit: 5, sort: 'index', index_range: 'A'..'Z'
-    config.add_facet_field solr_name("contributor", :facetable), label: "Contributor", limit: 5, sort: 'index', index_range: 'A'..'Z'
-    config.add_facet_field solr_name("center", :facetable), label: "Project Center", limit: 5, sort: 'index', index_range: 'A'..'Z'
-    config.add_facet_field solr_name("major", :facetable), label: "Major", limit: 5, sort: 'index', index_range: 'A'..'Z'
-    config.add_facet_field solr_name("department", :facetable), label: "Unit", limit: 5, sort: 'index', index_range: 'A'..'Z'
-    config.add_facet_field solr_name("publisher", :facetable), limit: 5
-    config.add_facet_field solr_name("subject", :facetable), limit: 5, sort: 'index', index_range: 'A'..'Z'
+    #config.add_facet_field solr_name("year", :facetable), label: "Year", sort: 'index desc', limit: 5
+    config.add_facet_field solr_name("year", :facetable), label: "Year", range: {
+     num_segments: 6,
+     assumed_boundaries: [1350, Time.now.year+2],
+     segments: true,
+     maxlength: 10
+    }, include_in_advanced_search: false
+    config.add_facet_field solr_name("creator", :facetable), sort: 'index', index_range: 'A'..'Z', limit: 5, include_in_advanced_search: false
+    config.add_facet_field solr_name("advisor", :facetable), label: "Advisor", sort: 'index', index_range: 'A'..'Z', limit: 5
+    config.add_facet_field solr_name("contributor", :facetable), label: "Contributor", sort: 'index', index_range: 'A'..'Z', limit: 5, include_in_advanced_search: false
+    config.add_facet_field solr_name("center", :facetable), label: "Project Center", sort: 'index', index_range: 'A'..'Z', limit: 5
+    config.add_facet_field solr_name("major", :facetable), label: "Major", sort: 'index', index_range: 'A'..'Z', limit: 5
+    config.add_facet_field solr_name("department", :facetable), label: "Unit", sort: 'index', index_range: 'A'..'Z', limit: 5
+    config.add_facet_field solr_name("publisher", :facetable), limit: 5, include_in_advanced_search: false
+    config.add_facet_field solr_name("subject", :facetable), sort: 'index', index_range: 'A'..'Z', limit: 5, include_in_advanced_search: false
     config.add_facet_field solr_name('sdg', :facetable), label: "UN SDG", limit: 17, sort: 'index', helper_method: :sdg_facet_display
     config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
     #config.add_facet_field solr_name("language", :facetable), limit: 5
@@ -109,7 +108,7 @@ class CatalogController < ApplicationController
     # config.add_index_field solr_name("language", :stored_searchable), itemprop: 'inLanguage', link_to_search: solr_name("language", :facetable)
     # config.add_index_field solr_name("date_uploaded", :stored_sortable, type: :date), itemprop: 'datePublished', helper_method: :human_readable_date
     # config.add_index_field solr_name("date_modified", :stored_sortable, type: :date), itemprop: 'dateModified', helper_method: :human_readable_date
-    config.add_index_field solr_name("date_created", :stored_searchable), itemprop: 'dateCreated'
+    config.add_index_field solr_name("date_created", :stored_searchable), itemprop: 'dateCreated', include_in_advanced_search: false
     # config.add_index_field solr_name("rights_statement", :stored_searchable), helper_method: :rights_statement_links
     # config.add_index_field solr_name("license", :stored_searchable), helper_method: :license_links
     config.add_index_field solr_name("resource_type", :stored_searchable), label: "Resource Type", link_to_search: solr_name("resource_type", :facetable)
@@ -241,6 +240,7 @@ class CatalogController < ApplicationController
         qf: solr_name,
         pf: solr_name
       }
+      field.include_in_advanced_search = false
     end
 
     config.add_search_field('resource_type') do |field|
@@ -275,6 +275,7 @@ class CatalogController < ApplicationController
         qf: solr_name,
         pf: solr_name
       }
+      field.include_in_advanced_search = false
     end
 
     config.add_search_field('keyword') do |field|
@@ -291,6 +292,7 @@ class CatalogController < ApplicationController
         qf: solr_name,
         pf: solr_name
       }
+      field.include_in_advanced_search = false
     end
 
     config.add_search_field('rights_statement') do |field|
@@ -299,6 +301,7 @@ class CatalogController < ApplicationController
         qf: solr_name,
         pf: solr_name
       }
+      field.include_in_advanced_search = false
     end
 
     config.add_search_field('license') do |field|
@@ -307,6 +310,7 @@ class CatalogController < ApplicationController
         qf: solr_name,
         pf: solr_name
       }
+      field.include_in_advanced_search = false
     end
 
     config.add_search_field('advisor') do |field|
@@ -359,6 +363,22 @@ class CatalogController < ApplicationController
                 { label: 'type', solr_field: 'resource_type_tesim' }
             ]
         }
+    }
+
+    config.advanced_search[:form_solr_parameters] ||= {
+      # "facet.field" => [
+      # "member_of_collection_ids_ssim", 
+      # "year_sim", 
+      # "advisor_sim", 
+      # "center_sim", 
+      # "major_sim", 
+      # "department_sim", 
+      # "sdg_sim", 
+      # "resource_type_sim", 
+      # "generic_type_sim"
+      # ],
+      "facet.limit" => "-1",
+      "facet.sort" => "index"
     }
 
   end
