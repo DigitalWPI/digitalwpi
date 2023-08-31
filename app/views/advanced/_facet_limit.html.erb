@@ -1,0 +1,18 @@
+<ul class="facet-values list-unstyled blacklight-advanced-facet-select">
+  <% items = display_facet.items %>
+
+  <% items[0..5].each do |item| -%>
+    <%= render 'fields', item: item, solr_field: solr_field %>
+  <% end -%>
+
+  <% if items.length > 6 %>
+    <div class="collapse multi-collapse" id="<%= display_facet.name%>">
+      <% items[6..items.length].each do |item| -%>
+        <%= render 'fields', item: item, solr_field: solr_field %>
+      <% end -%>
+    </div>
+    <li>
+      <a class="more-or-less-button" data-toggle="collapse" href="#<%= display_facet.name%>" role="button" aria-expanded="false" aria-controls="<%= display_facet.name %>">more >></a>
+    </li>
+  <% end %>
+</ul>
