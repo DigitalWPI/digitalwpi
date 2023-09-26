@@ -8,6 +8,7 @@ module Hyrax
     self.terms += [:resource_type, :award, :includes, :alternate_title]
     self.terms += [:advisor, :sponsor, :center, :year]
     self.terms += [:funding, :institute, :sdg, :school, :major]
+    self.terms += [:note]
     self.terms += [:editorial_note]
     self.required_fields -= [:keyword]
   end
