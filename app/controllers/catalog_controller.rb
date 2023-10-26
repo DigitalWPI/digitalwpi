@@ -81,7 +81,9 @@ class CatalogController < ApplicationController
     config.add_facet_field solr_name("subject", :facetable), sort: 'index', index_range: 'A'..'Z', limit: 5, include_in_advanced_search: false
     config.add_facet_field solr_name('sdg', :facetable), label: "UN SDG", limit: 17, sort: 'index', helper_method: :sdg_facet_display
     config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
-    config.add_facet_field solr_name("sponsor", :facetable), label: "Sponsor", sort: 'index', index_range: 'A'..'Z', limit: 5
+    # Removing sponsor facet, as the values are not controlled -
+    # https://github.com/antleaf/wpi-repository-project/issues/69#issuecomment-1746994760
+    # config.add_facet_field solr_name("sponsor", :facetable), label: "Sponsor", sort: 'index', index_range: 'A'..'Z', limit: 5
     #config.add_facet_field solr_name("language", :facetable), limit: 5
 
 
