@@ -26,6 +26,7 @@
               <ul class="dropdown-menu">
                 <li><a href="/col">Browse by Collection</a></li>
                 <li><a href="/project-centers">Browse by Project Center</a></li>
+                <li><%= link_to "Browse Exhibits", ENV['EXHIBITS_HOST_URL'] %></li>
               </ul>
             </li>
             <li <%= 'class=active' if current_page?(hyrax.about_path) %>>
