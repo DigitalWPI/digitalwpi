@@ -81,6 +81,8 @@ class CatalogController < ApplicationController
     config.add_facet_field solr_name("subject", :facetable), sort: 'index', index_range: 'A'..'Z', limit: 5, include_in_advanced_search: false
     config.add_facet_field solr_name('sdg', :facetable), label: "UN SDG", limit: 17, sort: 'index', helper_method: :sdg_facet_display
     config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
+    config.add_facet_field solr_name("license", :facetable), label: "License", limit: 5
+    config.add_facet_field solr_name("award", :facetable), label: "Award", limit: 5
     # Removing sponsor facet, as the values are not controlled -
     # https://github.com/antleaf/wpi-repository-project/issues/69#issuecomment-1746994760
     # config.add_facet_field solr_name("sponsor", :facetable), label: "Sponsor", sort: 'index', index_range: 'A'..'Z', limit: 5
@@ -122,6 +124,7 @@ class CatalogController < ApplicationController
     # config.add_index_field solr_name("lease_expiration_date", :stored_sortable, type: :date), label: "Lease expiration date", helper_method: :human_readable_date
     config.add_index_field solr_name("degree", :stored_searchable), label: "Degree"
     config.add_index_field solr_name("department", :stored_searchable), label: "Unit (Department)"
+    config.add_index_field solr_name("award", :stored_searchable), label: "Award"
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
@@ -144,6 +147,7 @@ class CatalogController < ApplicationController
     config.add_show_field solr_name("rights_statement", :stored_searchable)
     config.add_show_field solr_name("license", :stored_searchable)
     config.add_show_field solr_name("resource_type", :stored_searchable), label: "Resource Type"
+    config.add_show_field solr_name("award", :stored_searchable), label: "Award"
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
     #

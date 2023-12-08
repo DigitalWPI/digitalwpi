@@ -1,7 +1,9 @@
 require 'json'
 class ReindexWithLogs
 
-  def initialize(log_file_path)
+  def initialize(log_file_path, url=nil)
+    options = url ? {} : {url: url}
+    @solr_service = ActiveFedora::SolrService.new(options)
     @og_file_path = log_file_path
   end
 
@@ -41,7 +43,7 @@ class ReindexWithLogs
 
       if (batch.count % batch_size).zero?
         my_logger.info "Soft committing batch #{batch_count}"
-        ActiveFedora::SolrService.add(batch, softCommit: softCommit) unless dry_run
+        @solr_service.add(batch, softCommit: softCommit) unless dry_run
         batch.clear
         batch_count += 1
       end
@@ -51,14 +53,14 @@ class ReindexWithLogs
 
     if batch.present?
       my_logger.info "Soft committing last batch #{batch_count}"
-      ActiveFedora::SolrService.add(batch, softCommit: softCommit) unless dry_run
+      @solr_service.add(batch, softCommit: softCommit) unless dry_run
       batch.clear
     end
     return unless dry_run
     return unless final_commit
 
     my_logger.info "Solr hard commit..."
-    ActiveFedora::SolrService.commit
+    @solr_service.commit
   end
 
   def gather_descendants(from, dir_path: nil, files_to_process: [], uri: nil)
