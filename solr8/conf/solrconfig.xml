@@ -585,6 +585,7 @@
       <str>EEE MMM ppd HH:mm:ss [z ]yyyy</str>
     </arr>
   </updateProcessor>
+  <!--
   <updateProcessor class="solr.AddSchemaFieldsUpdateProcessorFactory" name="add-schema-fields">
     <lst name="typeMapping">
       <str name="valueClass">java.lang.String</str>
@@ -593,7 +594,6 @@
         <str name="dest">*_str</str>
         <int name="maxChars">256</int>
       </lst>
-      <!-- Use as default mapping instead of defaultFieldType -->
       <bool name="default">true</bool>
     </lst>
     <lst name="typeMapping">
@@ -614,10 +614,19 @@
       <str name="fieldType">double</str>
     </lst>
   </updateProcessor>
+ -->
 
   <!-- The update.autoCreateFields property can be turned to false to disable schemaless mode -->
+  <!--
   <updateRequestProcessorChain name="add-unknown-fields-to-the-schema" default="${update.autoCreateFields:true}"
            processor="uuid,remove-blank,field-name-mutating,parse-boolean,parse-long,parse-double,parse-date,add-schema-fields">
+    <processor class="solr.LogUpdateProcessorFactory"/>
+    <processor class="solr.DistributedUpdateProcessorFactory"/>
+    <processor class="solr.RunUpdateProcessorFactory"/>
+  </updateRequestProcessorChain> -->
+
+  <updateRequestProcessorChain name="add-unknown-fields-to-the-schema" default="${update.autoCreateFields:true}"
+                               processor="uuid,remove-blank,field-name-mutating,parse-boolean,parse-long,parse-double,parse-date">
     <processor class="solr.LogUpdateProcessorFactory"/>
     <processor class="solr.DistributedUpdateProcessorFactory"/>
     <processor class="solr.RunUpdateProcessorFactory"/>
