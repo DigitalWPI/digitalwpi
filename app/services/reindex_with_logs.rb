@@ -3,7 +3,7 @@ class ReindexWithLogs
 
   def initialize(log_file_path, url=nil)
     options = url ? {} : {url: url}
-    @solr_service = ActiveFedora::SolrService.new(options)
+    ActiveFedora::SolrService.register(options)
     @og_file_path = log_file_path
   end
 
@@ -43,7 +43,7 @@ class ReindexWithLogs
 
       if (batch.count % batch_size).zero?
         my_logger.info "Soft committing batch #{batch_count}"
-        @solr_service.add(batch, softCommit: softCommit) unless dry_run
+        ActiveFedora::SolrService.add(batch, softCommit: softCommit) unless dry_run
         batch.clear
         batch_count += 1
       end
@@ -53,14 +53,14 @@ class ReindexWithLogs
 
     if batch.present?
       my_logger.info "Soft committing last batch #{batch_count}"
-      @solr_service.add(batch, softCommit: softCommit) unless dry_run
+      ActiveFedora::SolrService.add(batch, softCommit: softCommit) unless dry_run
       batch.clear
     end
     return unless dry_run
     return unless final_commit
 
     my_logger.info "Solr hard commit..."
-    @solr_service.commit
+    ActiveFedora::SolrService.commit
   end
 
   def gather_descendants(from, dir_path: nil, files_to_process: [], uri: nil)
@@ -207,17 +207,20 @@ end
 # -----------------------------------------
 # usage - reindex starting from active fedora base
 # -----------------------------------------
-# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log')
+# url = "http://localhost:8984/solr"
+# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log', url)
 # from = 'active_fedora_base'
 # r.reindex_everything(from)
 
 # If you do not want to reindex, but want to gather all the URIs and solr documents which are going to be indexed, run the following
-# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log')
+# url = "http://localhost:8984/solr"
+# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log', url)
 # from = 'active_fedora_base'
 # r.gather_descendants(from, dry_run: true)
 
 # If you do not want to reindex, but want to gather all the URIs which are going to be indexed, run the following
-# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log')
+# url = "http://localhost:8984/solr"
+# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log', url)
 # from = 'active_fedora_base'
 # r.gather_descendants(from)
 
