@@ -1,7 +1,9 @@
 require 'json'
 class ReindexWithLogs
 
-  def initialize(log_file_path)
+  def initialize(log_file_path, url=nil)
+    options = url ? {} : {url: url}
+    ActiveFedora::SolrService.register(options)
     @og_file_path = log_file_path
   end
 
@@ -205,17 +207,20 @@ end
 # -----------------------------------------
 # usage - reindex starting from active fedora base
 # -----------------------------------------
-# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log')
+# url = "http://localhost:8984/solr"
+# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log', url)
 # from = 'active_fedora_base'
 # r.reindex_everything(from)
 
 # If you do not want to reindex, but want to gather all the URIs and solr documents which are going to be indexed, run the following
-# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log')
+# url = "http://localhost:8984/solr"
+# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log', url)
 # from = 'active_fedora_base'
 # r.gather_descendants(from, dry_run: true)
 
 # If you do not want to reindex, but want to gather all the URIs which are going to be indexed, run the following
-# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log')
+# url = "http://localhost:8984/solr"
+# r = ReindexWithLogs.new('/home/webapp/reindex_work/reindex.log', url)
 # from = 'active_fedora_base'
 # r.gather_descendants(from)
 
