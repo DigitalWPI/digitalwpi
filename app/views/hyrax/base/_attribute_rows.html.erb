@@ -35,6 +35,7 @@
 <%= presenter.attribute_to_html(:rights_statement, render_as: :rights_statement, html_dl: true) %>
 <%= presenter.attribute_to_html(:license, render_as: :license, html_dl: true) %>
 <%= presenter.attribute_to_html(:access_right, label: "Access rights", html_dl: true) %>
+<%= presenter.attribute_to_html(:citation, html_dl: true) %>
 <%= presenter.attribute_to_html(:date_modified, label: t('hyrax.base.show.last_modified'), html_dl: true) %>
 <% if user_signed_in? %>
   <% if current_user.admin? %>
