@@ -145,4 +145,8 @@ class SolrDocument
   def editorial_note
     self[Solrizer.solr_name('editorial_note', :displayable)]
   end
+
+  def citation
+    self[Solrizer.solr_name('citation', :displayable)]
+  end
 end

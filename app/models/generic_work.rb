@@ -48,6 +48,10 @@ class GenericWork < ActiveFedora::Base
     index.as :displayable
   end
 
+  property :citation, predicate: "http://purl.org/dc/terms/bibliographicCitation" do |index|
+    index.as :displayable
+  end
+
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
   include ::Hyrax::BasicMetadata

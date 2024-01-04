@@ -7,6 +7,7 @@ module Hyrax
     delegate :alternate_title, to: :solr_document
     delegate :award, to: :solr_document
     delegate :center, to: :solr_document
+    delegate :citation, to: :solr_document
     delegate :committee, to: :solr_document
     delegate :defense_date, to: :solr_document
     delegate :degree, to: :solr_document
