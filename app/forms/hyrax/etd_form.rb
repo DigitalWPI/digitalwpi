@@ -7,7 +7,7 @@ module Hyrax
     self.terms -= [:alternative_title]
     self.terms += [:resource_type, :degree, :department, :alternate_title]
     self.terms += [:advisor, :orcid, :committee, :defense_date, :year, :center]
-    self.terms += [:funding, :sponsor, :institute, :school, :award, :includes]
+    self.terms += [:funding, :sponsor, :institute, :sdg, :school, :award, :includes]
     self.terms += [:editorial_note]
     self.required_fields -= [:keyword]
   end
