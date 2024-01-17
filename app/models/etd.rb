@@ -68,6 +68,10 @@ class Etd < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :sdg, predicate: "http://metadata.un.org/sdg/ontology#Goal" do |index|
+    index.as :stored_searchable, :facetable
+  end
+
   property :editorial_note, predicate: ::RDF::Vocab::SKOS.editorialNote, multiple: false do |index|
     index.as :displayable
   end
