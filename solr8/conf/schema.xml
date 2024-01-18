@@ -335,14 +335,6 @@
     <!-- Type used to index the lat and lon components for the "location" FieldType -->
     <dynamicField name="*_coordinate" type="tdouble" indexed="true"  stored="false" />
 
-    <!-- location (_ll...) -->
-    <dynamicField name="*_lli" type="location_rpt" stored="false" indexed="true" multiValued="false"/>
-    <dynamicField name="*_llim" type="location_rpt" stored="false" indexed="true" multiValued="true"/>
-    <dynamicField name="*_lls" type="location_rpt" stored="true" indexed="false" multiValued="false"/>
-    <dynamicField name="*_llsm" type="location_rpt" stored="true" indexed="false" multiValued="true"/>
-    <dynamicField name="*_llsi" type="location_rpt" stored="true" indexed="true" multiValued="false"/>
-    <dynamicField name="*_llsim" type="location_rpt" stored="true" indexed="true" multiValued="true"/>
-
     <dynamicField name="*suggest" type="textSuggest" indexed="true" stored="false" multiValued="true" />
     <dynamicField name="*_ng" type="ngrams" indexed="true" stored="false" multiValued="true" />	    
 
