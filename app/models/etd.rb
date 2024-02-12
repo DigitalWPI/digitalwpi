@@ -13,7 +13,7 @@ class Etd < ActiveFedora::Base
   end
 
   property :award, predicate: "http://id.loc.gov/ontologies/bibframe/awards" do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :facetable
   end
 
   property :includes, predicate: "http://purl.org/dc/terms/hasPart" do |index|
