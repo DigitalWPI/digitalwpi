@@ -180,6 +180,14 @@ class CatalogController < ApplicationController
     # creator, title, description, publisher, date_created,
     # subject, language, resource_type, format, identifier, based_near,
 
+    config.add_search_field('all_metadata_fields', label: 'All Fields (no full text)') do |field|
+      solr_name = "all_metadata_tesim"
+      field.solr_local_parameters = {
+        qf: solr_name,
+        pf: solr_name
+      }
+    end
+
     config.add_search_field('title') do |field|
       solr_name = solr_name("title", :stored_searchable)
       field.solr_local_parameters = {
