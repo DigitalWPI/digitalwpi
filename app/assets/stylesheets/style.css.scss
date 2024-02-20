@@ -55,7 +55,7 @@ $color-red: #FF0000;
     background-size: cover; /* Resize the background image to cover the entire container */
 
     @media screen and (min-width: 1280px){
-        height:250px;
+        height:350px;
     }
 
     .navbar .navbar-nav li {
@@ -89,8 +89,8 @@ $color-red: #FF0000;
             }
         }
         @media screen and (min-width: 1023px){
-            min-height: 250px;
-            max-height:250px;          
+            min-height: 350px;
+            max-height:350px;          
         }        
     }
 }

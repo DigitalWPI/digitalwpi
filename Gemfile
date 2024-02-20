@@ -121,3 +121,6 @@ group :deployment, :development do
   gem "capistrano-rails", "~> 1.3", require: false
 end
 
+gem "blacklight_advanced_search"
+gem "blacklight_range_limit"
+

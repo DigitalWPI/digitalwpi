@@ -1,0 +1,27 @@
+<% @page_title = "Advanced Search Options - #{application_name}" %>
+
+<div class="advanced-search-form col-sm-12">
+
+  <h1 class="advanced page-header">
+    <%= t('blacklight_advanced_search.form.title') %>
+    <%= link_to t('blacklight_advanced_search.form.start_over'), blacklight_advanced_search_engine.advanced_search_path, :class =>"btn btn-default pull-right advanced-search-start-over" %>
+  </h1>
+
+  <div class="row">
+    <%= form_tag search_catalog_path, :class => 'advanced form-horizontal', :method => :get do  %>
+      <div class="col-md-8">
+        <%= render 'advanced_search_form' %>
+      </div>
+      <div class="col-md-4">
+        <%= render "advanced_search_help" %>
+        <div class="submit-buttons pull-right">
+          <%= submit_tag t('blacklight_advanced_search.form.search_btn'),
+                         :class=>'btn btn-primary advanced-search-submit',
+                         :id => "advanced-search-submit" %>
+        </div>
+
+      </div>
+    <% end %>
+  </div>
+
+</div>
