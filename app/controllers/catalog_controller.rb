@@ -187,7 +187,6 @@ class CatalogController < ApplicationController
         qf: solr_name,
         pf: solr_name
       }
-      field.include_in_advanced_search = false
     end
 
     config.add_search_field('title') do |field|
