@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Bulkrax.setup do |config|
+  config.required_elements = []
   config.field_mappings = {
     "Bulkrax::CsvParser" => {
       "source" => { from: ["source"], source_identifier: true },
