@@ -611,6 +611,7 @@ h2.slider {
 
 //Recommended File Types
 .file-table {
+  border: 1px solid #999999;
   display: table;
   width: 100%;
 }
@@ -620,14 +621,17 @@ h2.slider {
 .file-table-type-cell {
 	border: 1px solid #999999;
 	display: table-cell;
-	padding: 3px 10px;
+	padding: 5px 10px;
     width: 20%;
 }
 .file-table-values-cell {
 	border: 1px solid #999999;
 	display: table-cell;
-	padding: 3px 10px;
+	padding: 5px 10px;
     width: 75%;
+    ul {
+        margin-bottom: 0;
+    }
 }
 .file-table-body {
 	display: table-row-group;
