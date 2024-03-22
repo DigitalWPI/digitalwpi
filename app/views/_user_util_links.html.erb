@@ -1,8 +1,5 @@
 <ul id="user_utility_links" class="nav navbar-nav navbar-right">
   <% if user_signed_in? %>
-    <li>
-      <%= render_notifications(user: current_user) %>
-    </li>
     <li class="dropdown">
       <%= link_to hyrax.dashboard_profile_path(current_user), role: 'button', data: { toggle: 'dropdown' }, aria: { haspopup: true, expanded: false} do %>
         <span class="sr-only"><%= t("hyrax.toolbar.profile.sr_action") %></span>
@@ -18,6 +15,9 @@
         <li><%= link_to t("hyrax.toolbar.profile.logout"), main_app.destroy_user_session_path %></li>
       </ul>
     </li><!-- /.btn-group -->
+    <li>
+      <%= render_notifications(user: current_user) %>
+    </li>
   <% else %>
     <li>
       <%= link_to main_app.login_path do %>
