@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     concerns :oai_provider
     concerns :searchable
     concerns :range_searchable
-
+    get :export_as_csv, on: :collection
   end
 
   get '/collections/upub', to: redirect('/collections/k0698b37j')
