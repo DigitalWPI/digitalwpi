@@ -388,6 +388,12 @@ class CatalogController < ApplicationController
   # Hyrax doesn't show any of the default controls on the list view, so
   # this method is not called in that context.
   def render_bookmarks_control?
-    false
+    true
+  end
+
+  def export_as_csv
+    models = Hyrax.config.curation_concerns.map(&:to_s) + ['Collection']
+    result = Hyrax::SolrQueryService.new.with_field_pairs(field_pairs: {"has_model_ssim": models}, join_with: ' OR ').accessible_by(ability: current_user.ability).get({ wt: :csv, rows: 100000})
+    send_data result, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
   end
 end
