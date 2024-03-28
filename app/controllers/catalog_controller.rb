@@ -392,8 +392,33 @@ class CatalogController < ApplicationController
   end
 
   def export_as_csv
-    models = Hyrax.config.curation_concerns.map(&:to_s) + ['Collection']
-    result = Hyrax::SolrQueryService.new.with_field_pairs(field_pairs: {"has_model_ssim": models}, join_with: ' OR ').accessible_by(ability: current_user.ability).get({ wt: :csv, rows: 100000})
+    export_fields = "id,has_model_ssim,title_tesim,creator_tesim,identifier_tesim,description_tesim,contributor_tesim,advisor_tesim,committee_tesim,keyword_tesim,language_tesim,publisher_tesim,subject_tesim,resource_type_tesim,degree_tesim,department_tesim,year_tesim,rights_statement_tesim,license_tesim,sponsor_tesim,orcid_tesim"
+
+    result = build_solr_query_service.get({ wt: :csv, rows: 2_000_000_000, fl: export_fields})
     send_data result, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
+  end
+
+
+  def build_solr_query_service
+    
+    models = Hyrax.config.curation_concerns.map(&:to_s) + ['Collection']
+
+    f_field_pairs = params[:f].present? ? params[:f].permit!.to_h : {}
+    f_inclusive_field_pairs = params[:f_inclusive].present? ? params[:f_inclusive].permit!.to_h : {}
+    field_pairs = f_field_pairs.merge(f_inclusive_field_pairs)
+
+    models_filter = {"has_model_ssim": models}
+    all_fields = {}
+    blacklight_config.search_fields["all_fields"][:solr_parameters][:qf].split(' ').each{|fl| all_fields[fl] = params[:q]} if  params[:q].present?
+
+    query_service = Hyrax::SolrQueryService.new
+    # add models in query
+    query_service.with_field_pairs(field_pairs: models_filter, join_with: ' OR ')
+    # add facet fields in query
+    query_service.with_field_pairs(field_pairs: field_pairs)
+    # add al all_search_fields in query to serch query in all fields
+    query_service.with_field_pairs(field_pairs: all_fields, join_with: ' OR ')
+    # add ability in query
+    query_service.accessible_by(ability: current_user.ability)
   end
 end
