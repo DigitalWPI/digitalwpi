@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'csv'
 class CatalogController < ApplicationController
 
   include BlacklightRangeLimit::ControllerOverride
@@ -392,33 +393,34 @@ class CatalogController < ApplicationController
   end
 
   def export_as_csv
-    export_fields = "id,has_model_ssim,title_tesim,creator_tesim,identifier_tesim,description_tesim,contributor_tesim,advisor_tesim,committee_tesim,keyword_tesim,language_tesim,publisher_tesim,subject_tesim,resource_type_tesim,degree_tesim,department_tesim,year_tesim,rights_statement_tesim,license_tesim,sponsor_tesim,orcid_tesim"
-
-    result = build_solr_query_service.get({ wt: :csv, rows: 2_000_000_000, fl: export_fields})
-    send_data result, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
+    params[:page] = 1
+    params[:per_page] = 2_000_000_000
+    (@response, @document_list) = search_results(params)
+    send_data result_json_to_csv, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
   end
 
-
-  def build_solr_query_service
-    
-    models = Hyrax.config.curation_concerns.map(&:to_s) + ['Collection']
-
-    f_field_pairs = params[:f].present? ? params[:f].permit!.to_h : {}
-    f_inclusive_field_pairs = params[:f_inclusive].present? ? params[:f_inclusive].permit!.to_h : {}
-    field_pairs = f_field_pairs.merge(f_inclusive_field_pairs)
-
-    models_filter = {"has_model_ssim": models}
-    all_fields = {}
-    blacklight_config.search_fields["all_fields"][:solr_parameters][:qf].split(' ').each{|fl| all_fields[fl] = params[:q]} if  params[:q].present?
-
-    query_service = Hyrax::SolrQueryService.new
-    # add models in query
-    query_service.with_field_pairs(field_pairs: models_filter, join_with: ' OR ')
-    # add facet fields in query
-    query_service.with_field_pairs(field_pairs: field_pairs)
-    # add al all_search_fields in query to serch query in all fields
-    query_service.with_field_pairs(field_pairs: all_fields, join_with: ' OR ')
-    # add ability in query
-    query_service.accessible_by(ability: current_user.ability)
+  def result_json_to_csv
+    csv_string = ''
+    export_fields = ['id', 'has_model_ssim', 'title_tesim', 'creator_tesim', 'identifier_tesim', 'description_tesim', 'contributor_tesim', 'advisor_tesim', 'committee_tesim', 'keyword_tesim', 'language_tesim', 'publisher_tesim', 'subject_tesim', 'resource_type_tesim', 'degree_tesim', 'department_tesim', 'year_tesim', 'rights_statement_tesim', 'license_tesim', 'sponsor_tesim', 'orcid_tesim']
+    if @document_list.present?
+      csv_string = CSV.generate(headers: true) do |csv|
+        # Add the headers
+        csv << export_fields
+        # Iterate over the array of hashes to add data rows
+        @document_list.each do |list|
+          data = list._source
+          row = []
+          export_fields.each do |fields|
+            if data[fields].present? && data[fields].is_a?(Array)
+              row << data[fields].join(",")
+            else
+              row << (data[fields] || '')
+            end
+          end
+          csv << row
+        end
+      end
+    end
+    csv_string
   end
 end
