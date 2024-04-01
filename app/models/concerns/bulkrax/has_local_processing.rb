@@ -10,7 +10,10 @@ module Bulkrax::HasLocalProcessing
 
 
   def parsed_metadata_for_embargo
-    if record["embargo"].to_s.downcase == "true"
+    
+    template = ::Hyrax::PermissionTemplate.find_by!(source_id: importerexporter.admin_set_id)
+
+    if record["embargo"].to_s.downcase == "true" && template.visibility == nil
       parsed_metadata["visibility"] = "embargo"
       parsed_metadata["embargo_release_date"] = record["embargo_release_date"]
       parsed_metadata["visibility_during_embargo"] = embargo_visibility(record["visibility_during_embargo"])
