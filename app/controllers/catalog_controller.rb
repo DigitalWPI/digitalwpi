@@ -393,24 +393,30 @@ class CatalogController < ApplicationController
   end
 
   def export_as_csv
-    params[:page] = 1
-    params[:per_page] = 2_000_000_000
-    (@response, @document_list) = search_results(params)
-    send_data result_json_to_csv, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
+    send_data search_documents, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
   end
 
-  def result_json_to_csv
+  def search_documents
+    blacklight_config.max_per_page = 5000
+    page = 1
+    per_page = 5000
+    total_pages = Float::INFINITY 
     csv_string = ''
-    export_fields = ['id', 'has_model_ssim', 'title_tesim', 'creator_tesim', 'identifier_tesim', 'description_tesim', 'contributor_tesim', 'advisor_tesim', 'committee_tesim', 'keyword_tesim', 'language_tesim', 'publisher_tesim', 'subject_tesim', 'resource_type_tesim', 'degree_tesim', 'department_tesim', 'year_tesim', 'rights_statement_tesim', 'license_tesim', 'sponsor_tesim', 'orcid_tesim']
-    if @document_list.present?
-      csv_string = CSV.generate(headers: true) do |csv|
-        # Add the headers
-        csv << export_fields
+    header_fields = ['id', 'has_model_ssim', 'title_tesim', 'creator_tesim', 'identifier_tesim', 'description_tesim', 'contributor_tesim', 'advisor_tesim', 'committee_tesim', 'keyword_tesim', 'language_tesim', 'publisher_tesim', 'subject_tesim', 'resource_type_tesim', 'degree_tesim', 'department_tesim', 'year_tesim', 'rights_statement_tesim', 'license_tesim', 'sponsor_tesim', 'orcid_tesim']
+
+    csv_string = CSV.generate(headers: true) do |csv|
+      # Add header to csv
+      csv << header_fields
+
+      while page <= total_pages
+        params[:page] = page
+        params[:per_page] = per_page
+        (@response, @document_list) = search_results(params)
         # Iterate over the array of hashes to add data rows
         @document_list.each do |list|
           data = list._source
           row = []
-          export_fields.each do |fields|
+          header_fields.each do |fields|
             if data[fields].present? && data[fields].is_a?(Array)
               row << data[fields].join(",")
             else
@@ -419,8 +425,12 @@ class CatalogController < ApplicationController
           end
           csv << row
         end
+
+        total_pages = @response.total_pages if page == 1
+        page +=1
       end
     end
+
     csv_string
   end
 end
