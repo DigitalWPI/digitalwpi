@@ -406,7 +406,7 @@ class CatalogController < ApplicationController
 
     csv_string = CSV.generate(headers: true) do |csv|
       # Add header to csv
-      csv << header_fields
+      csv << header_fields.map{|filed| I18n.t("hyrax.downloads.csv_header.fields.#{filed}")}
 
       while page <= total_pages
         params[:page] = page
@@ -420,7 +420,14 @@ class CatalogController < ApplicationController
             if data[fields].present? && data[fields].is_a?(Array)
               row << data[fields].join(",")
             else
-              row << (data[fields] || '')
+              field_data = if fields == "id"
+                model_name = data["has_model_ssim"].first.gsub(/([a-z])([A-Z])/,'\1_\2').downcase.pluralize
+                base_url = request.base_url
+                "#{base_url}/concern/#{model_name}/#{data[fields]}"
+              else
+                data[fields]
+              end
+              row << (field_data || '')
             end
           end
           csv << row
