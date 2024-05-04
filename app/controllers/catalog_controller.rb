@@ -402,11 +402,16 @@ class CatalogController < ApplicationController
     per_page = 5000
     total_pages = Float::INFINITY 
     csv_string = ''
-    header_fields = ['id', 'has_model_ssim', 'title_tesim', 'creator_tesim', 'identifier_tesim', 'description_tesim', 'contributor_tesim', 'advisor_tesim', 'committee_tesim', 'keyword_tesim', 'language_tesim', 'publisher_tesim', 'subject_tesim', 'resource_type_tesim', 'degree_tesim', 'department_tesim', 'year_tesim', 'rights_statement_tesim', 'license_tesim', 'sponsor_tesim', 'orcid_tesim']
+    header_fields = ['id', 'has_model_ssim', 'title_tesim', 'creator_tesim', 'identifier_tesim',
+                     'description_tesim', 'contributor_tesim', 'advisor_tesim', 'committee_tesim',
+                     'keyword_tesim', 'publisher_tesim', 'subject_tesim', 'resource_type_tesim',
+                     'degree_tesim', 'department_tesim', 'year_tesim', 'rights_statement_tesim',
+                     'license_tesim', 'sponsor_tesim', 'orcid_tesim', 'date_created_tesim',
+                     'award_tesim', 'center_sim', 'sdg_sim', 'major_sim']
 
     csv_string = CSV.generate(headers: true) do |csv|
       # Add header to csv
-      csv << header_fields.map{|filed| I18n.t("hyrax.downloads.csv_header.fields.#{filed}")}
+      csv << header_fields.map{|field| I18n.t("hyrax.downloads.csv_header.fields.#{field}")}
 
       while page <= total_pages
         params[:page] = page
@@ -421,9 +426,8 @@ class CatalogController < ApplicationController
               row << data[fields].join(",")
             else
               field_data = if fields == "id"
-                model_name = data["has_model_ssim"].first.gsub(/([a-z])([A-Z])/,'\1_\2').downcase.pluralize
-                base_url = request.base_url
-                "#{base_url}/concern/#{model_name}/#{data[fields]}"
+                p = PermalinksPresenter.new(main_app.common_object_path(locale: nil))
+                p.url
               else
                 data[fields]
               end
