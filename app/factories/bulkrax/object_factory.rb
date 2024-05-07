@@ -13,7 +13,7 @@ module Bulkrax
     #
     # @return [Array<Symbol>]
     # @see #permitted_attributes
-    class_attribute :base_permitted_attributes, default: %i[id edit_users edit_groups read_groups visibility work_members_attributes admin_set_id embargo_release_date visibility_during_embargo visibility_after_embargo]
+    class_attribute :base_permitted_attributes, default: %i[id edit_users edit_groups read_groups visibility record_visibility work_members_attributes admin_set_id embargo_release_date visibility_during_embargo visibility_after_embargo]
 
     # @return [Boolean]
     #
@@ -160,7 +160,6 @@ module Bulkrax
     end
 
     def create_work(attrs)
-      byebug
       work_actor.create(environment(attrs))
     end
 
