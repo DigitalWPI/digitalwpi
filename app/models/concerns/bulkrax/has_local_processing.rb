@@ -13,8 +13,10 @@ module Bulkrax::HasLocalProcessing
     
     template = ::Hyrax::PermissionTemplate.find_by!(source_id: importerexporter.admin_set_id)
 
-    if record["embargo"].to_s.downcase == "true" && template.visibility == nil
-      parsed_metadata["visibility"] = "embargo"
+    parsed_metadata["record_visibility"] = embargo_visibility(record["record_visibility"])
+    parsed_metadata["visibility"] = embargo_visibility(record["file_visibility"])
+
+    if record["file_visibility"].to_s.downcase == "embargo"
       parsed_metadata["embargo_release_date"] = record["embargo_release_date"]
       parsed_metadata["visibility_during_embargo"] = embargo_visibility(record["visibility_during_embargo"])
       parsed_metadata["visibility_after_embargo"] = embargo_visibility(record["visibility_after_embargo"])
@@ -27,8 +29,10 @@ module Bulkrax::HasLocalProcessing
       'restricted'
     when 'wpi'
       'authenticated'
-    else
+    when 'public'
       'open'
+    else
+      visibility
     end
   end
 end
