@@ -3,12 +3,14 @@
     <li class="dropdown">
       <%= link_to hyrax.dashboard_profile_path(current_user), role: 'button', data: { toggle: 'dropdown' }, aria: { haspopup: true, expanded: false} do %>
         <span class="sr-only"><%= t("hyrax.toolbar.profile.sr_action") %></span>
-        <span class="hidden-xs">&nbsp;<%= current_user.name %></span>
+        <span class="hidden-xs">My Account</span>
         <span class="sr-only"> <%= t("hyrax.toolbar.profile.sr_target") %></span>
         <span class="fa fa-user"></span>
         <span class="caret"></span>
       <% end %>
       <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <li><%= current_user.name %></li>
+        <li class="divider"></li>
         <li><%= link_to t("hyrax.toolbar.dashboard.menu"), hyrax.dashboard_path %></li>
 
         <li class="divider"></li>
