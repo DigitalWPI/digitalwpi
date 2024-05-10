@@ -4,11 +4,11 @@
   <div class="image-masthead shortstack">
   <% end %>
 
-    <div class="col-sm-6 logo_image">  
+    <div class="col-sm-6 logo_image">
         <%= link_to image_tag("DigitalWPILogo_2019.png"), hyrax.root_path %>
     </div>
 
-    <nav class="navbar navbar-default navbar-static-top col-sm-6" role="navigation">  
+    <nav class="navbar navbar-default navbar-static-top col-sm-6" role="navigation">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-collapse" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
@@ -19,7 +19,8 @@
         </div>
         <div class="collapse navbar-collapse" id="top-navbar-collapse">
           <ul class="nav navbar-nav">
-            <li <%= 'class=active' if current_page?(hyrax.root_path) %>>
+            <!--<li <%= 'class=active' if current_page?(hyrax.root_path) %>>-->
+            <li>
               <%= link_to t(:'hyrax.controls.home'), hyrax.root_path, aria: current_page?(hyrax.root_path) ? {current: 'page'} : nil %></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Browse <span class="caret"></span></a>
@@ -29,13 +30,18 @@
                 <li><%= link_to "Browse Exhibits", ENV['EXHIBITS_HOST_URL'] %></li>
               </ul>
             </li>
-            <li <%= 'class=active' if current_page?(hyrax.about_path) %>>
-              <a href="/about-page">About</a></li>
-              
-            <li <%= 'class=active' if current_page?(hyrax.help_path) %>>
-              <a href="/help-page">Help</a></li>
+
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/about-page">About Us</a></li>
+                <li><a href="/help-page">Help</a></li>
+              </ul>
+            </li>
+
               <!--<%= link_to t(:'hyrax.controls.help'), hyrax.help_path, aria: current_page?(hyrax.help_path) ? {current: 'page'} : nil %></li> -->
-          </ul><!-- /.nav -->        
+          </ul><!-- /.nav -->
+          <%= render '/user_util_links' %>
         </div>
     </nav><!-- /.navbar -->
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -45,5 +51,5 @@
     </div>
   </div>
 
-    
+
 </div>
