@@ -28,4 +28,8 @@ class User < ApplicationRecord
   def mailboxer_email(_object)
     email
   end
+
+  def bookmark_categories
+    BookmarkCategory.where(id: bookmarks.pluck(:bookmark_category_id).compact.uniq)
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_09_001128) do
+ActiveRecord::Schema.define(version: 2024_05_07_083849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,12 @@ ActiveRecord::Schema.define(version: 2022_06_09_001128) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "bookmark_categories", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "bookmarks", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "user_type"
@@ -32,6 +38,7 @@ ActiveRecord::Schema.define(version: 2022_06_09_001128) do
     t.binary "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "bookmark_category_id"
     t.index ["document_id"], name: "index_bookmarks_on_document_id"
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
   end

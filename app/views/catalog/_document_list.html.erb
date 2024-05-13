@@ -1,0 +1,12 @@
+<%# container for all documents in index view -%>
+  <button id="add-to-category" class="btn btn-primary" data-toggle="modal" data-target="#select-bookmark-category-modal" style="display:none;margin:20px">Add to Category</button>
+<div id="search-results">
+  <%= check_box_tag 'select_all_bookmark_documents', 1, false, id:"select-all-bookmark-documents"%>
+  <label for="select-all-bookmark-documents">Select All</label>
+  <ul class="list-unstyled catalog" start="<%= document_counter_with_offset(0) %>">
+    <%= render documents, as: :document %>
+  </ul>
+
+  <%= render partial: "bookmarks/bookmark_category_modal" %>
+  <%= render partial: "select_bookmark_category_modal" %>
+</div>
