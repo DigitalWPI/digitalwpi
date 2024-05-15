@@ -1,2 +1,5 @@
 <%= link_to t('blacklight.bookmarks.clear.action_title'), clear_bookmarks_path, :method => :delete, :data => { :confirm => t('blacklight.bookmarks.clear.action_confirm') }, :class => 'clear-bookmarks btn btn-danger', style: "color: #fff;" %>
-<%= link_to "Create New Bookmark Category", "#", id: "create-category", data: { toggle: "modal", target: "#bookmark-category-modal"}, class: 'btn btn-primary', style: "color: #fff;"%>
+<% if current_user.present? %>
+  <%= link_to "Create New Bookmark Category", "#", id: "create-category", data: { toggle: "modal", target: "#bookmark-category-modal"}, class: 'btn btn-primary', style: "color: #fff;"%>
+  <%= link_to "generate share url", generate_share_url_bookmarks_path(bookmark_category_id: params[:bookmark_category_id]), class: 'btn btn-primary', style: "color: #fff;", remote: true%>
+<% end %>

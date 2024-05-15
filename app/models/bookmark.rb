@@ -2,7 +2,8 @@
 class Bookmark < ActiveRecord::Base
   belongs_to :user, polymorphic: true
   belongs_to :document, polymorphic: true
-  belongs_to :bookmark_category
+  has_many :bookmarks_categories
+  has_many :categories, through: :bookmarks_categories
 
   validates :user_id, presence: true
 

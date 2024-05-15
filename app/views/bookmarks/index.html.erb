@@ -2,18 +2,20 @@
 <div id="content" class="col-md-12">
   <% if params[:controller] == "bookmarks" %>
     <div style="display:flex">
-      <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Select Bookmark Category
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-          <li><%= link_to "All", bookmarks_path%></li>
-          <% current_user.bookmark_categories.each do |category| %>
-            <li><%= link_to category.title, bookmarks_path(bookmark_category_id: category.id)  %></li>
-          <% end %>
-        </ul>
-      </div>
+      <% if current_user.present? %>
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Select Bookmark Category
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li><%= link_to "All", bookmarks_path%></li>
+            <% current_user.categories.each do |category| %>
+              <li><%= link_to category.title, bookmarks_path(bookmark_category_id: category.id)  %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
       <% if @bookmark_category.present? %>
         <label style="padding-top: 7px;margin-left: 10px;">Filter:</label>
         <label style="padding-top: 8px;margin-left: 10px;" class="label label-default"><%= "Bookmark category: #{ @bookmark_category.title }" %></label>
@@ -28,6 +30,7 @@
     <h3 class='section-heading'><%= t('blacklight.bookmarks.no_bookmarks') %></h3>
   <% else %>
     <%= render 'sort_and_per_page' %>
+    <div class="shareable-url"></div>
     <%= render partial: 'tools', locals: { document_list: @document_list } %>
     <%= render_document_index %>
     <%= render 'results_pagination' %>

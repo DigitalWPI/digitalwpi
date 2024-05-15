@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :bookmark_category do
+  factory :category do
     title { "MyString" }
   end
 end

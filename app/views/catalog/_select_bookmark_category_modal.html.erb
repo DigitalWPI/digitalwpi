@@ -10,7 +10,7 @@
             <div class="bookmark-category-error"></div>
             <%= label_tag 'category', 'Bookmark Category:' %>
             <select id="bookmark-category-select" class="form-control">
-              <% BookmarkCategory.all.each do |category| %>
+              <% current_user.categories.each do |category| %>
                 <option value="<%= category.id %>"><%= category.title %></option>
               <% end %>
             </select>

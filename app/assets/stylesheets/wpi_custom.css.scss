@@ -33,3 +33,10 @@ li.attribute-editorial_note {
 .advanced-search-display-field {
   display: block !important;
 }
+
+.shareable-url > p {
+  background-color: #d3d3d3;
+  padding: 10px;
+  overflow: auto;
+  white-space: nowrap;
+}
