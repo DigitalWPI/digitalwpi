@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class BookmarksController < CatalogController  
   include Blacklight::Bookmarks
-  before_action :set_bookmark_category, only: [:index, :action_documents, :update_category_to_bookmark]
+  before_action :set_bookmark_category, only: [:index, :action_documents, :update_category_to_bookmark, :generate_share_url, :delete_share_url]
   before_action :set_bookmarks, only: :update_category_to_bookmark
 
   def index    
@@ -63,12 +63,19 @@ class BookmarksController < CatalogController
   end
 
   def generate_share_url
-    url_params = {}
-    url_params[:encrypted_user_id] = encrypt_user_id(current_user.id) if current_user.present?
-    @shareable_url = request.base_url + bookmarks_path(url_params)
-    respond_to do |format|
-      format.js
+    if current_user.present?
+      token = encrypt_user_id(current_user.id, @bookmark_category&.id)
+      @bookmark_category.update(access_token: token)
     end
+
+    redirect_to bookmarks_path(bookmark_category_id: @bookmark_category.id)
+  end
+
+  def delete_share_url
+    if @bookmark_category.present?
+      @bookmark_category.update(access_token: nil)
+    end
+    redirect_to bookmarks_path(bookmark_category_id: @bookmark_category.id)
   end
 
   private
@@ -80,8 +87,7 @@ class BookmarksController < CatalogController
   def set_bookmark_category
     begin
       if params[:encrypted_user_id].present?
-        category_id = decrypt_bookmark_category_id(params[:encrypted_user_id])
-        @bookmark_category = Category.find_by(id: category_id)
+        @bookmark_category = decrypt_bookmark_category(params[:encrypted_user_id])
       elsif params[:bookmark_category_id].present?
         @bookmark_category = Category.find_by(id: params[:bookmark_category_id])
       end
@@ -106,18 +112,28 @@ class BookmarksController < CatalogController
     end
   end
 
-  def encrypt_user_id(user_id, current_time = nil)
+  def encrypt_user_id(user_id, bookmark_category_id= nil, current_time = nil)
     current_time ||= Time.zone.now
-    message_encryptor.encrypt_and_sign([user_id, current_time, params[:bookmark_category_id]])
+    message_encryptor.encrypt_and_sign([user_id, current_time, bookmark_category_id])
   end
 
-  def decrypt_bookmark_category_id(encrypted_user_id)
+  # Used for #export action, with encrypted user_id.
+  def decrypt_user_id(encrypted_user_id)
     user_id, timestamp, bookmark_category_id = message_encryptor.decrypt_and_verify(encrypted_user_id)
 
-    if timestamp < 1.hour.ago
+    user_id
+  end
+
+  def decrypt_bookmark_category(encrypted_user_id)
+    user_id, timestamp, bookmark_category_id = message_encryptor.decrypt_and_verify(encrypted_user_id)
+
+    user = User.find_by(id: user_id)
+    category = user.categories.find_by(id: bookmark_category_id)
+
+    if category.access_token != encrypted_user_id
       raise Blacklight::Exceptions::ExpiredSessionToken
     end
 
-    bookmark_category_id
+    category
   end
 end 

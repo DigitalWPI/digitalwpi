@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(version: 2024_05_14_130510) do
   create_table "categories", force: :cascade do |t|
     t.string "title"
     t.bigint "user_id"
+    t.string "access_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_categories_on_user_id"
