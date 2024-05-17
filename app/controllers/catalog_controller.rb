@@ -426,7 +426,7 @@ class CatalogController < ApplicationController
               row << data[fields].join(",")
             else
               field_data = if fields == "id"
-                p = PermalinksPresenter.new(main_app.common_object_path(locale: nil))
+                p = PermalinksPresenter.new("/show/#{data[fields]}")
                 p.url
               else
                 data[fields]
