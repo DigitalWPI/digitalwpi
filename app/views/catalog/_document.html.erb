@@ -1,10 +1,19 @@
 <li id="document_<%= document.to_param %>" class="document <%= render_document_class document %>" itemscope itemtype="<%= document.itemtype %>">
-  <div class="row search-result-wrapper">
-    <%= render_document_partials document, blacklight_config.view_config(document_index_view_type).partials, document_counter: document_counter %>
-    <% if current_user %>
-      <div class="col-md-4">
-        <%= render 'bookmark_control', document: document %>
+  <div class="row">
+    <% if params[:controller] == "bookmarks" && current_user.present? %>
+      <div class="col-md-1">
+        <%= check_box_tag 'bookmark_document[]', document.id, false, class:"bookmark-document" %>
       </div>
     <% end %>
+    <div class=" col-md-11">
+      <div class="row search-result-wrapper">
+        <%= render_document_partials document, blacklight_config.view_config(document_index_view_type).partials, document_counter: document_counter %>
+        <% if current_user %>
+          <div class="col-md-4">
+            <%= render 'bookmark_control', document: document %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </li>

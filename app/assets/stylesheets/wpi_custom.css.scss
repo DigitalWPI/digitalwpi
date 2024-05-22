@@ -37,3 +37,10 @@ li.attribute-editorial_note {
 body.dashboard {
   background-color:#333;
 }
+
+.shareable-url > p {
+  background-color: #d3d3d3;
+  padding: 10px;
+  overflow: auto;
+  white-space: nowrap;
+}
