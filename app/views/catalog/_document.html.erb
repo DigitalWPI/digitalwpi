@@ -10,7 +10,9 @@
         <%= render_document_partials document, blacklight_config.view_config(document_index_view_type).partials, document_counter: document_counter %>
         <% if current_user %>
           <div class="col-md-4">
-            <%= render 'bookmark_control', document: document %>
+            <% unless params[:bookmark_category_id].present? %>
+              <%= render 'bookmark_control', document: document %>
+            <% end %>
           </div>
         <% end %>
       </div>

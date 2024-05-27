@@ -30,11 +30,7 @@
     <h3 class='section-heading'><%= t('blacklight.bookmarks.no_bookmarks') %></h3>
   <% else %>
     <%= render 'sort_and_per_page' %>
-    <% if @bookmark_category.present? && @bookmark_category.access_token.present? %>
-      <div class="shareable-url">
-        <p><%= request.base_url + bookmarks_path(encrypted_user_id: @bookmark_category.access_token) %></p>
-      </div>
-    <% end %>
+    <%= render 'bookmark_actions' %>
     <%= render partial: 'tools', locals: { document_list: @document_list } %>
     <%= render_document_index %>
     <%= render 'results_pagination' %>
