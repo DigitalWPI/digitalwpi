@@ -1,4 +1,14 @@
 
+$(document).on("click", ".copy_bookmark_url", function() {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($('.shareable-url').text()).select();
+  document.execCommand("copy");
+  // Remove the temporary input
+  $temp.remove();
+  alert('Copied')
+});
+
 // Close modal on cancel button click
 $(document).on("click", "#select-bookmark-category-modal-cancel", function() {
   $('#select-bookmark-category-modal').hide();
@@ -12,20 +22,48 @@ $(document).on("click", "#bookmark-category-modal-cancel", function() {
 // Select all checkboxes when "Select All" is checked
 $(document).on("change", "#select-all-bookmark-documents", function() {
   $('.bookmark-document').prop('checked', $(this).prop('checked'));
+  button_identifier = $("#bookmark_category_id").val() ? "#remove-from-category" : "#add-to-category"
   if ($(this).prop('checked')) {
-    $('#add-to-category').show();
+    $(button_identifier).show();
   } else {
-    $('#add-to-category').hide();
+    $(button_identifier).hide();
   }
 });
 
 // Show/hide add to category button based on checkbox selection
 $(document).on("change",".bookmark-document", function() {
+  button_identifier = $("#bookmark_category_id").val() ? "#remove-from-category" : "#add-to-category"
   if ($('.bookmark-document:checked').length > 0) {
-    $('#add-to-category').show();
+    $(button_identifier).show();
   } else {
-    $('#add-to-category').hide();
+    $(button_identifier).hide();
   }
+});
+
+// Close modal on cancel button click
+$(document).on("click", "#remove-from-category", function() {
+  var selected_category = $("#bookmark_category_id").val();
+  var selected_bookmark_document_ids = [];
+  $('.bookmark-document:checked').each(function() {
+    selected_bookmark_document_ids.push($(this).val());
+  }); 
+
+  // Perform AJAX request to update categories
+  $.ajax({
+    url: 'bookmarks/remove_category_from_bookmark',
+    type: 'post',
+    data: {
+      bookmark_category_id: selected_category,
+      bookmark_document_ids: selected_bookmark_document_ids
+    },
+    success: function(response) {
+      window.location.href = window.location.href;
+    },
+    error: function(xhr, status, error) {
+      window.location.href = window.location.href;
+      alert(xhr.responseJSON.errors)
+    }
+  });
 });
 
 // Submit modal form

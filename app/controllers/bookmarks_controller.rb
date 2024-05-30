@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class BookmarksController < CatalogController  
   include Blacklight::Bookmarks
-  before_action :set_bookmark_category, only: [:index, :action_documents, :update_category_to_bookmark, :generate_share_url, :delete_share_url]
-  before_action :set_bookmarks, only: :update_category_to_bookmark
+  before_action :set_bookmark_category, only: [:index, :action_documents, :update_category_to_bookmark, :remove_category_from_bookmark, :generate_share_url, :delete_share_url, :delete_category]
+  before_action :set_bookmarks, only: [:update_category_to_bookmark, :remove_category_from_bookmark]
 
   def index    
     @bookmarks = if @bookmark_category.present?
@@ -52,6 +52,15 @@ class BookmarksController < CatalogController
     end
   end
 
+  def remove_category_from_bookmark
+    if @bookmark_category.present? && @bookmarks.present?
+      @bookmark_category.bookmarks.delete(@bookmarks)
+      render json: {massage: "Bookmark removed Bookmark Category"}, status: 200
+    else
+      render json: {}, status: 442
+    end
+  end
+
   def action_documents
     bookmarks = if params[:bookmark_category_id].present?
                     token_or_current_or_guest_user.categories.find_by(id: params[:bookmark_category_id]).bookmarks
@@ -78,6 +87,13 @@ class BookmarksController < CatalogController
     redirect_to bookmarks_path(bookmark_category_id: @bookmark_category.id)
   end
 
+  def delete_category
+    if @bookmark_category.present?
+      @bookmark_category.destroy
+    end
+    redirect_to bookmarks_path
+  end
+
   private
 
   def set_bookmarks
@@ -88,8 +104,12 @@ class BookmarksController < CatalogController
     begin
       if params[:encrypted_user_id].present?
         @bookmark_category = decrypt_bookmark_category(params[:encrypted_user_id])
-      elsif params[:bookmark_category_id].present?
-        @bookmark_category = Category.find_by(id: params[:bookmark_category_id])
+      elsif current_user.present? && params[:bookmark_category_id].present?
+        @bookmark_category = current_user.categories.find_by(id: params[:bookmark_category_id])
+        if @bookmark_category.nil?
+          flash[:error] = "Bookmark category doesn't exist"
+          redirect_to bookmarks_path
+        end
       end
     rescue Blacklight::Exceptions::ExpiredSessionToken => e
       flash[:error] = "The link you're trying to access has expired"

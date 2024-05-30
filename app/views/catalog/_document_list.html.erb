@@ -1,5 +1,7 @@
 <%# container for all documents in index view -%>
+  <%= hidden_field_tag :bookmark_category_id, params[:bookmark_category_id] , id:"bookmark_category_id" %>
   <button id="add-to-category" class="btn btn-primary" data-toggle="modal" data-target="#select-bookmark-category-modal" style="display:none;margin:20px">Add to Category</button>
+  <button id="remove-from-category" class="btn btn-danger" style="display:none;margin:20px">Remove From Category</button>
 <div id="search-results">
   <% if params[:controller] == "bookmarks" && current_user.present? %>
     <%= check_box_tag 'select_all_bookmark_documents', 1, false, id:"select-all-bookmark-documents"%>

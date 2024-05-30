@@ -38,9 +38,20 @@ body.dashboard {
   background-color:#333;
 }
 
-.shareable-url > p {
-  background-color: #d3d3d3;
-  padding: 10px;
-  overflow: auto;
-  white-space: nowrap;
+.shareable-url-section {
+  display: grid;
+
+  .shareable-url {
+    width: 100%;
+    background-color: #d3d3d3;
+    padding: 10px;
+    overflow: auto;
+    white-space: nowrap;
+  }
+
+  .bookmark-action-tools {
+    margin: 20px 0px;
+    border-bottom: 1px solid #AC2B37;
+    padding-bottom: 5px;
+  }
 }
