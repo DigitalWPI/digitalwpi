@@ -423,7 +423,7 @@ class CatalogController < ApplicationController
           row = []
           header_fields.each do |fields|
             if data[fields].present? && data[fields].is_a?(Array)
-              row << data[fields].join(",")
+              row << data[fields].join(";")
             else
               field_data = if fields == "id"
                 p = PermalinksPresenter.new("/show/#{data[fields]}")

@@ -3,7 +3,7 @@
   <%= render_results_collection_tools wrapping_class: "search-widgets pull-right" %>
   <% if @document_list.present? && params[:controller] == "catalog" %>
     <%= link_to export_as_csv_catalog_path(params.except(:controller, :action, format: :csv).permit!.to_h), id: "download-all",class: "btn btn-default", target: '_blank' do %>
-      <label data-toggle="tooltip" data-placement="bottom" title="Download results to .CSV">Download results to .CSV</label>
+      <label data-toggle="tooltip" data-placement="bottom" title="Download results to .CSV">Download search results to .CSV file</label>
       <i class="fa fa-download" aria-hidden="true"></i>
     <% end %>
   <% end %>
