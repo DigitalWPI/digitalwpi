@@ -49,7 +49,7 @@ terms:
       active: false
     - id: https://www.europeana.eu/en/rights/rr-r/
       term: All rights reserved
-      active: true
+      active: false
     - id: https://creativecommons.org/publicdomain/zero/1.0/
       term: Creative Commons CC0 1.0 Universal
       active: true
