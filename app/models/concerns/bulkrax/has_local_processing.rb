@@ -10,7 +10,7 @@ module Bulkrax::HasLocalProcessing
 
 
   def parsed_metadata_for_embargo
-    
+
     template = ::Hyrax::PermissionTemplate.find_by!(source_id: importerexporter.admin_set_id)
 
     parsed_metadata["record_visibility"] = embargo_visibility(record["record_visibility"])
