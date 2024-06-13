@@ -17,7 +17,6 @@ module Bulkrax::HasLocalProcessing
     parsed_metadata["visibility"] = embargo_visibility(record["file_visibility"])
 
     if record["file_visibility"].to_s.downcase == "embargo"
-      parsed_metadata["visibility"] = "embargo"
       parsed_metadata["embargo_release_date"] = record["embargo_release_date"]
       parsed_metadata["visibility_during_embargo"] = embargo_visibility(record["visibility_during_embargo"])
       parsed_metadata["visibility_after_embargo"] = embargo_visibility(record["visibility_after_embargo"])
