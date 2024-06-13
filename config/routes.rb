@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   get '/collections/ms54', to: redirect('/collections/3197xp59j')
   get '/collections/ms55', to: redirect('/collections/vx021h564')
   get '/collections/boz', to: redirect('/collections/sq87bv394')
-  get '/collections/summits', to: redirect('/collections/b8515q79x')
+  #get '/collections/summits', to: redirect('/collections/b8515q79x')
   get '/collections/theo', to: redirect('/collections/3x816q79g')
 
   resources :bepress
