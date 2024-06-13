@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     concerns :oai_provider
     concerns :searchable
     concerns :range_searchable
-
+    get :export_as_csv, on: :collection
   end
 
   get '/collections/upub', to: redirect('/collections/k0698b37j')
@@ -72,6 +72,12 @@ Rails.application.routes.draw do
 
     collection do
       delete 'clear'
+      post :create_category
+      post :update_category_to_bookmark
+      post :remove_category_from_bookmark
+      get :generate_share_url
+      delete :delete_share_url
+      delete :delete_category
     end
   end
 

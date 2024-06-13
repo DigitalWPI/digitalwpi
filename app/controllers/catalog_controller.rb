@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'csv'
 class CatalogController < ApplicationController
 
   include BlacklightRangeLimit::ControllerOverride
@@ -388,6 +389,59 @@ class CatalogController < ApplicationController
   # Hyrax doesn't show any of the default controls on the list view, so
   # this method is not called in that context.
   def render_bookmarks_control?
-    false
+    true
+  end
+
+  def export_as_csv
+    send_data search_documents, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
+  end
+
+  def search_documents
+    blacklight_config.max_per_page = 5000
+    page = 1
+    per_page = 5000
+    total_pages = Float::INFINITY 
+    csv_string = ''
+    header_fields = ['id', 'has_model_ssim', 'title_tesim', 'creator_tesim', 'identifier_tesim',
+                     'description_tesim', 'contributor_tesim', 'advisor_tesim', 'committee_tesim',
+                     'keyword_tesim', 'publisher_tesim', 'subject_tesim', 'resource_type_tesim',
+                     'degree_tesim', 'department_tesim', 'year_tesim', 'rights_statement_tesim',
+                     'license_tesim', 'sponsor_tesim', 'orcid_tesim', 'date_created_tesim',
+                     'award_tesim', 'center_sim', 'sdg_sim', 'major_sim']
+
+    csv_string = CSV.generate(headers: true) do |csv|
+      # Add header to csv
+      csv << header_fields.map{|field| I18n.t("hyrax.downloads.csv_header.fields.#{field}")}
+
+      while page <= total_pages
+        params[:page] = page
+        params[:per_page] = per_page
+        (@response, @document_list) = search_results(params)
+        # Iterate over the array of hashes to add data rows
+        @document_list.each do |list|
+          data = list._source
+          row = []
+          header_fields.each do |fields|
+            if data[fields].present? && data[fields].is_a?(Array)
+              row << data[fields].join(";")
+            else
+              field_data = if fields == "id"
+                p = PermalinksPresenter.new("/show/#{data[fields]}")
+                p.url
+              else
+                data[fields]
+              end
+              row << (field_data || '')
+            end
+          end
+          csv << row
+        end
+
+        total_pages = @response.total_pages if page == 1
+        page +=1
+      end
+    end
+
+    csv_string
   end
 end
