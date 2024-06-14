@@ -87,7 +87,9 @@ Hyrax.config do |config|
   # config.redis_namespace = "hyrax"
 
   # Path to the file characterization tool
-  # config.fits_path = ENV['FITS_PATH'] || "/fits/fits-1.5.0/fits.sh"
+  if Rails.env.development?
+    config.fits_path = ENV['FITS_PATH'] || "/fits/fits-1.5.0/fits.sh"
+  end
 
   # Path to the file derivatives creation tool
   # config.libreoffice_path = "soffice"

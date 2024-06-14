@@ -79,6 +79,7 @@ services:
 
   appdb:
     image: postgres:13-alpine
+    restart: unless-stopped
     env_file:
       - .env
     environment:
@@ -103,6 +104,7 @@ services:
         UPLOADS_PATH: ${UPLOADS_PATH}
         DERIVATIVES_PATH: ${DERIVATIVES_PATH}
         CACHE_PATH: ${CACHE_PATH}
+        FITS_PATH: ${FITS_PATH}
         FITS_VERSION: ${FITS_VERSION}
     env_file:
       - .env
