@@ -421,15 +421,17 @@ class CatalogController < ApplicationController
         @document_list.each do |list|
           data = list._source
           row = []
-          header_fields.each do |fields|
-            if data[fields].present? && data[fields].is_a?(Array)
-              row << data[fields].join(";")
+          header_fields.each do |field|
+            if data[field].present? && data[field].is_a?(Array)
+              row << data[field].join(";")
+            elsif field.ends_with?("_sim")
+              row << list.solr_response[:facet_counts][:facet_fields][field].select{|m| m.is_a?(String)}.join(";")
             else
-              field_data = if fields == "id"
-                p = PermalinksPresenter.new("/show/#{data[fields]}")
+              field_data = if field == "id"
+                p = PermalinksPresenter.new("/show/#{data[field]}")
                 p.url
               else
-                data[fields]
+                data[field]
               end
               row << (field_data || '')
             end
