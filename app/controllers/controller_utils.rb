@@ -47,14 +47,17 @@ module ControllerUtils
   private
 
   def add_date_and_creator_to_note(model)
+    notes = []
+    notes = JSON.parse(@curation_concern.editorial_note) if @curation_concern.editorial_note.present?
+    notes = [notes] unless notes.is_a? Array
+
     if params[model].include?('editorial_note') and params[model]['editorial_note'].present?
-      notes = []
-      notes = JSON.parse(@curation_concern.editorial_note) if @curation_concern.editorial_note.present?
-      notes = [notes] unless notes.is_a? Array
-      params[model]['editorial_note'] = notes.append(
+      notes = notes.append(
         {'note': params[model]['editorial_note'], created: Time.now, user_id: current_user.email, user_name: current_user.name}
       ).to_json
     end
+
+    params[model]['editorial_note'] = notes if notes.present?
   end
 
 end
