@@ -415,7 +415,7 @@ class CatalogController < ApplicationController
                      'keyword_tesim', 'publisher_tesim', 'subject_tesim', 'resource_type_tesim',
                      'degree_tesim', 'department_tesim', 'year_tesim', 'rights_statement_tesim',
                      'license_tesim', 'sponsor_tesim', 'orcid_tesim', 'date_created_tesim',
-                     'award_tesim', 'center_sim', 'sdg_sim', 'major_sim']
+                     'award_tesim', 'center_tesim', 'sdg_tesim', 'major_tesim']
 
     csv_string = CSV.generate(headers: true) do |csv|
       # Add header to csv
@@ -430,19 +430,19 @@ class CatalogController < ApplicationController
           data = list._source
           row = []
           header_fields.each do |field|
-            if data[field].present? && data[field].is_a?(Array)
-              row << data[field].join(";")
-            elsif field.ends_with?("_sim")
-              row << list.solr_response[:facet_counts][:facet_fields][field].select{|m| m.is_a?(String)}.join(";")
-            else
-              field_data = if field == "id"
+            if data[field].present?
+              if data[field].is_a?(Array)
+                row << data[field].join(";")
+              elsif field == "id"
                 p = PermalinksPresenter.new("/show/#{data[field]}")
-                p.url
+                row << p.url
               else
-                data[field]
+                row << data[field]
               end
-              row << (field_data || '')
+            else
+              row << ''
             end
+          end
           end
           csv << row
         end
