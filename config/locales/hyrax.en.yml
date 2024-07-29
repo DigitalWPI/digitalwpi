@@ -98,9 +98,9 @@ en:
           orcid_tesim: Orcid
           date_created_tesim: Date created
           award_tesim: Award
-          center_sim: Project Center
-          sdg_sim: UN SDG
-          major_sim: Major
+          center_tesim: Project Center
+          sdg_tesim: UN SDG
+          major_tesim: Major
   blacklight_advanced_search:
     all: all
     any: any
