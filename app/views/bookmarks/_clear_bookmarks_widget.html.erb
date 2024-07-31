@@ -1,0 +1,5 @@
+<%= link_to t('blacklight.bookmarks.clear.action_title'), clear_bookmarks_path, :method => :delete, :data => { :confirm => t('blacklight.bookmarks.clear.action_confirm') }, :class => 'clear-bookmarks btn btn-danger', style: "color: #fff;" %>
+<%= link_to "Create New Bookmark Category", "#", id: "create-category", data: { toggle: "modal", target: "#bookmark-category-modal"}, class: 'btn btn-primary', style: "color: #fff;" %>
+<% if @bookmark_category.present? %>
+  <%= link_to "Delete This Category", delete_category_bookmarks_path(bookmark_category_id: @bookmark_category.id), class: 'btn btn-danger', style: "color: #fff;", method: :delete %>
+<% end %>
