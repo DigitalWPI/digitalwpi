@@ -73,6 +73,34 @@ en:
       form:
         q:
           placeholder: Search Digital WPI
+    downloads:
+      csv_header:
+        fields:
+          id: Digital WPI URL
+          has_model_ssim: Model
+          title_tesim: Title
+          creator_tesim: Creator
+          identifier_tesim: Identifier
+          description_tesim: Description
+          contributor_tesim: Contributor
+          advisor_tesim: Advisor
+          committee_tesim: Committee
+          keyword_tesim: Keyword
+          publisher_tesim: Publisher
+          subject_tesim: Subject
+          resource_type_tesim: Resource Type
+          degree_tesim: Degree
+          department_tesim: Department
+          year_tesim: Year
+          rights_statement_tesim: Rights Statement
+          license_tesim: License
+          sponsor_tesim: Sponsor
+          orcid_tesim: Orcid
+          date_created_tesim: Date created
+          award_tesim: Award
+          center_tesim: Project Center
+          sdg_tesim: UN SDG
+          major_tesim: Major
   blacklight_advanced_search:
     all: all
     any: any
