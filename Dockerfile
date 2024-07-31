@@ -17,7 +17,7 @@ RUN apk update && \
     apk add bash build-base curl curl-dev gcompat imagemagick imagemagick-libs imagemagick-dev libarchive-tools  \
     libpq-dev libxml2-dev libxslt-dev nodejs openjdk11-jre-headless sqlite-dev mysql-dev tzdata yarn git
 
-COPY policy.xml /etc/ImageMagick-7/policy.xml
+# COPY policy.xml /etc/ImageMagick-7/policy.xml
 
 RUN mkdir -p /fits/fits-$FITS_VERSION \
     && curl --fail --location "https://github.com/harvard-lts/fits/releases/download/$FITS_VERSION/fits-$FITS_VERSION.zip" | bsdtar --extract --directory /fits/fits-$FITS_VERSION \
