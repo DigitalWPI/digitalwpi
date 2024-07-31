@@ -140,7 +140,6 @@ services:
       - derivatives:${DERIVATIVES_PATH}
       - cache:${CACHE_PATH}
       - branding:${BRAND_PATH}
-      - .:/data
       - .:/data:cached
 
   workers:
@@ -157,7 +156,6 @@ services:
       - derivatives:${DERIVATIVES_PATH}
       - cache:${CACHE_PATH}
       - branding:${BRAND_PATH}
-      - .:/data
       - .:/data:cached
 
   redis:
