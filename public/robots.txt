@@ -9,3 +9,4 @@ Disallow: /*.html*
 Disallow: /catalog/export_as_csv*
 Disallow: /bookmarks*
 Disallow: /works/*/stats*
+Disallow: /files/*/stats*
