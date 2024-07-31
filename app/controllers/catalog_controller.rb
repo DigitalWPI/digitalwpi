@@ -410,12 +410,12 @@ class CatalogController < ApplicationController
     per_page = 5000
     total_pages = Float::INFINITY 
     csv_string = ''
-    header_fields = ['id', 'has_model_ssim', 'title_tesim', 'creator_tesim', 'identifier_tesim',
-                     'description_tesim', 'contributor_tesim', 'advisor_tesim', 'committee_tesim',
-                     'keyword_tesim', 'publisher_tesim', 'subject_tesim', 'resource_type_tesim',
-                     'degree_tesim', 'department_tesim', 'year_tesim', 'rights_statement_tesim',
-                     'license_tesim', 'sponsor_tesim', 'orcid_tesim', 'date_created_tesim',
-                     'award_tesim', 'center_tesim', 'sdg_tesim', 'major_tesim']
+    header_fields = %w(id has_model_ssim title_tesim creator_tesim identifier_tesim
+                      description_tesim contributor_tesim advisor_tesim committee_tesim
+                      keyword_tesim publisher_tesim subject_tesim resource_type_tesim
+                      degree_tesim department_tesim year_tesim rights_statement_tesim
+                      license_tesim sponsor_tesim orcid_tesim date_created_tesim award_tesim
+                      center_tesim sdg_tesim major_tesim)
 
     csv_string = CSV.generate(headers: true) do |csv|
       # Add header to csv
@@ -443,15 +443,13 @@ class CatalogController < ApplicationController
               row << ''
             end
           end
-          end
           csv << row
         end
-
         total_pages = @response.total_pages if page == 1
         page +=1
       end
     end
-
     csv_string
   end
+
 end
