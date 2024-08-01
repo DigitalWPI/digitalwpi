@@ -10,3 +10,7 @@ Disallow: /catalog/export_as_csv*
 Disallow: /bookmarks*
 Disallow: /works/*/stats*
 Disallow: /files/*/stats*
+Disallow: /users*
+Disallow: /dashboard*
+Disallow: /login*
+
