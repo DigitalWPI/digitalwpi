@@ -7,8 +7,8 @@ module Hyrax
       @visibility ||= if embargo_release_date.present?
                         if first('visibility_during_embargo_ssim').eql?("authenticated")
                           Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-                        elsif first('visibility_during_embargo_ssim').eql?("restricted")
-                          Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+                        #elsif first('visibility_during_embargo_ssim').eql?("restricted")
+                        #  Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
                         else
                           Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO
                         end
