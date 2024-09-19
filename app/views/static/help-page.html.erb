@@ -44,6 +44,12 @@
           <div class="post" data-id="content-refine">
             <h4>How to Refine a Search</h4>
           </div>
+          <div class="post" data-id="content-download">
+            <h4>Download Search Results</h4>
+          </div>
+          <div class="post" data-id="content-bookmark">
+            <h4>Bookmarking</h4>
+          </div>
           <div class="post" data-id="content-formats">
             <h4>Recommended File Formats</h4>
           </div>
@@ -89,7 +95,7 @@
         <div class="information" id="content-single">
           <h1>Single Search</h1>
           <p>The persistent <strong>Single Search</strong> box (located on every Digital WPI page) can be used to search all items in Digital WPI. Enter keywords, phrases, authors, or other terms in the search box, and then click the magnifying glass icon next to the box or click the return/enter key. Searching is not case-sensitive. For example, searching for "washington monument" or "Washington Monument" will yield the same results.</p>
-          <p>A result will be returned when your search terms match text stored in that record’s descriptive metadata fields (e.g. title, names, subjects, abstracts/descriptions) or, in the case of text documents (e.g. IQP report, MQP report, thesis, dissertation, monograph/book, etc.), in the full text of the resource/document as well.</p>
+          <p>A result will be returned when your search terms match text stored in that record's descriptive metadata fields (e.g. title, names, subjects, abstracts/descriptions) or, in the case of text documents (e.g. IQP report, MQP report, thesis, dissertation, monograph/book, etc.), in the full text of the resource/document as well.</p>
         </div>
         <div class="returnlink" style="text-align:right;padding:15px;padding-bottom:0px; margin-top:40px;margin-bottom:40px;border-bottom:2px solid rgb(172, 42, 55);">
           <span class="post" data-id="info-top">Return to Top</span>
@@ -137,6 +143,37 @@
           <p><strong>Quotation Marks</strong></p>
           <p>Use quotation marks around a phrase to return results with that exact phrase. For example, a search for greenhouse gas will return results with the terms greenhouse and gas separately, in addition to items where they appear together. By searching for "greenhouse gas" you will only get results containing that exact phrase.
           </p>
+        </div>
+        <div class="returnlink" style="text-align:right;padding:15px;padding-bottom:0px; margin-top:40px;margin-bottom:40px;border-bottom:2px solid rgb(172, 42, 55);">
+          <span class="post" data-id="info-top">Return to Top</span>
+        </div>
+        <div class="information" id="content-download">
+          <h1>Download Search Results</h1>
+          <p>After filtering your search results, you can download the results to a .CSV file. Only metadata related to the Digital WPI items will be included in the .CSV file. In the search results page, select the button "Download search results to .CSV file" located near the center of the page.</p>
+          <p><strong>NOTE:</strong> This will not download the files associated with each Digital WPI item, you will only see the metadata related to the items, ex. Title, Creator, Advisor, Project Center, UN Sustainable Development Goals, etc. However the first column titled, "Digital WPI", contains the full URL that you can use to retrieve the item record from which you can download the files associated with the item.</p>
+        </div>
+        <div class="returnlink" style="text-align:right;padding:15px;padding-bottom:0px; margin-top:40px;margin-bottom:40px;border-bottom:2px solid rgb(172, 42, 55);">
+          <span class="post" data-id="info-top">Return to Top</span>
+        </div>
+        <div class="information" id="content-bookmark">
+          <h1>Bookmarking</h1>
+          <p>Users can bookmark items from the search results page if they are logged in to Digital WPI. WPI community members can login by selecting the "Login" link at the top right corner of Digital WPI, or navigate to <%= link_to("https://digital.wpi.edu/login", "https://digital.wpi.edu/login") %>.</p>
+          <p><strong>Create Bookmarks</strong></p>
+          <p>To create a bookmark, you must be in the search results page. Select the "Bookmark" checkbox located on the right-hand side of each item. To view all bookmarks, select "My Account" from the top right-hand side menu and choose "Bookmarks".</p>
+          <p><strong>Create Bookmark Categories</strong></p>
+          <p>Users can create different categories for their bookmarks. In the "Bookmarks" page, select the blue "Create New Bookmark Category" button on the right-hand side of the screen. Type in the name of your bookmark category and select "Submit".</p>
+          <p>To add bookmarks to a category, make sure you are in the "Bookmarks" page. Select the checkbox on the left-hand side of each item and a blue "Add to Category" button will appear above. Once the button is selected, use the drop-down to pick a category and hit "Submit".</p>
+          <p>To navigate to the bookmark category, go to the white "Select Bookmark Category" dropdown on the left-hand side of the screen and select the category - you are now viewing all of the bookmarks that you have assigned to the category.</p>
+          <p>To delete a bookmark category, navigate to the category and select the red "Delete This Category" button on the right-hand side.</p>
+          <p><strong>Share Bookmark Category</strong></p>
+          <p>Your bookmark category list can be shared with others (not just logged-in users). Navigate to the bookmark category you wish to share and select the blue "Generate Shared URL" button on the left-hand side. A randomized URL is provided and a blue "Copy URL" button appears above on the left. Select the button to copy and paste the URL into an email, document, or message to share your list of bookmarks with others.</p>
+          <p>If you add or remove items from a shared bookmark category, the previously generated URL will show the changes when it is accessed by others. If, after sharing, you decide you only want a select group of users to see your bookmark category, the previously generated URL can be disabled and a new randomized URL can be created by selecting the blue "Generate New Shared URL" button on the left. The new URL should then be copied and shared with your preferred group of users.</p>
+          <p>If you want to stop sharing the bookmark category altogether, navigate to the bookmark category and select the red "Delete URL" button located above the randomized URL. Once selected, the previous URL will direct users to a page with the error, "The link you're trying to access has expired".</p>
+          <p><strong>NOTE:</strong> At this time it is not yet possible to download your bookmarked items to a csv file. This is currently under development.</p>
+          <p><strong>Delete Bookmarks</strong></p>
+          <p>To delete a bookmark, navigate to your "Bookmarks" main page and de-select the "In Bookmarks" indicator on the right.</p>
+          <p>To delete a bookmark from a bookmark category, navigate to the bookmark category and select the item using the checkbox on the left-hand side. A red "Remove From Category" button will appear, once selected it will remove the item from the category.</p>
+          <p>To delete all of your bookmarks (including those assigned to bookmark categories), select the red "Clear Bookmarks" button from any bookmark page. A pop-up window will appear to confirm that you want to delete all bookmarks - press "OK" to proceed, otherwise select "Cancel".</p>
         </div>
         <div class="returnlink" style="text-align:right;padding:15px;padding-bottom:0px; margin-top:40px;margin-bottom:40px;border-bottom:2px solid rgb(172, 42, 55);">
           <span class="post" data-id="info-top">Return to Top</span>
