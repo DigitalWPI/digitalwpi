@@ -1,108 +1,161 @@
 require 'json'
 require 'csv'
+require 'date'
 
 class AddJpegToWorks
-  def initialize(input_csv_file, output_dir: "log", processed_fileset_ids: [], max_count: 0)
+  attr_reader :csv, :new_fileset_ids
+  attr_accessor :output_csv_file
+    def initialize(input_csv_file, output_dir: "log", processed_fileset_ids: [], max_count: 0, purge_tiff: false)
     @input_csv_file = input_csv_file
     @output_dir = output_dir
     time = Time.now.strftime("%Y-%m-%d_%H-%M-%S")
     @output_csv_file = File.join(@output_dir, "attach_jpg_to_work_output-#{time}.csv")
     @processed_fileset_ids = processed_fileset_ids
-    headers = %w(time	fileset_id digest_ssim tiff_filepath jpg_filepath	note jpg_added message work_id new_fileset_id)
+    headers = %w(time tiff_fileset_id digest_ssim tiff_filepath jpg_filepath	note work_id jpg_fileset_id jpg_added message tiff_purged)
     @csv = CSV.open(@output_csv_file, "ab", :headers => headers, :write_headers => true)
     @count = 0
     @max_count = max_count
+    @purge_tiff = purge_tiff
+    @depositor = User.find_by_user_key("depositor@wpi.edu")
+    @new_fileset_ids = @processed_fileset_ids
   end
 
   def add_from_csv
     raise Exception.new("File #{@input_csv_file} not Found") unless File.exist?(@input_csv_file)
     table = CSV.parse(File.read(@input_csv_file), headers: true)
-    user = User.find_by_user_key("depositor@wpi.edu")
-    table.by_row.each do |row|
-      next if @processed_fileset_ids.include?(row['fileset_id'])
+    table.by_row.each do |csv_row|
+      next if @processed_fileset_ids.include?(csv_row['tiff_fileset_id'])
       @count = @count + 1
       return if @max_count > 0 and @count > @max_count
-      adding_jpg = true
-      # jpg_filepath is not present
-      unless row['jpg_filepath'].present?
-        row['message'] = row['note']
-        row['jpg_added'] = false
-        adding_jpg = false
+      row = set_row_defaults(csv_row)
+      next unless jpg_file_exists?(row)
+      tiff_fileset = get_tiff_fileset(row)
+      next unless tiff_fileset.present?
+      work_ids = tiff_fileset.parent_work_ids.uniq
+      embargo_attributes = get_embargo_from_tiff_fileset(tiff_fileset)
+      title = [File.basename(row['jpg_filepath'])]
+      work_ids.each do |work_id|
+        row = set_row_defaults(csv_row, work_id: work_id)
+        row, added_jpg = add_jpg_to_work_id(work_id, title, embargo_attributes, row)
+        if @purge_tiff and added_jpg
+          purge_tiff_fileset(tiff_fileset, row)
+        else
+          @csv << row
+        end
       end
-      # jpeg file represented by jpg_filepath is not present
-      unless row['jpg_filepath'].present? and File.exist?(row['jpg_filepath'])
-        row['message'] = "Jpeg file not found"
-        row['jpg_added'] = false
-        adding_jpg = false
-      end
-      # If no jpg file, write to csv and go to the next one
-      unless adding_jpg
-        @csv << row
-        next
-      end
-      add_jpeg_to_tiff(row, user)
     end
     @csv.close
   end
 
   private
 
-  def add_jpeg_to_tiff(row, user)
-    fileset_id = row['fileset_id']
-    jpg_filepath = row['jpg_filepath']
+  def set_row_defaults(row, work_id: '')
+    new_row = row.to_hash
+    new_row['time'] = DateTime.now().strftime("%Y-%m-%d %H:%M:%S")
+    new_row['work_id'] = work_id
+    new_row['jpg_fileset_id'] = ''
+    new_row['jpg_added'] = false
+    new_row['message'] = ''
+    new_row['tiff_purged'] = false
+    new_row
+  end
 
-    fileset = FileSet.find(fileset_id)
-    unless fileset.present?
-      row['message'] = "Fileset not found #{fileset_id}"
-      row['jpg_added'] = false
-      @csv << row
-      return
-    end
-    work_ids = fileset.parent_work_ids.uniq
+  def purge_tiff_fileset(tiff_fileset, row)
+    id = tiff_fileset.id
+    tiff_fileset.delete()
 
-    work_ids.each do |work_id|
-      row['work_id'] = work_id
-      work = ActiveFedora::Base.find(work_id)
-      if work.present?
-        if work_has_jpeg?(work)
-          row['message'] = "Work already has jpeg file. So not adding"
-          row['jpg_added'] = false
-          @csv << row
-        else
-          embargo_attributes = tiff_fileset_embargo_attributes(fileset)
-          new_fileset_id = nil
-          begin
-            new_fileset_id = attach_jpeg_file(work, user, jpg_filepath, fileset.title, embargo_attributes)
-            row['new_fileset_id'] = new_fileset_id
-            row['jpg_added'] = true
-            row['message'] = "Added jpg file to work"
-            @csv << row
-          rescue Exception => e
-            row['new_fileset_id'] = new_fileset_id
-            row['jpg_added'] = false
-            row['message'] = e.message
-            @csv << row
-          end
-        end
-      else
-        row['message'] = "Work #{work_id} associated with Fileset #{fileset_id} is not found"
-        row['jpg_added'] = false
-        @csv << row
-      end
+    # extrapolate the id for Fedora
+    pair_tree = "#{id[0..1]}/#{id[2..3]}/#{id[4..5]}/#{id[6..7]}"
+    repository = Rails.application.config_for(:fedora)["url"]
+    uri = "#{repository}/#{pair_tree}/#{id}"
+    msg, state = purge_from_fedora_using_curl(uri)
+    row['message'] = "#{row['message']}. #{msg}"
+    row['tiff_purged'] = state
+    @csv << row
+  end
+
+  def purge_from_fedora_using_curl(uri)
+    begin
+      `curl -X DELETE "#{uri}"`
+      `curl -X DELETE "#{uri}/fcr:tombstone"`
+      return "Tiff has been purged", true
+    rescue Exception => ex
+      return "Tiff not purged: #{ex.to_s}", false
     end
   end
 
-  def work_has_jpeg?(work)
+  def add_jpg_to_work_id(work_id, title, embargo_attributes, row)
+    work = get_work(work_id, row)
+    return unless work.present?
+    return if work_has_jpeg?(work, row)
+    # uploaded_file = upload_file(row['jpg_filepath'])
+    jpg_fileset_id = nil
+    begin
+      jpg_fileset_id = create_fileset(work, row['jpg_filepath'], title, embargo_attributes)
+      set_work_thumbnail(work, jpg_fileset_id)
+      row['jpg_fileset_id'] = jpg_fileset_id
+      row['jpg_added'] = true
+      row['message'] = "Added jpg file to work"
+      return row, true
+    rescue Exception => ex
+      row['jpg_fileset_id'] = jpg_fileset_id
+      row['message'] = ex.to_s
+      @csv << row
+      return row, false
+    end
+  end
+
+  def get_work(work_id, row)
+    work = ActiveFedora::Base.find(work_id)
+    unless work.present?
+      row['message'] = "Work #{work_id} is not found"
+      @csv << row
+      return nil
+    end
+    work
+  end
+
+  def jpg_file_exists?(row)
+    unless row['jpg_filepath'].present?
+      row['message'] = row['note']
+      @csv << row
+      return false
+    end
+    # check if jpeg file represented by jpg_filepath is present
+    unless row['jpg_filepath'].present? and File.exist?(row['jpg_filepath'])
+      row['message'] = "Jpeg file not found"
+      @csv << row
+      return false
+    end
+    true
+  end
+
+  def get_tiff_fileset(row)
+    # Get existing tiff fileset
+    fileset = FileSet.find(row['tiff_fileset_id'])
+    unless fileset.present?
+      row['message'] = "Fileset not found #{row['tiff_fileset_id']}"
+      @csv << row
+      return nil
+    end
+    fileset
+  end
+
+  def work_has_jpeg?(work, row)
     has_jpeg = false
     work.file_sets.each do |fs|
       if fs.mime_type == 'image/jpeg' or fs.title.first.end_with?('.jpg') or fs.title.first.end_with?('.jpeg')
         has_jpeg = true
       end
     end
+    if has_jpeg
+      row['message'] = "Work already has jpeg file. So not adding"
+      @csv << row
+    end
     has_jpeg
   end
 
-  def tiff_fileset_embargo_attributes(fileset)
+  def get_embargo_from_tiff_fileset(fileset)
     embargo_attributes = {
       'embargo' => false,
       'embargo_release_date' => nil
@@ -120,21 +173,70 @@ class AddJpegToWorks
     embargo_attributes
   end
 
-  def attach_jpeg_file(work, user, file_path, title, embargo_attributes)
+  def get_title_from_tiff_fileset(tiff_fileset)
+    title = nil
+    tiff_fileset.title.each do |t|
+      if t.end_with?('.tif')
+        name = File.basename(t, ".tif")
+        title.append("#{name}.jpeg")
+      else
+        title.append(t)
+      end
+      Array(title)
+    end
+  end
+
+  def _upload_file(filepath)
+    u = ::Hyrax::UploadedFile.new
+    u.user = @depositor unless @depositor.nil?
+    u.file = ::CarrierWave::SanitizedFile.new(filepath)
+    u.save
+    u
+  end
+
+  def create_fileset(work, jpg_filepath, title, embargo_attributes)
     fs = FileSet.new
-    fs.id = ActiveFedora::Noid::Service.new.mint
+    new_id = generate_new_id
+    @new_fileset_ids << new_id
+    fs.id = new_id
+    # ActiveFedora::Noid::Service.new.mint
     fs.title = title
-    actor = ::Hyrax::Actors::FileSetActor.new(fs, user)
-    actor.create_metadata
-    actor.create_content(File.open(file_path))
-    actor.attach_to_work(work)
+    fs.permissions_attributes = work.permissions.map(&:to_hash)
     if embargo_attributes['embargo'] == true
       fs.apply_embargo(embargo_attributes['embargo_release_date'],
                        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,
                        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
     end
     fs.set_edit_groups(["content-admin"], [])
+    actor = ::Hyrax::Actors::FileSetActor.new(fs, @depositor)
+    actor.create_metadata
+    actor.create_content(File.open(jpg_filepath, 'rb'))
     fs.save
+    actor.attach_to_work(work)
     fs.id
   end
+
+  def generate_new_id
+    new_id = "05a2#{SecureRandom.uuid[0..4]}"
+    generate_new_id if @new_fileset_ids.include?(new_id)
+    new_id
+  end
+
+  def set_work_thumbnail(work, jpg_fileset_id)
+    work.representative_id = jpg_fileset_id
+    work.thumbnail_id = jpg_fileset_id
+    work.save
+  end
 end
+
+# To use
+#
+# input_csv_file = '/home/webapp/id_hash_file_mapping.csv'
+# processed_fileset_ids = []
+# max_count = 10
+# purge_tiff = true
+# a = AddJpegToWorks.new(input_csv_file,
+#                        processed_fileset_ids: processed_fileset_ids,
+#                        max_count: max_count,
+#                        purge_tiff: purge_tiff)
+# a.add_from_csv
