@@ -86,8 +86,8 @@ class AddJpegToWorks
 
   def add_jpg_to_work_id(work_id, title, embargo_attributes, row)
     work = get_work(work_id, row)
-    return unless work.present?
-    return if work_has_jpeg?(work, row)
+    return row, false unless work.present?
+    return row, false if work_has_jpeg?(work, row)
     # uploaded_file = upload_file(row['jpg_filepath'])
     jpg_fileset_id = nil
     begin
@@ -133,12 +133,11 @@ class AddJpegToWorks
   def get_tiff_fileset(row)
     # Get existing tiff fileset
     fileset = FileSet.find(row['tiff_fileset_id'])
-    unless fileset.present?
-      row['message'] = "Fileset not found #{row['tiff_fileset_id']}"
-      @csv << row
-      return nil
-    end
     fileset
+  rescue Ldp::Gone => e
+    row['message'] = "Fileset not found #{row['tiff_fileset_id']}"
+    @csv << row
+    return nil
   end
 
   def work_has_jpeg?(work, row)
