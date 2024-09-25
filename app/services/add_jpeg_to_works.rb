@@ -19,7 +19,7 @@ class AddJpegToWorks
     @max_count = max_count
     @purge_tiff = purge_tiff
     @depositor = User.find_by_user_key("depositor@wpi.edu")
-    @new_fileset_ids = @processed_fileset_ids
+    @new_fileset_ids = []
     @fileset_id_prefix = fileset_id_prefix
     @filter_by_collections = filter_by_collections
   end
@@ -249,14 +249,11 @@ end
 # file = File.read('log/processed_fileset_ids.json')
 # processed_fileset_ids = JSON.parse(file)
 # input_csv_file = '/home/webapp/id_hash_file_mapping.csv'
-# max_count = 100
+# max_count = 1000
 # purge_tiff = true
-a = AddJpegToWorks.new(input_csv_file,
-                       processed_fileset_ids: processed_fileset_ids,
-                       max_count: max_count,
-                       purge_tiff: purge_tiff)
+# a = AddJpegToWorks.new(input_csv_file,
+#                        processed_fileset_ids: processed_fileset_ids,
+#                        max_count: max_count,
+#                        purge_tiff: purge_tiff)
 # a.add_from_csv
-# File.open('log/processed_fileset_ids.json', 'w') do |f|
-#   f.write(a.new_fileset_ids.to_json)
-# end
 
