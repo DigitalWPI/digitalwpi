@@ -5,19 +5,23 @@ require 'date'
 class AddJpegToWorks
   attr_reader :csv, :new_fileset_ids
   attr_accessor :output_csv_file
-    def initialize(input_csv_file, output_dir: "log", processed_fileset_ids: [], max_count: 0, purge_tiff: false)
+    def initialize(input_csv_file, output_dir: "log", processed_fileset_ids: [], max_count: 0, purge_tiff: false,
+                   fileset_id_prefix: "05a2", filter_by_collections: ["hi"])
     @input_csv_file = input_csv_file
     @output_dir = output_dir
     time = Time.now.strftime("%Y-%m-%d_%H-%M-%S")
     @output_csv_file = File.join(@output_dir, "attach_jpg_to_work_output-#{time}.csv")
     @processed_fileset_ids = processed_fileset_ids
-    headers = %w(time tiff_fileset_id digest_ssim tiff_filepath jpg_filepath	note work_id jpg_fileset_id jpg_added message tiff_purged)
+    headers = %w(time tiff_fileset_id digest_ssim tiff_filepath jpg_filepath	note work_id jpg_fileset_id
+                 jpg_added message tiff_purged)
     @csv = CSV.open(@output_csv_file, "ab", :headers => headers, :write_headers => true)
     @count = 0
     @max_count = max_count
     @purge_tiff = purge_tiff
     @depositor = User.find_by_user_key("depositor@wpi.edu")
-    @new_fileset_ids = @processed_fileset_ids
+    @new_fileset_ids = []
+    @fileset_id_prefix = fileset_id_prefix
+    @filter_by_collections = filter_by_collections
   end
 
   def add_from_csv
@@ -33,7 +37,8 @@ class AddJpegToWorks
       next unless tiff_fileset.present?
       work_ids = tiff_fileset.parent_work_ids.uniq
       embargo_attributes = get_embargo_from_tiff_fileset(tiff_fileset)
-      title = [File.basename(row['jpg_filepath'])]
+      title = [get_title_from_tiff_fileset(tiff_fileset, row)]
+      # title = [File.basename(row['jpg_filepath'])]
       work_ids.each do |work_id|
         row = set_row_defaults(csv_row, work_id: work_id)
         row, added_jpg = add_jpg_to_work_id(work_id, title, embargo_attributes, row)
@@ -86,8 +91,18 @@ class AddJpegToWorks
 
   def add_jpg_to_work_id(work_id, title, embargo_attributes, row)
     work = get_work(work_id, row)
-    return row, false unless work.present?
-    return row, false if work_has_jpeg?(work, row)
+    unless work.present?
+      row['message'] = "Work not found"
+      return row, false
+    end
+    unless work_belongs_to_collection?(work)
+      row['message'] = "Work does not belong to chosen collection"
+      return row, false
+    end
+    if work_has_jpeg?(work)
+      row['message'] = "Work already has jpeg file. So not adding"
+      return row, false
+    end
     # uploaded_file = upload_file(row['jpg_filepath'])
     jpg_fileset_id = nil
     begin
@@ -100,7 +115,6 @@ class AddJpegToWorks
     rescue Exception => ex
       row['jpg_fileset_id'] = jpg_fileset_id
       row['message'] = ex.to_s
-      @csv << row
       return row, false
     end
   end
@@ -140,16 +154,20 @@ class AddJpegToWorks
     return nil
   end
 
-  def work_has_jpeg?(work, row)
+  def work_belongs_to_collection?(work)
+    in_collection = false
+    @filter_by_collections.each do |col_id|
+      in_collection = true if (work.member_of_collection_ids.include?(col_id) or work.parent_collection_ids.include?(col_id))
+    end
+    in_collection
+  end
+
+  def work_has_jpeg?(work)
     has_jpeg = false
     work.file_sets.each do |fs|
       if fs.mime_type == 'image/jpeg' or fs.title.first.end_with?('.jpg') or fs.title.first.end_with?('.jpeg')
         has_jpeg = true
       end
-    end
-    if has_jpeg
-      row['message'] = "Work already has jpeg file. So not adding"
-      @csv << row
     end
     has_jpeg
   end
@@ -172,17 +190,15 @@ class AddJpegToWorks
     embargo_attributes
   end
 
-  def get_title_from_tiff_fileset(tiff_fileset)
-    title = nil
-    tiff_fileset.title.each do |t|
-      if t.end_with?('.tif')
-        name = File.basename(t, ".tif")
-        title.append("#{name}.jpeg")
-      else
-        title.append(t)
-      end
-      Array(title)
+  def get_title_from_tiff_fileset(tiff_fileset, row)
+    tiff_titles = tiff_fileset.title.reject(&:blank?)
+    if tiff_titles.present?
+      title = tiff_titles.first
+      title = "#{File.basename(title, ".tif")}.jpeg" if title.end_with?('.tif')
+    else
+      title = File.basename(row['jpg_filepath'])
     end
+    title
   end
 
   def _upload_file(filepath)
@@ -216,7 +232,7 @@ class AddJpegToWorks
   end
 
   def generate_new_id
-    new_id = "05a2#{SecureRandom.uuid[0..4]}"
+    new_id = "#{@fileset_id_prefix}#{SecureRandom.uuid[0..4]}"
     generate_new_id if @new_fileset_ids.include?(new_id)
     new_id
   end
@@ -229,13 +245,15 @@ class AddJpegToWorks
 end
 
 # To use
-#
+# require 'json'
+# file = File.read('log/processed_fileset_ids.json')
+# processed_fileset_ids = JSON.parse(file)
 # input_csv_file = '/home/webapp/id_hash_file_mapping.csv'
-# processed_fileset_ids = []
-# max_count = 10
+# max_count = 1000
 # purge_tiff = true
 # a = AddJpegToWorks.new(input_csv_file,
 #                        processed_fileset_ids: processed_fileset_ids,
 #                        max_count: max_count,
 #                        purge_tiff: purge_tiff)
 # a.add_from_csv
+
