@@ -4,7 +4,7 @@ require 'date'
 
 class AddJpegToWorks
   attr_reader :csv, :new_fileset_ids
-  attr_accessor :output_csv_file
+  attr_accessor :output_csv_file, :processed_fileset_ids
     def initialize(input_csv_file, output_dir: "log", processed_fileset_ids: [], max_count: 0, purge_tiff: false,
                    fileset_id_prefix: "05a2", filter_by_collections: ["hi"])
     @input_csv_file = input_csv_file
@@ -56,13 +56,11 @@ class AddJpegToWorks
 
   def gather_ids_from_output_csv
     if File.exist?(@output_csv_file)
-      fo = File.read(@output_csv_file)
-      table = CSV.parse(fo, headers: true)
+      table = CSV.parse(File.read(@output_csv_file), headers: true)
       table.by_row.each do |csv_row|
-        @processed_fileset_ids.append(csv_row['fileset_id']) if csv_row['fileset_id'].present?
+        @processed_fileset_ids.append(csv_row['tiff_fileset_id']) if csv_row['tiff_fileset_id'].present?
         @new_fileset_ids.append(csv_row['jpg_fileset_id']) if csv_row['jpg_fileset_id'].present?
       end
-      fo.close
       @processed_fileset_ids.uniq!
       @new_fileset_ids.uniq!
     end
@@ -259,14 +257,10 @@ class AddJpegToWorks
 end
 
 # To use
-# require 'json'
-# file = File.read('log/processed_fileset_ids.json')
-# processed_fileset_ids = JSON.parse(file)
 # input_csv_file = '/home/webapp/id_hash_file_mapping.csv'
 # max_count = 1000
 # purge_tiff = true
 # a = AddJpegToWorks.new(input_csv_file,
-#                        processed_fileset_ids: processed_fileset_ids,
 #                        max_count: max_count,
 #                        purge_tiff: purge_tiff)
 # a.add_from_csv
