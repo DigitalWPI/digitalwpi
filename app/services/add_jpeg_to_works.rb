@@ -194,7 +194,7 @@ class AddJpegToWorks
     tiff_titles = tiff_fileset.title.reject(&:blank?)
     if tiff_titles.present?
       title = tiff_titles.first
-      title = "#{File.basename(t, ".tif")}.jpeg" if tiff_titles.first.end_with?('.tif')
+      title = "#{File.basename(title, ".tif")}.jpeg" if title.end_with?('.tif')
     else
       title = File.basename(row['jpg_filepath'])
     end
@@ -245,13 +245,18 @@ class AddJpegToWorks
 end
 
 # To use
-#
+# require 'json'
+# file = File.read('log/processed_fileset_ids.json')
+# processed_fileset_ids = JSON.parse(file)
 # input_csv_file = '/home/webapp/id_hash_file_mapping.csv'
-# processed_fileset_ids = []
-# max_count = 10
+# max_count = 100
 # purge_tiff = true
-# a = AddJpegToWorks.new(input_csv_file,
-#                        processed_fileset_ids: processed_fileset_ids,
-#                        max_count: max_count,
-#                        purge_tiff: purge_tiff)
+a = AddJpegToWorks.new(input_csv_file,
+                       processed_fileset_ids: processed_fileset_ids,
+                       max_count: max_count,
+                       purge_tiff: purge_tiff)
 # a.add_from_csv
+# File.open('log/processed_fileset_ids.json', 'w') do |f|
+#   f.write(a.new_fileset_ids.to_json)
+# end
+
