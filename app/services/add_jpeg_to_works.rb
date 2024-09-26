@@ -4,13 +4,12 @@ require 'date'
 
 class AddJpegToWorks
   attr_reader :csv, :new_fileset_ids
-  attr_accessor :output_csv_file
+  attr_accessor :output_csv_file, :processed_fileset_ids
     def initialize(input_csv_file, output_dir: "log", processed_fileset_ids: [], max_count: 0, purge_tiff: false,
                    fileset_id_prefix: "05a2", filter_by_collections: ["hi"])
     @input_csv_file = input_csv_file
     @output_dir = output_dir
-    time = Time.now.strftime("%Y-%m-%d_%H-%M-%S")
-    @output_csv_file = File.join(@output_dir, "attach_jpg_to_work_output-#{time}.csv")
+    @output_csv_file = File.join(@output_dir, "attach_jpg_to_work_output.csv")
     @processed_fileset_ids = processed_fileset_ids
     headers = %w(time tiff_fileset_id digest_ssim tiff_filepath jpg_filepath	note work_id jpg_fileset_id
                  jpg_added message tiff_purged)
@@ -22,6 +21,7 @@ class AddJpegToWorks
     @new_fileset_ids = []
     @fileset_id_prefix = fileset_id_prefix
     @filter_by_collections = filter_by_collections
+    gather_ids_from_output_csv
   end
 
   def add_from_csv
@@ -53,6 +53,18 @@ class AddJpegToWorks
   end
 
   private
+
+  def gather_ids_from_output_csv
+    if File.exist?(@output_csv_file)
+      table = CSV.parse(File.read(@output_csv_file), headers: true)
+      table.by_row.each do |csv_row|
+        @processed_fileset_ids.append(csv_row['tiff_fileset_id']) if csv_row['tiff_fileset_id'].present?
+        @new_fileset_ids.append(csv_row['jpg_fileset_id']) if csv_row['jpg_fileset_id'].present?
+      end
+      @processed_fileset_ids.uniq!
+      @new_fileset_ids.uniq!
+    end
+  end
 
   def set_row_defaults(row, work_id: '')
     new_row = row.to_hash
@@ -194,7 +206,7 @@ class AddJpegToWorks
     tiff_titles = tiff_fileset.title.reject(&:blank?)
     if tiff_titles.present?
       title = tiff_titles.first
-      title = "#{File.basename(title, ".tif")}.jpeg" if title.end_with?('.tif')
+      title = "#{File.basename(title, ".tif")}.jpg" if title.end_with?('.tif')
     else
       title = File.basename(row['jpg_filepath'])
     end
@@ -245,14 +257,10 @@ class AddJpegToWorks
 end
 
 # To use
-# require 'json'
-# file = File.read('log/processed_fileset_ids.json')
-# processed_fileset_ids = JSON.parse(file)
 # input_csv_file = '/home/webapp/id_hash_file_mapping.csv'
 # max_count = 1000
 # purge_tiff = true
 # a = AddJpegToWorks.new(input_csv_file,
-#                        processed_fileset_ids: processed_fileset_ids,
 #                        max_count: max_count,
 #                        purge_tiff: purge_tiff)
 # a.add_from_csv
