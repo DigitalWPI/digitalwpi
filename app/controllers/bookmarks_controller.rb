@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 class BookmarksController < CatalogController  
   include Blacklight::Bookmarks
-  before_action :set_bookmark_category, only: [:index, :action_documents, :update_category_to_bookmark, :remove_category_from_bookmark, :generate_share_url, :delete_share_url, :delete_category]
+  include DownloadHelper
+  before_action :set_bookmark_category, only: [:index, :action_documents, :update_category_to_bookmark, :remove_category_from_bookmark, :generate_share_url, :delete_share_url, :delete_category, :export_as_csv]
   before_action :set_bookmarks, only: [:update_category_to_bookmark, :remove_category_from_bookmark]
 
   def index    
@@ -20,6 +21,10 @@ class BookmarksController < CatalogController
       format.atom { render :layout => false }
       format.json do
         render json: render_search_results_as_json
+      end
+      format.csv do
+        file_name = @bookmark_category.present? ? "#{@bookmark_category.title.downcase.gsub(" ", "_")}.csv" : "all_bookmarks.csv"
+        send_data build_csv_for_bookmarks(@document_list), type: 'text/csv', disposition: 'inline', filename: file_name
       end
 
       additional_response_formats(format)
