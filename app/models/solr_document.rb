@@ -149,4 +149,8 @@ class SolrDocument
   def citation
     self[Solrizer.solr_name('citation', :displayable)]
   end
+
+  def member_ids
+    self["member_ids_ssim"] || []
+  end
 end
