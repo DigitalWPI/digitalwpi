@@ -267,7 +267,7 @@ module Hyrax
       # list of item ids to display is based on ordered_ids
       def authorized_item_ids
         @member_item_list_ids ||= begin
-          items = member_ids 
+          items = ordered_ids 
           items.delete_if { |m| !current_ability.can?(:read, m) } if Flipflop.hide_private_items?
           items
         end
