@@ -14,6 +14,7 @@
     <div class="query-criteria">
       <h3 class="query-criteria-heading">
         <%= t('blacklight_advanced_search.form.query_criteria_heading_html', :select_menu =>  select_menu_for_field_operator ) %>
+        <%= link_to t('blacklight_advanced_search.form.start_over'), blacklight_advanced_search_engine.advanced_search_path, :class =>"btn btn-default pull-right advanced-search-start-over" %>
       </h3>
 
       <div id="advanced_search">
