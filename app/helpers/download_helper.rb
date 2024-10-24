@@ -29,7 +29,8 @@ module DownloadHelper
     end
   end
 
-  def build_csv_for_bookmarks(document_list)
+  def build_csv_for_bookmarks(document_ids)
+    @response, @document_list = fetch(document_ids, {rows: 50_00})
     CSV.generate(headers: true) do |csv|
       csv << generate_csv_header
       generate_csv_rows(@document_list).each do |row|
