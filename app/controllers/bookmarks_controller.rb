@@ -24,7 +24,7 @@ class BookmarksController < CatalogController
       end
       format.csv do
         file_name = @bookmark_category.present? ? "#{@bookmark_category.title.downcase.gsub(" ", "_")}.csv" : "all_bookmarks.csv"
-        send_data build_csv_for_bookmarks(@document_list), type: 'text/csv', disposition: 'inline', filename: file_name
+        send_data build_csv_for_bookmarks(bookmark_ids), type: 'text/csv', disposition: 'inline', filename: file_name
       end
 
       additional_response_formats(format)
