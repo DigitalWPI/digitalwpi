@@ -1,4 +1,9 @@
 module ControllerUtils
+  def self.included(base)
+    # This block will run when the module is included in a class
+    base.before_action :fix_missing_order_members, only: :show
+  end
+
   def additional_response_formats(format)
     format.endnote do
       send_data(presenter.solr_document.export_as_endnote,
@@ -59,5 +64,12 @@ module ControllerUtils
 
     params[model]['editorial_note'] = notes if notes.present?
   end
+
+  def fix_missing_order_members
+    @curation_concern = _curation_concern_type.find(params[:id]) unless curation_concern
+    if @curation_concern.member_ids.count > @curation_concern.ordered_member_ids.count
+      UpdateOrderMembersJob.perform_later(_curation_concern_type.to_s, presenter.id) 
+    end
+  end 
 
 end
