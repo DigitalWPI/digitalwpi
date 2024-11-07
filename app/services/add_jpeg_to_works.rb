@@ -35,7 +35,8 @@ class AddJpegToWorks
       next unless jpg_file_exists?(row)
       tiff_fileset = get_tiff_fileset(row)
       next unless tiff_fileset.present?
-      work_ids = tiff_fileset.parent_work_ids.uniq
+      work_ids = get_work_ids(tiff_fileset, row)
+      next unless work_ids.present?
       embargo_attributes = get_embargo_from_tiff_fileset(tiff_fileset)
       title = [get_title_from_tiff_fileset(tiff_fileset, row)]
       # title = [File.basename(row['jpg_filepath'])]
@@ -161,9 +162,22 @@ class AddJpegToWorks
     fileset = FileSet.find(row['tiff_fileset_id'])
     fileset
   rescue Ldp::Gone => e
+    row['message'] = "Fileset has been deleted #{row['tiff_fileset_id']}"
+    @csv << row
+    return nil
+  rescue => e
     row['message'] = "Fileset not found #{row['tiff_fileset_id']}"
     @csv << row
     return nil
+  end
+
+  def get_work_ids(tiff_fileset, row)
+    work_ids = tiff_fileset.parent_work_ids.uniq
+    unless work_ids.present?
+      row['message'] = "Fileset #{row['tiff_fileset_id']} has no parent work"
+      @csv << row
+    end
+    work_ids
   end
 
   def work_belongs_to_collection?(work)
