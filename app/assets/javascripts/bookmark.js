@@ -1,13 +1,31 @@
 
 $(document).on("click", ".copy_bookmark_url", function() {
-  var $temp = $("<input>");
-  $("body").append($temp);
-  $temp.val($('.shareable-url').text()).select();
-  document.execCommand("copy");
-  // Remove the temporary input
-  $temp.remove();
-  alert('Copied')
+  var text_to_copy = document.getElementById("shareable-url").innerHTML;
+
+  if (!navigator.clipboard) {
+    // use old commandExec() way
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val(text_to_copy).select();
+    document.execCommand("copy");
+    // Remove the temporary input
+    $temp.remove();
+    alert('Copied')
+  } else {
+    navigator.clipboard.writeText(text_to_copy).then(
+      function(){ alert("Copied!"); // success
+    }).catch(
+      function() { alert("Error copying to clipboard"); // error
+    });
+  }
 });
+
+$(document).on("click", ".view_bookmark_url", function() {
+  var text_to_show = document.getElementById("shareable-url").innerHTML;
+
+  alert(text_to_show); // success
+});
+
 
 // Close modal on cancel button click
 $(document).on("click", "#select-bookmark-category-modal-cancel", function() {

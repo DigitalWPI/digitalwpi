@@ -1,10 +1,19 @@
 <div id="sortAndPerPage" class="clearfix" role="navigation" aria-label="<%= t('blacklight.search.per_page.aria_label')%>">
   <%= render :partial => "paginate_compact", :object => @response if show_pagination? %>
   <%= render_results_collection_tools wrapping_class: "search-widgets pull-right" %>
-  <% if @document_list.present? && params[:controller] == "catalog" %>
-    <%= link_to export_as_csv_catalog_path(params.except(:controller, :action, format: :csv).permit!.to_h), id: "download-all",class: "btn btn-default", target: '_blank' do %>
-      <label data-toggle="tooltip" data-placement="bottom" title="Download results to .CSV">Download search results to .CSV file</label>
-      <i class="fa fa-download" aria-hidden="true"></i>
+  <% if @document_list.present? %>
+    <% if params[:controller] == "catalog" %>
+      <%= link_to export_as_csv_catalog_path(params.except(:controller, :action, format: :csv).permit!.to_h),
+                  id: "download-all",class: "btn btn-default", target: '_blank' do %>
+        <label data-toggle="tooltip" data-placement="bottom" title="Download results to .CSV">Download search results to .CSV file</label>
+        <i class="fa fa-download" aria-hidden="true"></i>
+      <% end %>
+    <% elsif params[:controller] == "bookmarks" %>
+      <%= link_to bookmarks_path(bookmark_category_id: @bookmark_category&.id, format: :csv),
+                  class: 'btn btn-primary', target: "_blank", style: "color: #fff;" do %>
+        <label data-toggle="tooltip" data-placement="bottom" title="Download Bookmark results to .CSV file">Download Bookmark results to .CSV file</label>
+        <i class="fa fa-download" aria-hidden="true"></i>
+      <% end %>
     <% end %>
   <% end %>
 </div>

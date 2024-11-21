@@ -1,37 +1,23 @@
-<% @page_title = t('blacklight.bookmarks.page_title', :application_name => application_name) %>
+<div class="col-md-12">
+  <% @page_title = t('blacklight.bookmarks.page_title', :application_name => application_name) %>
+  <h2 class='page-heading'>
+    <%= t('blacklight.bookmarks.title') %>
+    <% if @bookmark_category.present? %>
+      – #{ @bookmark_category.title }" %>
+    <% end %>
+  </h2>
+</div>
+<%= render 'bookmark_category_actions' %>
+<%= render 'bookmark_actions' %>
 <div id="content" class="col-md-12">
-  <% if params[:controller] == "bookmarks" %>
-    <div style="display:flex">
-      <% if current_user.present? %>
-        <div class="dropdown">
-          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Select Bookmark Category
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><%= link_to "All", bookmarks_path%></li>
-            <% current_user.categories.each do |category| %>
-              <li><%= link_to category.title, bookmarks_path(bookmark_category_id: category.id)  %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-      <% if @bookmark_category.present? %>
-        <label style="padding-top: 7px;margin-left: 10px;">Filter:</label>
-        <label style="padding-top: 8px;margin-left: 10px;" class="label label-default"><%= "Bookmark category: #{ @bookmark_category.title }" %></label>
-      <% end %>
-    </div>
-  <% end %>
-  <h2 class='page-heading'><%= t('blacklight.bookmarks.title') %></h2>
-
   <%- if current_or_guest_user.blank? -%>
     <h3 class='section-heading'><%= t('blacklight.bookmarks.need_login') %></h3>
   <%- elsif @document_list.blank? -%>
     <h3 class='section-heading'><%= t('blacklight.bookmarks.no_bookmarks') %></h3>
   <% else %>
     <%= render 'sort_and_per_page' %>
-    <%= render 'bookmark_actions' %>
     <%= render_document_index %>
     <%= render 'results_pagination' %>
   <% end %>
 </div>
+
