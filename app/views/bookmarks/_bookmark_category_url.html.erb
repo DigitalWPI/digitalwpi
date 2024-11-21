@@ -8,12 +8,11 @@
               <%= link_to "Share URL", "#", id: "share-category-url",
                           data: { toggle: "modal", target: "#bookmark-category-url-modal"},
                           class: 'btn btn-primary', style: "color: #fff;" %>
-              <%= link_to "Copy Url", "javascript:void(0)", class: 'copy_bookmark_url btn btn-primary', style: "color: #fff;" %>
-              <%= link_to "Delete Url", delete_share_url_bookmarks_path(bookmark_category_id: @bookmark_category.id), class: 'btn btn-danger', style: "color: #fff;", method: :delete %>
+              <%= link_to "Delete URL", delete_share_url_bookmarks_path(bookmark_category_id: @bookmark_category.id), class: 'btn btn-danger', style: "color: #fff;", method: :delete %>
           <% end %>
           </div>
           <div class="pull-right">
-            <% button_text = "Generate New Shared Url" %>
+            <% button_text = "Generate New Shared URL" %>
             <%= link_to button_text, generate_share_url_bookmarks_path(bookmark_category_id: @bookmark_category.id), class: 'btn btn-primary', style: "color: #fff;" %>
           </div>
         </div>

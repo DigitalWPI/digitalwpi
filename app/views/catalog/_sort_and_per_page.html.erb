@@ -4,13 +4,13 @@
   <% if @document_list.present? %>
     <% if params[:controller] == "catalog" %>
       <%= link_to export_as_csv_catalog_path(params.except(:controller, :action, format: :csv).permit!.to_h),
-                  id: "download-all",class: "btn btn-default", target: '_blank' do %>
+                  id: "download-all", class: "btn btn-default", target: '_blank' do %>
         <label data-toggle="tooltip" data-placement="bottom" title="Download results to .CSV">Download search results to .CSV file</label>
         <i class="fa fa-download" aria-hidden="true"></i>
       <% end %>
     <% elsif params[:controller] == "bookmarks" %>
       <%= link_to bookmarks_path(bookmark_category_id: @bookmark_category&.id, format: :csv),
-                  class: 'btn btn-default', target: "_blank" do %>
+                  id: "download-all", class: 'btn btn-default', target: "_blank" do %>
         <label data-toggle="tooltip" data-placement="bottom" title="Download Bookmark results to .CSV file">Download Bookmark results to .CSV file</label>
         <i class="fa fa-download" aria-hidden="true"></i>
       <% end %>

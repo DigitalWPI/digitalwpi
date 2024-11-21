@@ -24,13 +24,6 @@ $(document).on("click", ".copy_bookmark_url", function() {
   }
 });
 
-$(document).on("click", ".view_bookmark_url", function() {
-  var text_to_show = document.getElementById("shareable-url").innerHTML;
-
-  alert(text_to_show); // success
-});
-
-
 // Close modal on cancel button click
 $(document).on("click", "#select-bookmark-category-modal-cancel", function() {
   $('#select-bookmark-category-modal').hide();
