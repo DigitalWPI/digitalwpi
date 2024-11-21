@@ -10,7 +10,11 @@
             <%= request.base_url + bookmarks_path(encrypted_user_id: @bookmark_category.access_token) %>
           </div>
           <div class="modal-footer">
-            <%= link_to "Copy Url", "javascript:void(0)", class: 'copy_bookmark_url btn btn-primary', style: "color: #fff;" %>
+            <div>
+            <%= link_to "Copy Url", "javascript:void(0)", class: 'copy_bookmark_url btn btn-primary',
+                        style: "color: #fff;" %>
+            </div>
+            <div id="bookmark-url-copy-msg"></div>
           </div>
         </div><!-- /.modal-content -->
       <% end %>

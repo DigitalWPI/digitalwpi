@@ -10,7 +10,7 @@
       <% end %>
     <% elsif params[:controller] == "bookmarks" %>
       <%= link_to bookmarks_path(bookmark_category_id: @bookmark_category&.id, format: :csv),
-                  class: 'btn btn-primary', target: "_blank", style: "color: #fff;" do %>
+                  class: 'btn btn-default', target: "_blank" do %>
         <label data-toggle="tooltip" data-placement="bottom" title="Download Bookmark results to .CSV file">Download Bookmark results to .CSV file</label>
         <i class="fa fa-download" aria-hidden="true"></i>
       <% end %>

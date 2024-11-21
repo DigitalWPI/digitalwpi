@@ -45,8 +45,7 @@ body.dashboard {
     width: 100%;
     background-color: #d3d3d3;
     padding: 10px;
-    overflow: auto;
-    white-space: nowrap;
+    word-wrap:break-word;
   }
 
   .bookmark-action-tools {

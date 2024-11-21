@@ -3,7 +3,7 @@
   <h2 class='page-heading'>
     <%= t('blacklight.bookmarks.title') %>
     <% if @bookmark_category.present? %>
-      – #{ @bookmark_category.title }" %>
+      – <%= @bookmark_category.title %>
     <% end %>
   </h2>
 </div>

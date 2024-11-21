@@ -10,12 +10,16 @@ $(document).on("click", ".copy_bookmark_url", function() {
     document.execCommand("copy");
     // Remove the temporary input
     $temp.remove();
-    alert('Copied')
+    document.getElementById('bookmark-url-copy-msg').innerHTML = "Copied"
   } else {
     navigator.clipboard.writeText(text_to_copy).then(
-      function(){ alert("Copied!"); // success
+      function(){
+        // success
+        document.getElementById('bookmark-url-copy-msg').innerHTML = "Copied";
     }).catch(
-      function() { alert("Error copying to clipboard"); // error
+      function() {
+        // error
+        document.getElementById('bookmark-url-copy-msg').innerHTML = "Error copying to clipboard";
     });
   }
 });
