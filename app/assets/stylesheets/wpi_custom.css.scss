@@ -38,21 +38,16 @@ body.dashboard {
   background-color:#333;
 }
 
-.shareable-url-section {
-  display: grid;
+.shareable-url-section, .bookmark-action-tools {
+  border-bottom: 1px solid #AC2B37;
+  padding-bottom: 5px;
+}
 
-  .shareable-url {
-    width: 100%;
-    background-color: #d3d3d3;
-    padding: 10px;
-    word-wrap:break-word;
-  }
-
-  .bookmark-action-tools {
-    margin: 20px 0px;
-    border-bottom: 1px solid #AC2B37;
-    padding-bottom: 5px;
-  }
+#shareable-url {
+  width: 100%;
+  background-color: #d3d3d3;
+  padding: 10px;
+  word-wrap:break-word;
 }
 
 .select-bookmark-category, .create-bookmark-category {
