@@ -4,22 +4,28 @@ $(document).on("click", ".copy_bookmark_url", function() {
 
   if (!navigator.clipboard) {
     // use old commandExec() way
+    var html_alert = "<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">\n" +
+        "  <strongCopied!</strong> \n" +
+        "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
+        "    <span aria-hidden=\"true\">&times;</span>\n" +
+        "  </button>\n" +
+        "</div>"
     var $temp = $("<input>");
     $("body").append($temp);
     $temp.val(text_to_copy).select();
     document.execCommand("copy");
     // Remove the temporary input
     $temp.remove();
-    document.getElementById('bookmark-url-copy-msg').innerHTML = "Copied"
+    $('#bookmark-url-copy-msg').html = html_alert;
   } else {
     navigator.clipboard.writeText(text_to_copy).then(
       function(){
         // success
-        document.getElementById('bookmark-url-copy-msg').innerHTML = "Copied";
+        $('#bookmark-url-copy-msg').html = html_alert;
     }).catch(
       function() {
         // error
-        document.getElementById('bookmark-url-copy-msg').innerHTML = "Error copying to clipboard";
+        $('#bookmark-url-copy-msg').html = html_alert;
     });
   }
 });
