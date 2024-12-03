@@ -13,7 +13,7 @@ Rails.configuration.to_prepare do
       return 1 if response.nil?
       descendant_depth = response[Samvera::NestingIndexer.configuration.solr_field_name_for_deepest_nested_depth]
 
-      child_depth = Hyrax::Collections::NestedCollectionQueryService::NestingAttributes.new(id: child.id, scope: scope).depth
+      child_depth = Hyrax::Collections::NestedCollectionQueryService::NestingAttributes.new(id: child.id, scope: scope).depth || 1
       nesting_depth = descendant_depth - child_depth + 1
       nesting_depth.positive? ? nesting_depth : 1
     end

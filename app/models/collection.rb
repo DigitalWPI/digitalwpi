@@ -9,11 +9,11 @@ class Collection < ActiveFedora::Base
 
   def after_update_nested_collection_relationship_indices
     @during_save = false
-    reindex_nested_relationships_for(id: id, extent: reindex_extent)
+    reindex_nested_relationships_for(id: id, extent: Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX)
   end
 
   def update_nested_collection_relationship_indices
     return if @during_save
-    reindex_nested_relationships_for(id: id, extent: reindex_extent)
+    reindex_nested_relationships_for(id: id, extent: Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX)
   end
 end
