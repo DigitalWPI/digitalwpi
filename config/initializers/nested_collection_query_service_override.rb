@@ -4,9 +4,9 @@ Rails.configuration.to_prepare do
       return 1 if child.nil?
 
       builder = Hyrax::SearchBuilder.new(scope).with({
-                                                       q: "#{Samvera::NestingIndexer.configuration.solr_field_name_for_storing_pathnames}:/.*#{child.id}.*/",
-                                                       sort: "#{Samvera::NestingIndexer.configuration.solr_field_name_for_deepest_nested_depth} desc"
-                                                     })
+        q: "#{Samvera::NestingIndexer.configuration.solr_field_name_for_storing_pathnames}:/.*#{child.id}.*/",
+        sort: "#{Samvera::NestingIndexer.configuration.solr_field_name_for_deepest_nested_depth} desc"
+      })
       builder.rows = 1
       query = clean_lucene_error(builder: builder)
       response = scope.repository.search(query).documents.first
