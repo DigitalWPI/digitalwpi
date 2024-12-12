@@ -10,6 +10,6 @@ module Hyrax
     self.terms += [:extent, :school]
     self.terms += [:citation]
     self.terms += [:editorial_note]
-    self.required_fields -= [:keyword]
+    self.required_fields -= [:keyword]  
   end
 end

@@ -45,8 +45,7 @@ body.dashboard {
     width: 100%;
     background-color: #d3d3d3;
     padding: 10px;
-    overflow: auto;
-    white-space: nowrap;
+    word-wrap:break-word;
   }
 
   .bookmark-action-tools {
@@ -54,4 +53,8 @@ body.dashboard {
     border-bottom: 1px solid #AC2B37;
     padding-bottom: 5px;
   }
+}
+
+.select-bookmark-category, .create-bookmark-category {
+  display: inline-block;
 }

@@ -18,7 +18,7 @@ Rails.configuration.to_prepare do
       nesting_depth.positive? ? nesting_depth : 1
     end
     private_class_method :child_nesting_depth
-  
+
     def self.parent_nesting_depth(parent:, scope:)
       return 1 if parent.nil?
       Hyrax::Collections::NestedCollectionQueryService::NestingAttributes.new(id: parent.id, scope: scope).depth || 1

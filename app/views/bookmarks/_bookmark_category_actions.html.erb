@@ -1,0 +1,37 @@
+<% if current_user.present? %>
+  <div class="row">
+    <div class="col-md-9">
+      <div class="dropdown select-bookmark-category">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Select Bookmark Category
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><%= link_to "All", bookmarks_path%></li>
+          <% current_user.categories.each do |category| %>
+            <li><%= link_to category.title, bookmarks_path(bookmark_category_id: category.id)  %></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="create-bookmark-category">
+        <%= link_to "Create New Bookmark Category", "#", id: "create-category",
+                    data: { toggle: "modal", target: "#bookmark-category-modal"},
+                    class: 'btn btn-primary', style: "color: #fff;" %>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="pull-right">
+        <% if @bookmark_category.present? %>
+          <%= link_to "Delete This Category", delete_category_bookmarks_path(bookmark_category_id: @bookmark_category.id),
+                      class: 'btn btn-danger', style: "color: #fff;", method: :delete %>
+        <% else %>
+          <%= link_to t('blacklight.bookmarks.clear.action_title'), clear_bookmarks_path, :method => :delete,
+                      :data => { :confirm => t('blacklight.bookmarks.clear.action_confirm') },
+                      :class => 'clear-bookmarks btn btn-danger', style: "color: #fff;" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+
