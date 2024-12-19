@@ -7,8 +7,10 @@
     <% end %>
   </h2>
 </div>
-<%= render 'bookmark_category_actions' %>
-<%= render 'bookmark_category_url' %>
+<div class="bookmark-category">
+  <%= render 'bookmark_category_actions' %>
+  <%= render 'bookmark_category_url' %>
+</div>
 <div id="content" class="col-md-12">
   <%- if current_or_guest_user.blank? -%>
     <h3 class='section-heading'><%= t('blacklight.bookmarks.need_login') %></h3>

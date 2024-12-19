@@ -10,17 +10,8 @@ $(document).on("click", ".copy_bookmark_url", function() {
     document.execCommand("copy");
     // Remove the temporary input
     $temp.remove();
-    document.getElementById('bookmark-url-copy-msg').innerHTML = "Copied"
   } else {
-    navigator.clipboard.writeText(text_to_copy).then(
-      function(){
-        // success
-        document.getElementById('bookmark-url-copy-msg').innerHTML = "Copied";
-    }).catch(
-      function() {
-        // error
-        document.getElementById('bookmark-url-copy-msg').innerHTML = "Error copying to clipboard";
-    });
+    navigator.clipboard.writeText(text_to_copy);
   }
 });
 

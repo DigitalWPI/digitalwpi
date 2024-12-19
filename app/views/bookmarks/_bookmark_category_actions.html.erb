@@ -1,5 +1,5 @@
 <% if current_user.present? %>
-  <div class="row">
+  <div class="row category-actions-section">
     <div class="col-md-9">
       <div class="dropdown select-bookmark-category">
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -9,6 +9,7 @@
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
           <li><%= link_to "All", bookmarks_path%></li>
           <% current_user.categories.each do |category| %>
+
             <li><%= link_to category.title, bookmarks_path(bookmark_category_id: category.id)  %></li>
           <% end %>
         </ul>
