@@ -38,18 +38,23 @@ body.dashboard {
   background-color:#333;
 }
 
-.shareable-url-section, .bookmark-category {
+.bookmark-category {
+  margin-bottom: 10px;
   border-bottom: 1px solid #AC2B37;
-  padding-bottom: 5px;
+  padding-bottom: 10px;
+}
+
+.category-actions-section, .shareable-url-section {
+  margin-top: 10px;
 }
 
 #shareable-url {
   width: 100%;
-  background-color: #d3d3d3;
-  padding: 10px;
+  margin-bottom: 10px;
   word-wrap:break-word;
 }
 
 .select-bookmark-category, .create-bookmark-category {
   display: inline-block;
+  margin-bottom: 10px;
 }
