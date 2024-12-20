@@ -1,6 +1,7 @@
 require 'json'
 require 'csv'
 require 'date'
+require 'pathname'
 
 class AddJpegToWorks
   attr_reader :csv, :new_fileset_ids
@@ -53,6 +54,19 @@ class AddJpegToWorks
     @csv.close
   end
 
+  def purge_all_tiffs
+    raise Exception.new("File #{@input_csv_file} not Found") unless File.exist?(@input_csv_file)
+    table = CSV.parse(File.read(@input_csv_file), headers: true)
+    table.by_row.each do |csv_row|
+      row = set_purge_row_defaults(csv_row)
+      if csv_row['jpg_added']
+        id = row['tiff_fileset_id']
+        purge_tiff_fileset(id, row, by_id=true)
+      end
+    end
+    @csv.close
+  end
+
   private
 
   def gather_ids_from_output_csv
@@ -78,15 +92,32 @@ class AddJpegToWorks
     new_row
   end
 
-  def purge_tiff_fileset(tiff_fileset, row)
-    id = tiff_fileset.id
-    tiff_fileset.delete()
+  def set_purge_row_defaults(row)
+    new_row = row.to_hash
+    new_row['time'] = DateTime.now().strftime("%Y-%m-%d %H:%M:%S")
+    new_row
+  end
 
+  def purge_tiff_fileset(tiff_fileset, row, by_id=false)
+    if by_id
+      id = tiff_fileset
+    else
+      id = tiff_fileset.id
+      tiff_fileset.delete()
+    end
     # extrapolate the id for Fedora
     pair_tree = "#{id[0..1]}/#{id[2..3]}/#{id[4..5]}/#{id[6..7]}"
     repository = Rails.application.config_for(:fedora)["url"]
-    uri = "#{repository}/#{pair_tree}/#{id}"
+    uri = "#{repository}/prod/#{pair_tree}/#{id}"
     msg, state = purge_from_fedora_using_curl(uri)
+    if state and File.exist?(row['tiff_filepath'])
+      # Delete file if it exists
+      p = ::Pathname.new(row['tiff_filepath'])
+      `sudo chmod -R 777 "#{p.parent.to_s}"`
+      File.delete(row['tiff_filepath'])
+      `sudo chmod -R 755 "#{p.parent.to_s}"`
+      msg = msg + ". Tiff file deleted from disk"
+    end
     row['message'] = "#{row['message']}. #{msg}"
     row['tiff_purged'] = state
     @csv << row
@@ -94,11 +125,23 @@ class AddJpegToWorks
 
   def purge_from_fedora_using_curl(uri)
     begin
-      `curl -X DELETE "#{uri}"`
-      `curl -X DELETE "#{uri}/fcr:tombstone"`
-      return "Tiff has been purged", true
+      del_status = false
+      tomb_status = false
+      del_code = `curl -X DELETE -o /dev/null -s -w "%{http_code}" "#{uri}"`.to_i
+      tomb_code = `curl -X DELETE -o /dev/null -s -w "%{http_code}" "#{uri}/fcr:tombstone"`.to_i
+      if del_code == 404 or (del_code >= 200 and del_code < 300)
+        del_status = true
+      end
+      if tomb_code == 404 or (tomb_code >= 200 and tomb_code < 300)
+        tomb_status = true
+      end
+      if (del_status and tomb_status) or tomb_status
+        return "Tiff fileset purged from Fedora", true
+      else
+        return "Tiff fileset not purged - delete http status #{del_code}, tombstone http status #{tomb_code} ", false
+      end
     rescue Exception => ex
-      return "Tiff not purged: #{ex.to_s}", false
+      return "Tiff fileset not purged: #{ex.to_s}", false
     end
   end
 
