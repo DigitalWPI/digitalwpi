@@ -59,7 +59,7 @@ class AddJpegToWorks
     table = CSV.parse(File.read(@input_csv_file), headers: true)
     table.by_row.each do |csv_row|
       row = set_purge_row_defaults(csv_row)
-      if csv_row['jpg_added']
+      if csv_row['jpg_added'] and csv_row['jpg_added'].strip.downcase == 'true'
         id = row['tiff_fileset_id']
         purge_tiff_fileset(id, row, by_id=true)
       end
