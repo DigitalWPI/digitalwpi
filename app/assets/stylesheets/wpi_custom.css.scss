@@ -38,20 +38,23 @@ body.dashboard {
   background-color:#333;
 }
 
-.shareable-url-section {
-  display: grid;
+.bookmark-category {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #AC2B37;
+  padding-bottom: 10px;
+}
 
-  .shareable-url {
-    width: 100%;
-    background-color: #d3d3d3;
-    padding: 10px;
-    overflow: auto;
-    white-space: nowrap;
-  }
+.category-actions-section, .shareable-url-section {
+  margin-top: 10px;
+}
 
-  .bookmark-action-tools {
-    margin: 20px 0px;
-    border-bottom: 1px solid #AC2B37;
-    padding-bottom: 5px;
-  }
+#shareable-url {
+  width: 100%;
+  margin-bottom: 10px;
+  word-wrap:break-word;
+}
+
+.select-bookmark-category, .create-bookmark-category {
+  display: inline-block;
+  margin-bottom: 10px;
 }

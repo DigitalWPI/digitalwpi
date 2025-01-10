@@ -1,0 +1,23 @@
+<% if current_user.present? && @bookmark_category.present? %>
+  <div class="row shareable-url-section">
+    <div class="col-md-12">
+    <div class="pull-left">
+      <% if @bookmark_category.access_token.present? %>
+        <%= link_to "Share URL", "#", id: "share-category-url",
+                    data: { toggle: "modal", target: "#bookmark-category-url-modal"},
+                    class: 'btn btn-primary', style: "color: #fff;" %>
+      <% end %>
+      <% button_text = "Generate New Shared URL" %>
+      <%= link_to button_text, generate_share_url_bookmarks_path(bookmark_category_id: @bookmark_category.id),
+                  class: 'btn btn-primary', style: "color: #fff;" %>
+    </div>
+    <% if @bookmark_category.access_token.present? %>
+      <div class="pull-right">
+        <%= link_to "Delete URL", delete_share_url_bookmarks_path(bookmark_category_id: @bookmark_category.id),
+                  class: 'btn btn-danger', style: "color: #fff;", method: :delete %>
+      </div>
+    <% end %>
+    </div>
+  </div>
+  <%= render partial: "bookmark_category_url_modal" %>
+<% end %>

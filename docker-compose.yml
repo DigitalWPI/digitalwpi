@@ -1,0 +1,177 @@
+version: '3'
+
+volumes:
+  db:
+  db-fcrepo:
+  fcrepo:
+  solr:
+  redis:
+  app:
+  file_uploads:
+  derivatives:
+  cache:
+  branding:
+
+networks:
+  internal:
+
+services:
+  fcrepo:
+    image: ualbertalib/docker-fcrepo4:4.7
+    restart: unless-stopped
+    expose:
+      - 8080
+    depends_on:
+      - fcrepodb
+    networks:
+      internal:
+    environment:
+      - CATALINA_OPTS=-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC -Dfcrepo.home=/data -Dfcrepo.object.directory=/data/objects -Dfcrepo.binary.directory=/data/binaries -Dfcrepo.postgresql.username=$POSTGRES_USER -Dfcrepo.postgresql.password=$POSTGRES_PASSWORD -Dfcrepo.postgresql.host=$POSTGRES_HOST_FCREPO -Dfcrepo.postgresql.port=$POSTGRES_PORT -Dfcrepo.modeshape.configuration=classpath:/config/jdbc-postgresql/repository.json
+    ports:
+      - 8080:8080
+    volumes:
+      - fcrepo:/data
+
+  solr:
+    image: solr:7
+    restart: unless-stopped
+    expose:
+      - 8983
+    ports:
+      - 8983:8983
+    env_file:
+      - .env
+    environment:
+      - OOM=script
+    healthcheck:
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:8983/solr/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      internal:
+    volumes:
+      - solr:/var/solr
+      - ./solr/conf:/opt/solr/solr_conf
+    command:
+      - sh
+      - "-c"
+      - "precreate-core ${SOLR_TEST_CORE} /opt/solr/solr_conf; solr-precreate ${SOLR_CORE} /opt/solr/solr_conf"
+
+  fcrepodb:
+    image: postgres:13-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB_FCREPO}
+    volumes:
+      - db-fcrepo:/var/lib/postgresql/data
+    networks:
+      internal:
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "POSTGRES_PASSWORD=${POSTGRES_PASSWORD} pg_isready -U ${POSTGRES_USER} -h localhost -d ${POSTGRES_DB_FCREPO}"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  appdb:
+    image: postgres:13-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB_APP}
+    networks:
+      internal:
+    expose:
+      - 5432
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "POSTGRES_PASSWORD=${POSTGRES_PASSWORD} pg_isready -U ${POSTGRES_USER} -h localhost -d ${POSTGRES_DB_APP}"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  app: &app
+    build:
+      context: .
+      args:
+        RAILS_ENV: ${RAILS_ENV}
+        UPLOADS_PATH: ${UPLOADS_PATH}
+        DERIVATIVES_PATH: ${DERIVATIVES_PATH}
+        CACHE_PATH: ${CACHE_PATH}
+        FITS_PATH: ${FITS_PATH}
+        FITS_VERSION: ${FITS_VERSION}
+    env_file:
+      - .env
+    volumes:
+      - file_uploads:${UPLOADS_PATH}
+      - derivatives:${DERIVATIVES_PATH}
+      - cache:${CACHE_PATH}
+    networks:
+      internal:
+
+  web:
+    <<: *app
+    command: bash -c "/bin/docker-entrypoint.sh"
+    restart: unless-stopped
+    environment:
+      - VIRTUAL_HOST=wpi.docker
+      - VIRTUAL_PORT=3000
+    depends_on:
+      - appdb
+      - solr
+      - fcrepo
+      - redis
+    ports:
+      - 3000:3000
+    networks:
+      internal:
+        aliases:
+          - web
+    expose:
+      - 3000
+    volumes:
+      - file_uploads:${UPLOADS_PATH}
+      - derivatives:${DERIVATIVES_PATH}
+      - cache:${CACHE_PATH}
+      - branding:${BRAND_PATH}
+      - .:/data:cached
+
+  workers:
+    <<: *app
+    command: bash -c "bundle install && bundle exec sidekiq"
+    restart: unless-stopped
+    depends_on:
+      - appdb
+      - solr
+      - fcrepo
+      - redis
+    volumes:
+      - file_uploads:${UPLOADS_PATH}
+      - derivatives:${DERIVATIVES_PATH}
+      - cache:${CACHE_PATH}
+      - branding:${BRAND_PATH}
+      - .:/data:cached
+
+  redis:
+    image: redis:6
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      internal:
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    expose:
+      - 6379
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data

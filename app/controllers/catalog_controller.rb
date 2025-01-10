@@ -7,7 +7,7 @@ class CatalogController < ApplicationController
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior
   include BlacklightOaiProvider::Controller
-
+  include DownloadHelper
   # This filter applies the hydra access controls
   before_action :enforce_show_permissions, only: :show
   # Allow all search options when in read-only mode
@@ -403,53 +403,4 @@ class CatalogController < ApplicationController
   def export_as_csv
     send_data search_documents, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
   end
-
-  def search_documents
-    blacklight_config.max_per_page = 5000
-    page = 1
-    per_page = 5000
-    total_pages = Float::INFINITY 
-    csv_string = ''
-    header_fields = %w(id has_model_ssim title_tesim creator_tesim identifier_tesim
-                      description_tesim contributor_tesim advisor_tesim committee_tesim
-                      keyword_tesim publisher_tesim subject_tesim resource_type_tesim
-                      degree_tesim department_tesim year_tesim rights_statement_tesim
-                      license_tesim sponsor_tesim orcid_tesim date_created_tesim award_tesim
-                      center_tesim sdg_tesim major_tesim)
-
-    csv_string = CSV.generate(headers: true) do |csv|
-      # Add header to csv
-      csv << header_fields.map{|field| I18n.t("hyrax.downloads.csv_header.fields.#{field}")}
-
-      while page <= total_pages
-        params[:page] = page
-        params[:per_page] = per_page
-        (@response, @document_list) = search_results(params)
-        # Iterate over the array of hashes to add data rows
-        @document_list.each do |list|
-          data = list._source
-          row = []
-          header_fields.each do |field|
-            if data[field].present?
-              if data[field].is_a?(Array)
-                row << data[field].join(";")
-              elsif field == "id"
-                p = PermalinksPresenter.new("/show/#{data[field]}")
-                row << p.url
-              else
-                row << data[field]
-              end
-            else
-              row << ''
-            end
-          end
-          csv << row
-        end
-        total_pages = @response.total_pages if page == 1
-        page +=1
-      end
-    end
-    csv_string
-  end
-
 end
