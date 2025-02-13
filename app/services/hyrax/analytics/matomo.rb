@@ -48,6 +48,11 @@ module Hyrax
           end
         end
 
+        # Returns nil the for profile
+        def profile
+          nil
+        end
+
         # Period Options = "day, week, month, year, range"
         # Date Format = "2021-01-01,2021-01-31"
 

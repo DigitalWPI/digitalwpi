@@ -5,9 +5,12 @@
                     class: "representative-media",
                     alt: "",
                     role: "presentation" %>
-      <%= link_to "/pdfviewer/#{file_set.id}", class: "matomo_download", data: { turbolinks: false } do %>
-        open in viewer <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
-      <% end %>
+      <%= link_to t('hyrax.file_set.show.downloadable_content.office_link'),
+                  hyrax.download_path(file_set),
+                  target: :_blank,
+                  id: "file_download",
+                  class: "matomo_download",
+                  data: { label: file_set.id } %>
     </div>
 <% else %>
     <div>
