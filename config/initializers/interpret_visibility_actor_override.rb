@@ -1,7 +1,7 @@
 Rails.configuration.to_prepare do
   Hyrax::Actors::InterpretVisibilityActor.class_eval do
     def create(env)
-      if env.attributes[:record_visibility] != "embargo" && env.curation_concern.class != FileSet
+      if env.attributes.fetch(:source, []).reject(&:blank?).any? && env.attributes[:record_visibility] != "embargo" && env.curation_concern.class != FileSet
         env.attributes.delete(:visibility) if env.attributes.key? :visibility
         env.attributes.delete(:visibility_during_embargo,) if env.attributes.key? :visibility_during_embargo
         env.attributes.delete(:visibility_after_embargo) if env.attributes.key? :visibility_after_embargo
