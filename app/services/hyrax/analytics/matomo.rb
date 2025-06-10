@@ -77,6 +77,18 @@ module Hyrax
           response&.first ? response.first["nb_events"] : 0
         end
 
+
+        def daily_events_for_url(page_url, dates)
+          additional_params = {
+            pageUrl: page_url
+          }
+          response = dates.map { |date| api_params('Actions.getPageUrl', 'day', date, additional_params)}
+          response = response.flatten
+          response = response.reduce(:merge) if response.present?
+          
+          results_array(response, 'nb_visits')
+        end
+
         def daily_events(action, date = default_date_range)
           additional_params = { label: action }
           response = api_params('Events.getAction', 'day', date, additional_params)
@@ -87,6 +99,7 @@ module Hyrax
         def daily_events_for_id(id, action, date = default_date_range)
           additional_params = {
             flat: 1,
+            segment: "eventName==#{id};eventAction==#{action}",
             label: "#{id} - #{action}"
           }
           response = api_params('Events.getName', 'day', date, additional_params)

@@ -1,0 +1,25 @@
+<% default_start_date = Hyrax.config.analytics_start_date.to_s %>
+
+<div class="stats-filter">
+  <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <%= filters.key(params[:start_date]).present? ? filters.key(params[:start_date]) : 'All Time' %> <span class="caret">
+    </button>
+    <ul class="dropdown-menu">
+      <% filters.each do |f_key, f_value| %>
+        <% next if f_value == params[:start_date] || (params[:start_date].nil? && f_value == default_start_date) %>
+        <li><%= link_to f_key, stats_filter_path(document, f_value)%></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="form-group">
+    <%= form_with url: form_path, method: :get, local: true, class: "filter-form" do |f| %>
+
+      <%= date_field_tag :start_date, params[:start_date] || default_start_date, required: 'required', min: default_start_date, class: 'form-control' %> To
+      <%= date_field_tag :end_date, params[:end_date] || Date.today.to_s, required: 'required', max: Date.today.to_s, class: 'form-control' %>
+
+      <button type="submit" class="btn btn-primary">Filter</button>
+      <%= link_to "Clear", form_path, class: "btn btn-secondary clear-btn" %>
+    <% end %>
+  </div>
+</div>

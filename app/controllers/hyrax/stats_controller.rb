@@ -7,17 +7,17 @@ module Hyrax
     before_action :build_breadcrumbs, :set_document, only: [:work, :file]
 
     def work
-      @pageviews = Hyrax::Analytics.daily_events_for_id(@document.id, 'work-view', date_range)
-      @downloads = Hyrax::Analytics.daily_events_for_id(@document.id, 'file-set-in-work-download', date_range)
+      @pageviews = Hyrax::Analytics.daily_events_for_url(page_url, split_into_year_ranges)
+      @downloads = Hyrax::Analytics.daily_events_for_id(@document.id, 'file-set-in-work-download', date_range_for_download_statistics)
     end
 
     def file
-      @pageviews = Hyrax::Analytics.daily_events_for_id(@document.id, 'file-set-view', date_range)
-      @downloads = Hyrax::Analytics.daily_events_for_id(@document.id, 'file-set-download', date_range)
+      @pageviews = Hyrax::Analytics.daily_events_for_url(page_url, split_into_year_ranges)
+      @downloads = Hyrax::Analytics.daily_events_for_id(@document.id, 'file-set-download', date_range_for_download_statistics)
     end
 
     private
-
+    
     def set_document
       @document = ::SolrDocument.find(params[:id])
     end
@@ -35,20 +35,32 @@ module Hyrax
       end
     end
 
-    def date_range
-      start_from = case params[:start_from].to_s
-        when '1_month'
-          Time.zone.today - 1.month
-        when '3_month'
-          Time.zone.today - 3.month
-        when '6_month'
-          Time.zone.today - 6.month
-        when '1_year'
-          Time.zone.today - 1.year
-        else
-          Hyrax.config.analytics_start_date
-        end
-      "#{start_from},#{Time.zone.today}" 
+    def date_range_for_download_statistics
+      "#{params[:start_date] || Hyrax.config.analytics_start_date},#{params[:end_date] || Date.today}" 
+    end
+
+    def page_url
+      if action_name == 'file'
+        main_app.hyrax_file_set_path(@file.id)
+      else
+        "concern/#{@work.class.name.underscore.pluralize}/#{@work.id}"
+      end
+    end
+
+    def split_into_year_ranges
+      start_date = Date.parse(params[:start_date] || Hyrax.config.analytics_start_date.to_s)
+      end_date = Date.parse(params[:end_date] || Date.today.to_s)
+
+      ranges = []
+      current_start = start_date
+
+      while current_start <= end_date
+        current_end = [current_start.next_year - 1, end_date].min
+        ranges << "#{current_start},#{current_end}"
+        current_start = current_end + 1
+      end
+
+      ranges
     end
   end
 end
