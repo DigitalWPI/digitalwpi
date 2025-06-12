@@ -21,7 +21,7 @@ module HyraxHelper
     header = if start_date.present?
       filters.key(params[:start_date]) || start_date.to_date.strftime("%b %Y")
     else
-      Hyrax.config.analytics_start_date.strftime("%b %Y")
+      Hyrax.config.analytics_start_date.to_date.strftime("%b %Y")
     end
 
     "From #{header}"
