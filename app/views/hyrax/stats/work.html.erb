@@ -4,43 +4,41 @@
   var hyrax_item_stats = <%= raw json_escape @pageviews.to_flot.to_json %>;
 //]]>
 </script>
-<% filters = {"Select Filter": 'all', "Last month": "1_month", "Last 3 month": "3_month", "Last 6 month": "6_month", "Last 1 year": "1_year"}%>
+<% 
+  default_start_date = Hyrax.config.analytics_start_date
+  filters = {"All Time": default_start_date.to_s, "Last month": (Date.today - 1.month).to_s, "Last 3 month": (Date.today - 3.month).to_s, "Last 6 month": (Date.today - 6.month).to_s, "Last 1 year": (Date.today - 1.year).to_s}
+  total_view = @pageviews.range(params[:start_date]&.to_date || default_start_date.to_date, Time.zone.today)
+  total_downloads = @downloads.range(params[:start_date]&.to_date || default_start_date.to_date, Time.zone.today)
+%>
 
 <%= content_tag :h1, @document, class: "lower" %>
+
 <div class="row">
   <div class="col-sm-12">
-    <%= content_tag :h2, "#{t('.header')}" %>
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <%= params.has_key?(:start_from) ? filters.key(params[:start_from]) : 'Select Filter' %> <span class="caret">
-      </button>
-      <ul class="dropdown-menu">
-        <% filters.each do |f_key, f_value| %>
-          <% next if f_value == params[:start_from] || (params[:start_from].nil? && f_value == 'all') %>
-          <li><%= link_to f_key, stats_work_path(@document.id, start_from: f_value)%></li>
-        <% end %>
-      </ul>
-    </div>
-
+    <%= content_tag :h2, "#{t('.header')} - #{stats_filter_header(params[:start_date], filters)}" %>
+    <%= render 'stats_filter', document: @work, form_path: stats_work_path(@work), filters: filters %>
     <div class="alert alert-info">
       <span class="glyphicon glyphicon-signal large-icon"></span>
-        <%= t('total_view', count: @pageviews.range(Hyrax.config.analytics_start_date.to_date, Time.zone.today)) %>
-        <%= t('download', count: @downloads.range(Hyrax.config.analytics_start_date.to_date, Time.zone.today)) %>
+        <%= t('total_view', count: total_view) %>
+        <%= t('download', count: total_downloads) %>
     </div>
-
-    <div class="stats-container">
-      <h3 class="text-center"><%= t('.pageviews') %></h3>
-      <div id="pageviews">
-        <%= render 'pageviews' %>
+    <% if total_view > 0 %>
+      <div class="stats-container">
+        <h3 class="text-center"><%= t('.pageviews') %></h3>
+        <div id="pageviews">
+          <%= render 'pageviews' %>
+        </div>
       </div>
-    </div>
+    <% end %>
 
-    <div class="stats-container">
-      <h3 class="text-center"><%= t('.downloads') %></h3>
-      <div id="downloads">
-        <%= render 'downloads' %>
+    <% if total_downloads > 0 %>
+      <div class="stats-container">
+        <h3 class="text-center"><%= t('.downloads') %></h3>
+        <div id="downloads">
+          <%= render 'downloads' %>
+        </div>
       </div>
-    </div>
+    <% end %>
 
   </div>
 </div>
