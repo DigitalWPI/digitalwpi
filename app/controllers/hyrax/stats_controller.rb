@@ -7,12 +7,12 @@ module Hyrax
     before_action :build_breadcrumbs, :set_document, only: [:work, :file]
 
     def work
-      @pageviews = Hyrax::Analytics.daily_events_for_url(page_url, split_into_year_ranges)
+      @pageviews = Hyrax::Analytics.daily_events_for_url(page_url, split_into_year_ranges, get_local_results)
       @downloads = Hyrax::Analytics.daily_events_for_id(@document.id, 'file-set-in-work-download', date_range_for_download_statistics)
     end
 
     def file
-      @pageviews = Hyrax::Analytics.daily_events_for_url(page_url, split_into_year_ranges)
+      @pageviews = Hyrax::Analytics.daily_events_for_url(page_url, split_into_year_ranges, get_local_results)
       @downloads = Hyrax::Analytics.daily_events_for_id(@document.id, 'file-set-download', date_range_for_download_statistics)
     end
 
@@ -61,6 +61,16 @@ module Hyrax
       end
 
       ranges
+    end
+
+    def get_local_results
+      start_date, end_date = date_range_for_download_statistics.split(',').map { |d| d.to_time.beginning_of_day }
+      results = if action_name == 'file'
+        FileViewStat.where(file_id: @file.id, date: start_date..end_date)&.order(date: :asc)&.map { |stat| [stat.date.to_date, stat.views] }
+      else
+        WorkViewStat.where(work_id: @work.id, date: start_date..end_date)&.order(date: :asc)&.map { |stat| [stat.date.to_date, stat.work_views] }
+      end
+      results || []
     end
   end
 end

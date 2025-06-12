@@ -6,9 +6,10 @@
 </script>
 
 <%
-  filters = {"All Time": Hyrax.config.analytics_start_date.to_s, "Last month": (Date.today - 1.month).to_s, "Last 3 month": (Date.today - 3.month).to_s, "Last 6 month": (Date.today - 6.month).to_s, "Last 1 year": (Date.today - 1.year).to_s}
-  total_view = @pageviews.range(Hyrax.config.analytics_start_date.to_date, Time.zone.today)
-  total_downloads = @downloads.range(Hyrax.config.analytics_start_date.to_date)
+  default_start_date = Hyrax.config.analytics_start_date
+  filters = {"All Time": default_start_date.to_s, "Last month": (Date.today - 1.month).to_s, "Last 3 month": (Date.today - 3.month).to_s, "Last 6 month": (Date.today - 6.month).to_s, "Last 1 year": (Date.today - 1.year).to_s}
+  total_view = @pageviews.range(params[:start_date]&.to_date || default_start_date.to_date, Time.zone.today)
+  total_downloads = @downloads.range(params[:start_date]&.to_date || default_start_date.to_date, Time.zone.today)
 %>
 
 <%= content_tag :h1, @document, class: "lower" %>
