@@ -183,7 +183,7 @@ module Hyrax
               results.push([result[0].to_date, result[1][metric].presence || 0])
             end
           end
-          Hyrax::Analytics::Results.new(local_results + results)
+          Hyrax::Analytics::Results.new((local_results + results).sort_by{|result| result[0]})
         end
 
         def get(params)

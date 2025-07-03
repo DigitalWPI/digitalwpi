@@ -23,14 +23,18 @@ namespace :wpi do
         id = extract_id(path, prefix)
         if id
           work_view_stat = WorkViewStat.find_or_initialize_by(date: date, work_id: id)
-          work_view_stat.work_views = (work_view_stat.work_views || 0).to_i + row['ga:pageviews'].to_i
+          if work_view_stat.work_views.to_i < row['ga:pageviews'].to_i
+            work_view_stat.work_views = row['ga:pageviews'].to_i
+          end
           work_view_stat.save!
         end
       elsif path.include?("/#{fileset_prefix}/")
         id = extract_id(path, fileset_prefix)
         if id
           file_view_stat = FileViewStat.find_or_initialize_by(date: date, file_id: id)
-          file_view_stat.views = file_view_stat.views.to_i + row['ga:pageviews'].to_i
+          if file_view_stat.views.to_i < row['ga:pageviews'].to_i
+            file_view_stat.views = row['ga:pageviews'].to_i
+          end
           file_view_stat.save!
         end
       end
