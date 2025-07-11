@@ -9,14 +9,24 @@ module Hyrax
           return unless Hyrax.config.analytics? && Hyrax.config.analytics_provider != 'ga4'
 
           @accessible_works ||= accessible_works
+          @project_centers = project_centers
+
+          if params['center_tesim'].present?
+            @accessible_works = @accessible_works.select{|work| work['center_tesim']&.include?(params['center_tesim'])}
+          end
+
+          if params['member_of_collection_ids_ssim'].present?
+            @accessible_works = @accessible_works.select{|work| work['member_of_collection_ids_ssim']&.include?(params['member_of_collection_ids_ssim'])}
+          end
+
           @accessible_file_sets ||= accessible_file_sets
           @works_count = @accessible_works.count
           @top_works = paginate(top_works_list, rows: 10)
           @top_file_set_downloads = paginate(top_files_list, rows: 10)
 
           if current_user.ability.admin?
-            @pageviews = Hyrax::Analytics.daily_events('work-view')
-            @downloads = Hyrax::Analytics.daily_events('file-set-download')
+            @pageviews = Hyrax::Analytics::Results.new(WorkViewStat.all.map{|stat| [stat.date, stat.work_views]})
+            @downloads = Hyrax::Analytics::Results.new(FileDownloadStat.all.map{|stat| [stat.date, stat.downloads]})
           end
 
           respond_to do |format|
@@ -26,9 +36,10 @@ module Hyrax
         end
 
         def show
-          @pageviews = Hyrax::Analytics.daily_events_for_id(@document.id, 'work-view')
+          @pageviews =  Hyrax::Analytics::Results.new(WorkViewStat.where(work_id: @document.id).map{|stat| [stat.date, stat.work_views]})
           @uniques = Hyrax::Analytics.unique_visitors_for_id(@document.id)
-          @downloads = Hyrax::Analytics.daily_events_for_id(@document.id, 'file_set_in_work_download')
+          @file_download_stats = FileDownloadStat.where(file_id: @document._source["file_set_ids_ssim"])
+          @downloads = Hyrax::Analytics::Results.new(@file_download_stats.map{|stat| [stat.date, stat.downloads]})
           @files = paginate(@document._source["file_set_ids_ssim"], rows: 5)
           respond_to do |format|
             format.html
@@ -36,18 +47,18 @@ module Hyrax
           end
         end
 
-  private
+        private
 
         def accessible_works
           models = Hyrax.config.curation_concerns.map { |m| "\"#{m}\"" }
           if current_user.ability.admin?
             ActiveFedora::SolrService.query("has_model_ssim:(#{models.join(' OR ')})",
-              fl: 'title_tesim, id, member_of_collections',
+              fl: 'title_tesim, id, member_of_collection_ids_ssim, center_tesim',
               rows: 50_000)
           else
             ActiveFedora::SolrService.query(
               "edit_access_person_ssim:#{current_user} AND has_model_ssim:(#{models.join(' OR ')})",
-              fl: 'title_tesim, id, member_of_collections',
+              fl: 'title_tesim, id, member_of_collection_ids_ssim, center_tesim',
               rows: 50_000
             )
           end
@@ -70,27 +81,34 @@ module Hyrax
         end
 
         def top_analytics_works
-          @top_analytics_works ||= Hyrax::Analytics.top_events('work-view', date_range)
+          start_date, end_date = date_range.split(',').map(&:to_date)
+          @top_analytics_works ||= WorkViewStat.where(date: start_date..end_date).group(:work_id)
+          .select(:work_id, 'SUM(work_views) AS total_views')
+          .order('total_views DESC')
         end
 
-        def top_analytics_downloads
-          @top_analytics_downloads ||= Hyrax::Analytics.top_events('file-set-in-work-download', date_range)
+        def top_analytics_downloads(work_id)
+          document = ::SolrDocument.find(work_id)
+          start_date, end_date = date_range.split(',').map(&:to_date)
+          FileDownloadStat.where(date: start_date..end_date, file_id: document._source["file_set_ids_ssim"])
         end
 
         def top_analytics_file_sets
-          @top_analytics_file_sets ||= Hyrax::Analytics.top_events('file-set-download', date_range)
+          start_date, end_date = date_range.split(',').map(&:to_date)
+          @top_analytics_file_sets ||= FileDownloadStat.where(date: start_date..end_date).group(:file_id)
+          .select(:file_id, 'SUM(downloads) AS total_downloads')
+          .order('total_downloads DESC')
         end
 
         def top_works_list
           list = []
           top_analytics_works
-          top_analytics_downloads
           @accessible_works.each do |doc|
-            views_match = @top_analytics_works.detect { |id, _count| id == doc["id"] }
-            @view_count = views_match ? views_match[1] : 0
-            downloads_match = @top_analytics_downloads.detect { |id, _count| id == doc["id"] }
-            @download_count = downloads_match ? downloads_match[1] : 0
-            list.push([doc["id"], doc["title_tesim"].join(''), @view_count, @download_count, doc["member_of_collections"]])
+            views_match = @top_analytics_works.detect { |stat| stat.work_id == doc["id"] }
+            total_views = views_match ? views_match.total_views : 0
+            downloads_match = top_analytics_downloads( doc["id"])
+            @download_count = downloads_match ? downloads_match.sum(:downloads) : 0
+            list.push([doc["id"], doc["title_tesim"].join(''), total_views, @download_count, doc["member_of_collections"]])
           end
           list.sort_by { |l| -l[2] }
         end
@@ -99,8 +117,8 @@ module Hyrax
           list = []
           top_analytics_file_sets
           @accessible_file_sets.each do |doc|
-            downloads_match = @top_analytics_file_sets.detect { |id, _count| id == doc["id"] }
-            @download_count = downloads_match ? downloads_match[1] : 0
+            downloads_match = @top_analytics_file_sets.detect { |stat| stat.file_id == doc["id"] }
+            @download_count = downloads_match ? downloads_match.total_downloads : 0
             list.push([doc["id"], doc["title_tesim"].join(''), @download_count]) if doc["title_tesim"].present?
           end
           list.sort_by { |l| -l[2] }
@@ -115,6 +133,10 @@ module Hyrax
             end
           end
           send_data csv_row, filename: "#{params[:start_date]}-#{params[:end_date]}-works.csv"
+        end
+
+        def project_centers
+          @accessible_works.map{|work| work['center_tesim']}.compact.flatten.uniq
         end
       end
     end

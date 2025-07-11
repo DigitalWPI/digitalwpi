@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_23_104612) do
+ActiveRecord::Schema.define(version: 2025_07_09_024458) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "analytics_sync_logs", force: :cascade do |t|
+    t.string "sync_type"
+    t.datetime "last_synced_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sync_type"], name: "index_analytics_sync_logs_on_sync_type", unique: true
+  end
 
   create_table "bepress", force: :cascade do |t|
     t.string "bepress_id"
