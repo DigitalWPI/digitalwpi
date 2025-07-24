@@ -2,6 +2,7 @@
 
 <% provide :page_header do %>
   <h1><span class="fa fa-bar-chart" aria-hidden="true"></span><%= t('.title') %></h1>
+  <%= button_to "Sync Analytics Data", admin_analytics_sync_analytics_path, method: :post, class: "btn btn-primary mt-2" %>
 <% end %>
 
 <div class="row">

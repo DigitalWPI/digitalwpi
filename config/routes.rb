@@ -84,5 +84,13 @@ Rails.application.routes.draw do
 
   match 'show/:id' => 'common_objects#show', via: :get, as: 'common_object'
 
+  Hyrax::Engine.routes.draw do
+    namespace :admin do
+      namespace :analytics do
+        post 'analytics_sync_logs/sync', to: 'analytics_sync_logs#sync', as: :sync_analytics
+      end
+    end
+  end
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
