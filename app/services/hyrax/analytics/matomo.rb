@@ -48,6 +48,11 @@ module Hyrax
           end
         end
 
+        # Returns nil the for profile
+        def profile
+          nil
+        end
+
         # Period Options = "day, week, month, year, range"
         # Date Format = "2021-01-01,2021-01-31"
 
@@ -72,6 +77,18 @@ module Hyrax
           response&.first ? response.first["nb_events"] : 0
         end
 
+
+        def daily_events_for_url(page_url, dates, local_results = [])
+          additional_params = {
+            pageUrl: page_url
+          }
+          response = dates.map { |date| api_params('Actions.getPageUrl', 'day', date, additional_params)}
+          response = response.flatten
+          response = response.reduce(:merge) if response.present?
+          
+          results_array(response, 'nb_visits', local_results)
+        end
+
         def daily_events(action, date = default_date_range)
           additional_params = { label: action }
           response = api_params('Events.getAction', 'day', date, additional_params)
@@ -82,6 +99,7 @@ module Hyrax
         def daily_events_for_id(id, action, date = default_date_range)
           additional_params = {
             flat: 1,
+            segment: "eventName==#{id};eventAction==#{action}",
             label: "#{id} - #{action}"
           }
           response = api_params('Events.getName', 'day', date, additional_params)
@@ -154,7 +172,7 @@ module Hyrax
           response["nb_visits_returning"].to_i + response["nb_visits_new"].to_i
         end
 
-        def results_array(response, metric)
+        def results_array(response, metric, local_results = [])
           results = []
           response.each do |result|
             if result[1].empty?
@@ -165,7 +183,7 @@ module Hyrax
               results.push([result[0].to_date, result[1][metric].presence || 0])
             end
           end
-          Hyrax::Analytics::Results.new(results)
+          Hyrax::Analytics::Results.new((local_results + results).sort_by{|result| result[0]})
         end
 
         def get(params)

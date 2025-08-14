@@ -58,3 +58,29 @@ body.dashboard {
   display: inline-block;
   margin-bottom: 10px;
 }
+
+.stats-filter {
+  display: flex;
+
+  .dropdown {
+    margin-right: 20px;
+  }
+
+  .filter-form {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    .clear-btn {
+      background-color: #efefef;
+      color: #000;
+    }
+  }
+}
+
+.work-reports-filters {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+  gap: 10px;
+  align-items: center;
+}
