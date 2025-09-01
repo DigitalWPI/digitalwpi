@@ -21,6 +21,7 @@ module Hyrax
           respond_to do |format|
             format.html do
               @project_centers = project_centers
+              @collection_filter = collection_filter
               @top_works = paginate(build_top_works_list(work_views, work_file_downloads), rows: 10)
               @top_file_set_downloads = paginate(build_top_files_list(file_downloads), rows: 10)
     
@@ -185,6 +186,10 @@ module Hyrax
 
         def file_stats
           @file_stats ||= FileDownloadStat.where(date: @start_date..@end_date).where("downloads > 0")
+        end
+
+        def collection_filter
+          @collection_filter = Collection.where(id: @accessible_works.flat_map { |w| w['member_of_collection_ids_ssim'] }.compact.uniq).pluck(:id, :title).to_h
         end
       end
     end

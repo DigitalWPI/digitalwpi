@@ -7,10 +7,10 @@ class AnalyticsSyncJob < Hyrax::ApplicationJob
 
     %w(work_views file_views file_downloads).each do |sync_type|
       sync_log = AnalyticsSyncLog.find_or_initialize_by(sync_type: sync_type)
-      from_date = sync_log.persisted? ? (sync_log.last_synced_at&.to_date - 1.day) : Hyrax.config.analytics_start_date
+      from_date = sync_log.persisted? ? (sync_log.last_synced_at&.to_date - 1.day) : Hyrax.config.analytics_start_date.to_date
 
       next if from_date >= (Date.today - 1.day)
-      
+
       if sync_type == "work_views"
         accessible_works.each do |work|
           pageviews = Hyrax::Analytics.daily_events_for_url(page_url(sync_type, work), date_ranges(from_date))
