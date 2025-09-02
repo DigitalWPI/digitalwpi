@@ -6,34 +6,48 @@
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-      <li><%= link_to "All Project Centers", admin_analytics_work_reports_path(member_of_collection_ids_ssim: params[:member_of_collection_ids_ssim])%></li>
-      <% @project_centers.each do |center|%>
-        <li><%= link_to center, admin_analytics_work_reports_path(member_of_collection_ids_ssim: params[:member_of_collection_ids_ssim], center_tesim: center)%></li>
+      <% if @project_centers.present? %>
+        <li><%= link_to "All Project Centers", admin_analytics_work_reports_path(member_of_collection_ids_ssim: params[:member_of_collection_ids_ssim], start_date: params[:start_date], end_date: params[:end_date], commit: params[:commit]) %></li>
+        <% @project_centers.each do |center|%>
+          <li><%= link_to center, admin_analytics_work_reports_path(member_of_collection_ids_ssim: params[:member_of_collection_ids_ssim], center_tesim: center, start_date: params[:start_date], end_date: params[:end_date], commit: params[:commit])%></li>
+        <% end %>
       <% end %>
     </ul>
   </div>
   <div class="dropdown">
     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-      <%= params[:member_of_collection_ids_ssim].present? ? Collection.find(params[:member_of_collection_ids_ssim]).title[0] : "All Collections" %>
+      <%= params[:member_of_collection_ids_ssim].present? ? @collection_filter[params[:member_of_collection_ids_ssim]] : "All Collections" %>
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-      <li><%= link_to "All Collections", admin_analytics_work_reports_path(center_tesim: params[:center_tesim])%></li>
-      <% Collection.all.each do |collection|%>
-        <li><%= link_to collection.title[0], admin_analytics_work_reports_path(member_of_collection_ids_ssim: collection.id, center_tesim: params[:center_tesim])%></li>
+      <% if @collection_filter.present? %>
+        <li><%= link_to "All Collections", admin_analytics_work_reports_path(center_tesim: params[:center_tesim], start_date: params[:start_date], end_date: params[:end_date])%></li>
+        <% @collection_filter.each do |id, title|%>
+          <li><%= link_to title, admin_analytics_work_reports_path(member_of_collection_ids_ssim: id, center_tesim: params[:center_tesim], start_date: params[:start_date], end_date: params[:end_date])%></li>
+        <% end %>
       <% end %>
     </ul>
   </div>
 </div>
+
+<% if params[:center_tesim].present? || params[:member_of_collection_ids_ssim].present? %>
+  <div class="filter-label">
+    <b>Current Filters:</b>
+    <span><%= params[:center_tesim].presence || "All Project Centers" %></span>
+    <span> | </span>
+    <span><%= params[:member_of_collection_ids_ssim].present? ? @collection_filter[params[:member_of_collection_ids_ssim]] : "All Collections" %></span>
+    <span><%= link_to "Reset Filter", admin_analytics_work_reports_path %></span>
+  </div>
+<% end %>
+
 <div class="panel panel-default">
   <div class="panel-heading">
-   <h4><%= t('.top_works') %>
+    <h4><%= t('.top_works') %>
       <div class="btn-group pull-right">
         <%= link_to "#{t('.export')}", admin_analytics_work_reports_path(start_date: @start_date, end_date: @end_date, center_tesim: params[:center_tesim], format: :csv, disposition: "attachment"), class: "btn btn-default" %>
       </div>
-  </h4>
+    </h4>
   </div>
-
   <div class="panel-body">
     <table class="table table-striped">
       <thead>
@@ -56,12 +70,9 @@
       </tbody>
     </table>
   </div>
-  
-
   <div class="panel-footer">
     <div class="pull-right">
       <%= paginate @top_works %>
     </div>
   </div>
-
 </div>
