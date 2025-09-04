@@ -189,7 +189,7 @@ module Hyrax
         end
 
         def collection_filter
-          @collection_filter = Collection.where(id: @accessible_works.flat_map { |w| w['member_of_collection_ids_ssim'] }.compact.uniq).pluck(:id, :title).to_h
+          @collection_filter = Collection.where(id: @accessible_works.flat_map { |w| w['member_of_collection_ids_ssim'] }.compact.uniq).map { |c| [c.id, c.title[0]] }.to_h
         end
       end
     end
