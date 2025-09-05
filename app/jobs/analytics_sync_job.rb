@@ -51,12 +51,12 @@ class AnalyticsSyncJob < Hyrax::ApplicationJob
     models = Hyrax.config.curation_concerns.map { |m| "\"#{m}\"" }
     if current_user.ability.admin?
       ActiveFedora::SolrService.query("has_model_ssim:(#{models.join(' OR ')})",
-        fl: 'title_tesim, id, member_of_collections',
+        fl: 'has_model_ssim, title_tesim, id, member_of_collections',
         rows: 50_000)
     else
       ActiveFedora::SolrService.query(
         "edit_access_person_ssim:#{current_user} AND has_model_ssim:(#{models.join(' OR ')})",
-        fl: 'title_tesim, id, member_of_collections',
+        fl: 'has_model_ssim, title_tesim, id, member_of_collections',
         rows: 50_000
       )
     end
@@ -66,13 +66,13 @@ class AnalyticsSyncJob < Hyrax::ApplicationJob
     if current_user.ability.admin?
       ActiveFedora::SolrService.query(
         "has_model_ssim:FileSet",
-        fl: 'title_tesim, id',
+        fl: 'has_model_ssim, title_tesim, id',
         rows: 50_000
       )
     else
       ActiveFedora::SolrService.query(
         "edit_access_person_ssim:#{current_user} AND has_model_ssim:FileSet",
-        fl: 'title_tesim, id',
+        fl: 'has_model_ssim, title_tesim, id',
         rows: 50_000
       )
     end
@@ -80,9 +80,9 @@ class AnalyticsSyncJob < Hyrax::ApplicationJob
 
   def page_url(sync_type, object)
     if sync_type == 'file_views'
-      Rails.application.routes.url_helpers.hyrax_file_set_path(object.id)
+      Rails.application.routes.url_helpers.hyrax_file_set_path(object['id'])
     else
-      "concern/#{object.class.name.underscore.pluralize}/#{object.id}"
+      "concern/#{object['has_model_ssim'][0].underscore.pluralize}/#{object['id']}"
     end
   end
 
