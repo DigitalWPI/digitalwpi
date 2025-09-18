@@ -36,6 +36,10 @@
         <h3 class="text-center"><%= t('.downloads') %></h3>
         <div id="downloads">
           <%= render 'downloads' %>
+          <% date_created = @document._source["system_create_dtsi"].to_date %>
+          <% if date_created < Date.new(2025, 8, 26) %>
+            <%= t('hyrax.stats.work.download_stats.missing_message') %>
+          <% end %>
         </div>
       </div>
     <% end %>
