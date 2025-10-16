@@ -9,8 +9,7 @@ module Hyrax
     def work
       start_date, end_date = date_range_for_download_statistics.split(',').map(&:to_date)
       @pageviews = Hyrax::Analytics::Results.new(WorkViewStat.where(work_id: @document.id, date: start_date..end_date).map{|stat| [stat.date.to_date, stat.work_views]})
-      download_stats = FileDownloadStat.where(file_id: @document._source["file_set_ids_ssim"], date: start_date..end_date)
-      @downloads = Hyrax::Analytics::Results.new(download_stats.group_by { |stat| stat.date.to_date }.map { |date, records| [date, records.sum(&:downloads)] })
+      @downloads = Hyrax::Analytics::Results.new(FileDownloadStat.where(file_id: @document._source["file_set_ids_ssim"], date: start_date..end_date).map{|stat| [stat.date.to_date, stat.downloads]})
     end
 
     def file

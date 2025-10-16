@@ -95,15 +95,6 @@ module Hyrax
           results_array(response, 'nb_events')
         end
 
-        def daily_events_for_import(action, date = default_date_range)
-          additional_params = { 
-            segment: "eventAction==#{action}",
-            label: action 
-          }
-          response = api_params('Events.getName', 'day', date, additional_params)
-          response.select{|key, val| val.present?}
-        end
-
         # Pass in an action name and an id and get back the daily count of events for that id. [date, event_count]
         def daily_events_for_id(id, action, date = default_date_range)
           additional_params = {
