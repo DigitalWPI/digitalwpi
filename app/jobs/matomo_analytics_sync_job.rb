@@ -3,27 +3,33 @@ class MatomoAnalyticsSyncJob < Hyrax::ApplicationJob
 
   def perform
     %w(work_views file_views file_downloads).each do |sync_type|
+      # Find or initialize the sync log for this sync type. This record stores
+      # the timestamp of the last successful sync so we can resume from there.
       sync_log = AnalyticsSyncLog.find_or_initialize_by(sync_type: sync_type)
+      # Determine the from_date for the analytics query:
+      # - If we have a persisted sync_log, start from the previous last_synced_at
+      #   minus one day (to ensure we reprocess the most recent day in case of updates).
+      # - Otherwise, use the configured analytics start date.
       from_date = sync_log.persisted? ? (sync_log.last_synced_at&.to_date - 1.day) : Hyrax.config.analytics_start_date.to_date
 
       next if from_date >= (Date.today - 1.day)
 
       if sync_type == "work_views"
-          pageviews = Hyrax::Analytics.daily_events_for_import('work-view', date_range(from_date))
+        pageviews = Hyrax::Analytics.daily_events_for_import('work-view', date_range(from_date))
 
-          pageviews.each do |date, results|
-            results.each do |result|
-              work_id = result['label']
-              work = accessible_work(work_id)
-              next unless work
-              nb_visits = result['nb_uniq_visitors'].to_i
-              if nb_visits > 0
-                stat = WorkViewStat.find_or_initialize_by(date: date, work_id: work.id)
-                stat.work_views = [stat.work_views.to_i, nb_visits].max
-                stat.save!
-              end
+        pageviews.each do |date, results|
+          results.each do |result|
+            work_id = result['label']
+            work = accessible_work(work_id)
+            next unless work
+            nb_visits = result['nb_uniq_visitors'].to_i
+            if nb_visits > 0
+              stat = WorkViewStat.find_or_initialize_by(date: date, work_id: work.id)
+              stat.work_views = [stat.work_views.to_i, nb_visits].max
+              stat.save!
             end
           end
+        end
       elsif sync_type == "file_views"
         pageviews = Hyrax::Analytics.daily_events_for_import('file-set-view', date_range(from_date))
 
@@ -53,9 +59,10 @@ class MatomoAnalyticsSyncJob < Hyrax::ApplicationJob
             end
           end
         end
-        end
       end
 
+      # Update the sync log to indicate we've synced up to today so subsequent
+      # runs start from this point.
       sync_log.last_synced_at = Date.today
       sync_log.save!  
     end
