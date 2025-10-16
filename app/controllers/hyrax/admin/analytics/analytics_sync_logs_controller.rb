@@ -7,7 +7,7 @@ module Hyrax
         def sync
           sync_type = params[:sync_type] # "view" or "download"
 
-          ::AnalyticsSyncJob.perform_later(current_user.id)
+          ::MatomoAnalyticsSyncJob.perform_later
 
           redirect_back fallback_location: hyrax.dashboard_path, notice: "Sync started. It will complete in the background."
         end
