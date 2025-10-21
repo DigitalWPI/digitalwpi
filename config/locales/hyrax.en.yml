@@ -101,6 +101,10 @@ en:
           center_tesim: Project Center
           sdg_tesim: UN SDG
           major_tesim: Major
+    stats:
+      work:
+        download_stats:
+          message: Download data available starting September 2025.
   blacklight_advanced_search:
     all: all
     any: any

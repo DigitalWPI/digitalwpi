@@ -1,5 +1,6 @@
 <div class="work-reports-filters">
   <span><b>Filters:</b></span>
+  <% include_ga3 = params[:include_ga3] == 'true' %>
   <div class="dropdown">
     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
       <%= params[:center_tesim].presence || "All Project Centers" %>
@@ -7,9 +8,9 @@
     </button>
     <ul class="dropdown-menu">
       <% if @project_centers.present? %>
-        <li><%= link_to "All Project Centers", admin_analytics_work_reports_path(member_of_collection_ids_ssim: params[:member_of_collection_ids_ssim], start_date: params[:start_date], end_date: params[:end_date], commit: params[:commit]) %></li>
+        <li><%= link_to "All Project Centers", admin_analytics_work_reports_path(member_of_collection_ids_ssim: params[:member_of_collection_ids_ssim], start_date: params[:start_date], end_date: params[:end_date], include_ga3: include_ga3, commit: params[:commit]) %></li>
         <% @project_centers.each do |center|%>
-          <li><%= link_to center, admin_analytics_work_reports_path(member_of_collection_ids_ssim: params[:member_of_collection_ids_ssim], center_tesim: center, start_date: params[:start_date], end_date: params[:end_date], commit: params[:commit])%></li>
+          <li><%= link_to center, admin_analytics_work_reports_path(member_of_collection_ids_ssim: params[:member_of_collection_ids_ssim], center_tesim: center, start_date: params[:start_date], end_date: params[:end_date], include_ga3: include_ga3, commit: params[:commit])%></li>
         <% end %>
       <% end %>
     </ul>
@@ -21,12 +22,16 @@
     </button>
     <ul class="dropdown-menu">
       <% if @collection_filter.present? %>
-        <li><%= link_to "All Collections", admin_analytics_work_reports_path(center_tesim: params[:center_tesim], start_date: params[:start_date], end_date: params[:end_date])%></li>
+        <li><%= link_to "All Collections", admin_analytics_work_reports_path(center_tesim: params[:center_tesim], start_date: params[:start_date], end_date: params[:end_date], include_ga3: include_ga3) %></li>
         <% @collection_filter.each do |id, title|%>
-          <li><%= link_to title, admin_analytics_work_reports_path(member_of_collection_ids_ssim: id, center_tesim: params[:center_tesim], start_date: params[:start_date], end_date: params[:end_date])%></li>
+          <li><%= link_to title, admin_analytics_work_reports_path(member_of_collection_ids_ssim: id, center_tesim: params[:center_tesim], start_date: params[:start_date], end_date: params[:end_date], include_ga3: include_ga3) %></li>
         <% end %>
       <% end %>
     </ul>
+  </div>
+  <div class="">
+    <input type="checkbox" id="include-ga3" class="mr-2 cursor-pointer" <%= 'checked' if include_ga3 %> onchange="window.location.href=this.checked ? '<%= url_for(params.permit!.merge(include_ga3: 'true')) %>' : '<%= url_for(params.permit!.merge(include_ga3: nil)) %>'" >
+    <label for="include-ga3" class="cursor-pointer">Include GA3 download stats</label>
   </div>
 </div>
 

@@ -185,11 +185,25 @@ module Hyrax
         end
 
         def file_stats
-          @file_stats ||= FileDownloadStat.where(date: @start_date..@end_date).where("downloads > 0")
+          @file_stats ||= FileDownloadStat.where(date: start_date_for_download_stats..end_date_for_download_stats).where("downloads > 0")
         end
 
         def collection_filter
           @collection_filter = Collection.where(id: @accessible_works.flat_map { |w| w['member_of_collection_ids_ssim'] }.compact.uniq).map { |c| [c.id, c.title[0]] }.to_h
+        end
+
+        def start_date_for_download_stats
+          default_start_date = ENV['DOWNLOAD_STATS_START_DATE'].to_date || Hyrax.config.analytics_start_date.to_date
+          include_ga3 = params[:include_ga3] == 'true'
+          return @start_date if include_ga3
+          @start_date.present? && @start_date >= default_start_date ? @start_date.to_date : default_start_date.to_date
+        end
+
+        def end_date_for_download_stats
+          default_start_date = ENV['DOWNLOAD_STATS_START_DATE'].to_date || Hyrax.config.analytics_start_date.to_date
+          include_ga3 = params[:include_ga3] == 'true'
+          return @end_date if include_ga3
+          @end_date.present? && @end_date >= default_start_date ? @end_date.to_date : Date.today
         end
       end
     end
