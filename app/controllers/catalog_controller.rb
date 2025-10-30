@@ -403,4 +403,14 @@ class CatalogController < ApplicationController
   def export_as_csv
     send_data search_documents, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
   end
+
+  private
+
+  # @note Overrides Blacklight::SearchContext to NOT save searches into the current session. This prevents searches
+  # from being written to the Search table, and also disables the feature to allow users to save their searches for
+  # future use.
+  def current_search_session
+    session
+  end
+
 end
