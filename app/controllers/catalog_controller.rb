@@ -401,7 +401,12 @@ class CatalogController < ApplicationController
   end
 
   def export_as_csv
-    send_data search_documents, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
+    #send_data search_documents, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
+    if user_signed_in?
+      send_data search_documents, type: 'text/csv', disposition: 'inline', filename: "search_result.csv"
+    else
+      redirect_to root_path
+    end
   end
 
   private
