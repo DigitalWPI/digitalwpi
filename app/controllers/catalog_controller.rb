@@ -408,4 +408,14 @@ class CatalogController < ApplicationController
       redirect_to root_path
     end
   end
+
+  private
+
+  # @note Overrides Blacklight::SearchContext to NOT save searches into the current session. This prevents searches
+  # from being written to the Search table, and also disables the feature to allow users to save their searches for
+  # future use.
+  def current_search_session
+    session
+  end
+
 end
