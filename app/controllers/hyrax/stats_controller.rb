@@ -53,12 +53,15 @@ module Hyrax
 
     def file_view_stats
       start_date, end_date = date_range_for_view_statistics.split(',').map(&:to_date)
-      data = FileViewStat.where(file_id: @document.id, date: start_date..end_date).map{|stat| {stat.date.to_date => stat.views}}
+      data = {}
+      FileViewStat.where(file_id: @document.id, date: start_date..end_date).map{|stat| data[stat.date.to_date] = stat.views}
       (start_date..end_date).map { |date| [date, data[date] || 0] }
     end
 
     def work_view_stats
-      data = WorkViewStat.where(work_id: @document.id, date: start_date..end_date).map{|stat| {stat.date.to_date => stat.work_views}}
+      start_date, end_date = date_range_for_view_statistics.split(',').map(&:to_date)
+      data = {}
+      WorkViewStat.where(work_id: @document.id, date: start_date..end_date).map{|stat| data[stat.date.to_date] = stat.work_views}
       (start_date..end_date).map { |date| [date, data[date] || 0] }
     end
 
@@ -66,14 +69,16 @@ module Hyrax
       start_date = start_date_for_download_stats
       end_date = end_date_for_download_stats
       download_stats = FileDownloadStat.where(file_id: @document._source["file_set_ids_ssim"], date: start_date..end_date)
-      data = download_stats.group_by { |stat| stat.date.to_date }.map { |date, records| {date => records.sum(&:downloads)} }
+      data = {}
+      download_stats.group_by { |stat| stat.date.to_date }.map { |date, records| data[date] = records.sum(&:downloads) }
       (start_date..end_date).map { |date| [date, data[date] || 0] }
     end
 
     def file_download_stats
       start_date = start_date_for_download_stats
       end_date = end_date_for_download_stats
-      data = FileDownloadStat.where(file_id: @document.id, date: start_date..end_date).map{|stat| {stat.date.to_date => stat.downloads}}
+      data = {}
+      FileDownloadStat.where(file_id: @document.id, date: start_date..end_date).map{|stat| data[stat.date.to_date] = stat.downloads}
       (start_date..end_date).map { |date| [date, data[date] || 0] }
     end
   end
