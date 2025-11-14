@@ -15,11 +15,11 @@ class MatomoAnalyticsSyncJob < Hyrax::ApplicationJob
       next if from_date >= (Date.today - 1.day)
 
       if sync_type == "work_views"
-        pageviews = Hyrax::Analytics.daily_events_for_import('work-view', date_range(from_date))
+        pageviews = Hyrax::Analytics.daily_events_for_import('^work-view$', date_range(from_date))
 
         pageviews.each do |date, results|
           results.each do |result|
-            work_id = result['label']&.split(' - ')[1]
+            work_id = result['Events_EventName']
             work = accessible_work(work_id)
             next unless work
             nb_visits = result['nb_uniq_visitors'].to_i
@@ -31,11 +31,11 @@ class MatomoAnalyticsSyncJob < Hyrax::ApplicationJob
           end
         end
       elsif sync_type == "file_views"
-        pageviews = Hyrax::Analytics.daily_events_for_import('file-set-view', date_range(from_date))
+        pageviews = Hyrax::Analytics.daily_events_for_import('^file-set-view$', date_range(from_date))
 
         pageviews.each do |date, results|
           results.each do |result|
-            file_id = result['label']&.split(' - ')[1]
+            file_id = result['Events_EventName']
             file = accessible_file_set(file_id)
             next unless file
             nb_visits = result['nb_uniq_visitors'].to_i
@@ -47,10 +47,10 @@ class MatomoAnalyticsSyncJob < Hyrax::ApplicationJob
           end
         end
       elsif sync_type == "file_downloads"
-        downloads = Hyrax::Analytics.daily_events_for_import('file-set-download', date_range(from_date))
+        downloads = Hyrax::Analytics.daily_events_for_import('^file-set-download$', date_range(from_date))
         downloads.each do |date, results|
           results.each do |result|
-            file_id = result['label']&.split(' - ')[1]
+            file_id = result['Events_EventName']
             file = accessible_file_set(file_id)
             next unless file
             nb_visits = result['nb_uniq_visitors'].to_i
