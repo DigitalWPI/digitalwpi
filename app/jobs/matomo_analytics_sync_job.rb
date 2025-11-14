@@ -19,7 +19,7 @@ class MatomoAnalyticsSyncJob < Hyrax::ApplicationJob
 
         pageviews.each do |date, results|
           results.each do |result|
-            work_id = result['label']
+            work_id = result['label']&.split(' - ')[1]
             work = accessible_work(work_id)
             next unless work
             nb_visits = result['nb_uniq_visitors'].to_i
@@ -35,7 +35,8 @@ class MatomoAnalyticsSyncJob < Hyrax::ApplicationJob
 
         pageviews.each do |date, results|
           results.each do |result|
-            file = accessible_file_set(result['label'])
+            file_id = result['label']&.split(' - ')[1]
+            file = accessible_file_set(file_id)
             next unless file
             nb_visits = result['nb_uniq_visitors'].to_i
             if nb_visits > 0
@@ -49,7 +50,8 @@ class MatomoAnalyticsSyncJob < Hyrax::ApplicationJob
         downloads = Hyrax::Analytics.daily_events_for_import('file-set-download', date_range(from_date))
         downloads.each do |date, results|
           results.each do |result|
-            file = accessible_file_set(result['label'])
+            file_id = result['label']&.split(' - ')[1]
+            file = accessible_file_set(file_id)
             next unless file
             nb_visits = result['nb_uniq_visitors'].to_i
             if nb_visits > 0
