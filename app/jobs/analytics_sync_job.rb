@@ -15,27 +15,33 @@ class AnalyticsSyncJob < Hyrax::ApplicationJob
         accessible_works.each do |work|
           pageviews = Hyrax::Analytics.daily_events_for_url(page_url(sync_type, work), date_ranges(from_date))
           pageviews.results.each do |date, views_count|
-            stat = WorkViewStat.find_or_initialize_by(date: date, work_id: work.id)
-            stat.work_views = [stat.work_views.to_i, views_count.to_i].max
+            if views_count > 0
+              stat = WorkViewStat.find_or_initialize_by(date: date, work_id: work.id)
+              stat.work_views = [stat.work_views.to_i, views_count.to_i].max
 
-            stat.save!
+              stat.save!
+            end
           end
         end
       elsif sync_type == "file_views"
         accessible_file_sets.each do |file|
           pageviews = Hyrax::Analytics.daily_events_for_url(page_url(sync_type, file), date_ranges(from_date))
           pageviews.results.each do |date, views_count|
-            stat = FileViewStat.find_or_initialize_by(date: date, file_id: file.id)
-            stat.views = [stat.views.to_i, views_count.to_i].max
+            if views_count > 0
+              stat = FileViewStat.find_or_initialize_by(date: date, file_id: file.id)
+              stat.views = [stat.views.to_i, views_count.to_i].max
 
-            stat.save!
+              stat.save!
+            end
           end
         end
       elsif sync_type == "file_downloads"
         accessible_file_sets.each do |file|
           downloads = Hyrax::Analytics.daily_events_for_id(file.id, 'file-set-download', date_range_for_download_statistics(from_date))
           downloads.results.each do |date, downloads_count|
-            create_download_stat(file, date, downloads_count)
+            if downloads_count > 0
+              create_download_stat(file, date, downloads_count)
+            end
           end
         end
       end
