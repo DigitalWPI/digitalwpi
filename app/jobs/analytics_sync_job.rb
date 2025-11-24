@@ -7,35 +7,41 @@ class AnalyticsSyncJob < Hyrax::ApplicationJob
 
     %w(work_views file_views file_downloads).each do |sync_type|
       sync_log = AnalyticsSyncLog.find_or_initialize_by(sync_type: sync_type)
-      from_date = sync_log.persisted? ? (sync_log.last_synced_at&.to_date - 1.day) : Hyrax.config.analytics_start_date
+      from_date = sync_log.persisted? ? (sync_log.last_synced_at&.to_date - 1.day) : Hyrax.config.analytics_start_date.to_date
 
       next if from_date >= (Date.today - 1.day)
-      
+
       if sync_type == "work_views"
         accessible_works.each do |work|
           pageviews = Hyrax::Analytics.daily_events_for_url(page_url(sync_type, work), date_ranges(from_date))
           pageviews.results.each do |date, views_count|
-            stat = WorkViewStat.find_or_initialize_by(date: date, work_id: work.id)
-            stat.work_views = [stat.work_views.to_i, views_count.to_i].max
+            if views_count > 0
+              stat = WorkViewStat.find_or_initialize_by(date: date, work_id: work.id)
+              stat.work_views = [stat.work_views.to_i, views_count.to_i].max
 
-            stat.save!
+              stat.save!
+            end
           end
         end
       elsif sync_type == "file_views"
         accessible_file_sets.each do |file|
           pageviews = Hyrax::Analytics.daily_events_for_url(page_url(sync_type, file), date_ranges(from_date))
           pageviews.results.each do |date, views_count|
-            stat = FileViewStat.find_or_initialize_by(date: date, file_id: file.id)
-            stat.views = [stat.views.to_i, views_count.to_i].max
+            if views_count > 0
+              stat = FileViewStat.find_or_initialize_by(date: date, file_id: file.id)
+              stat.views = [stat.views.to_i, views_count.to_i].max
 
-            stat.save!
+              stat.save!
+            end
           end
         end
       elsif sync_type == "file_downloads"
         accessible_file_sets.each do |file|
           downloads = Hyrax::Analytics.daily_events_for_id(file.id, 'file-set-download', date_range_for_download_statistics(from_date))
           downloads.results.each do |date, downloads_count|
-            create_download_stat(file, date, downloads_count)
+            if downloads_count > 0
+              create_download_stat(file, date, downloads_count)
+            end
           end
         end
       end
@@ -51,12 +57,12 @@ class AnalyticsSyncJob < Hyrax::ApplicationJob
     models = Hyrax.config.curation_concerns.map { |m| "\"#{m}\"" }
     if current_user.ability.admin?
       ActiveFedora::SolrService.query("has_model_ssim:(#{models.join(' OR ')})",
-        fl: 'title_tesim, id, member_of_collections',
+        fl: 'has_model_ssim, title_tesim, id, member_of_collections',
         rows: 50_000)
     else
       ActiveFedora::SolrService.query(
         "edit_access_person_ssim:#{current_user} AND has_model_ssim:(#{models.join(' OR ')})",
-        fl: 'title_tesim, id, member_of_collections',
+        fl: 'has_model_ssim, title_tesim, id, member_of_collections',
         rows: 50_000
       )
     end
@@ -66,13 +72,13 @@ class AnalyticsSyncJob < Hyrax::ApplicationJob
     if current_user.ability.admin?
       ActiveFedora::SolrService.query(
         "has_model_ssim:FileSet",
-        fl: 'title_tesim, id',
+        fl: 'has_model_ssim, title_tesim, id',
         rows: 50_000
       )
     else
       ActiveFedora::SolrService.query(
         "edit_access_person_ssim:#{current_user} AND has_model_ssim:FileSet",
-        fl: 'title_tesim, id',
+        fl: 'has_model_ssim, title_tesim, id',
         rows: 50_000
       )
     end
@@ -80,9 +86,9 @@ class AnalyticsSyncJob < Hyrax::ApplicationJob
 
   def page_url(sync_type, object)
     if sync_type == 'file_views'
-      Rails.application.routes.url_helpers.hyrax_file_set_path(object.id)
+      Rails.application.routes.url_helpers.hyrax_file_set_path(object['id'])
     else
-      "concern/#{object.class.name.underscore.pluralize}/#{object.id}"
+      "concern/#{object['has_model_ssim'][0].underscore.pluralize}/#{object['id']}"
     end
   end
 
