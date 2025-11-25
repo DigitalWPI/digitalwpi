@@ -75,13 +75,21 @@ class MatomoAnalyticsSyncJob < Hyrax::ApplicationJob
   private
 
   def accessible_work(id)
-    object = ActiveFedora::Base.find(id)
-    return object.work? ? object : nil
+    if ActiveFedora::Base.exists?(id)
+      object = ActiveFedora::Base.find(id)
+      return object.work? ? object : nil
+    else
+      return nil
+    end
   end
 
   def accessible_file_set(id)
-    object = ActiveFedora::Base.find(id)
-    return object.file_set? ? object : nil
+    if ActiveFedora::Base.exists?(id)
+      object = ActiveFedora::Base.find(id)
+      return object.file_set? ? object : nil
+    else
+      return nil
+    end
   end
 
   def date_range(start_date)
