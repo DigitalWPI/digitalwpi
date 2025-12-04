@@ -3,7 +3,7 @@
 <div class="stats-filter">
   <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <%= filters.key(params[:start_date]).present? ? filters.key(params[:start_date]) : 'All Time' %> <span class="caret">
+      <%= filters.key(params[:start_date]).present? ? filters.key(params[:start_date]) : 'All Time' %> <span class="caret"/>
     </button>
     <ul class="dropdown-menu">
       <% filters.each do |f_key, f_value| %>
