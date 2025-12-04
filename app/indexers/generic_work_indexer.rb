@@ -14,6 +14,7 @@ class GenericWorkIndexer < Hyrax::WorkIndexer
    super.tap do |solr_doc|
      solr_doc['license_sim'] = object.license
      solr_doc['all_metadata_tesim'] = all_metadata_values
+     solr_doc['year_sim'] = object.year.strip[0,4] if object.year
    end
   end
 end
