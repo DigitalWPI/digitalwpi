@@ -31,10 +31,8 @@
     <div class="alert alert-info">
       <span class="glyphicon glyphicon-signal large-icon"></span>
       <%= content_tag :strong, total_view %> <%= view_label %> and <%= content_tag :strong, total_downloads %> <%= download_label %> <%= range_label %>
-      <% if total_downloads == 0 %>
         <br/>
         Note: <%= t('hyrax.stats.work.download_stats.message', :download_start_date => @default_download_start_date) %>
-      <% end %>
     </div>
     <% if total_view > 0 %>
       <div class="stats-container">
