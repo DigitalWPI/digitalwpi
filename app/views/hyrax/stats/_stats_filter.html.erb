@@ -7,6 +7,7 @@
     </button>
     <ul class="dropdown-menu">
       <% filters.each do |f_key, f_value| %>
+        <% next if f_key == @selected_range %>
         <li><%= link_to f_key, stats_filter_path(document, f_value)%></li>
       <% end %>
     </ul>
