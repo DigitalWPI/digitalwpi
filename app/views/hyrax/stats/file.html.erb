@@ -7,9 +7,20 @@
 
 <%
   default_start_date = Hyrax.config.analytics_start_date
-  filters = {"All Time": default_start_date.to_s, "Last month": (Date.today - 1.month).to_s, "Last 3 month": (Date.today - 3.month).to_s, "Last 6 month": (Date.today - 6.month).to_s, "Last 1 year": (Date.today - 1.year).to_s}
-  total_view = @pageviews.range(params[:start_date]&.to_date || default_start_date.to_date, Time.zone.today)
-  total_downloads = @downloads.range(params[:start_date]&.to_date || default_start_date.to_date, Time.zone.today)
+  filters = {
+             "All Time": default_start_date.to_s,
+             "Last month": (Date.today - 1.month).to_s,
+             "Last 3 month": (Date.today - 3.month).to_s,
+             "Last 6 month": (Date.today - 6.month).to_s,
+             "Last 1 year": (Date.today - 1.year).to_s
+  }
+  total_view = @pageviews.range(params[:start_date]&.to_date || default_start_date.to_date, params[:end_date]&.to_date || Time.zone.today)
+  total_downloads = @downloads.range(params[:start_date]&.to_date || default_start_date.to_date, params[:end_date]&.to_date || Time.zone.today)
+  view_label = "views"
+  view_label = "view" if total_view == 1
+  download_label = "downloads"
+  download_label = "download" if total_downloads == 1
+  range_label = "from #{params[:start_date]&.to_date || default_start_date.to_date} to #{params[:end_date]&.to_date || Time.zone.today}"
 %>
 
 <%= content_tag :h1, @document, class: "lower" %>
@@ -20,7 +31,11 @@
     <%= render 'stats_filter', document: @file, form_path: stats_file_path(@file), filters: filters %>
     <div class="alert alert-info">
       <span class="glyphicon glyphicon-signal large-icon"></span>
-      <%= content_tag :strong, total_view %> views and <%= content_tag :strong, total_downloads %> downloads since <%= DateTime.now.strftime("%B %-d, %Y") %>
+      <%= content_tag :strong, total_view %> <%= view_label %> and <%= content_tag :strong, total_downloads %> <%= download_label %> <%= range_label %>
+      <% if total_downloads == 0 %>
+        <br/>
+        Note: <%= t('hyrax.stats.work.download_stats.message', :download_start_date => @default_download_start_date) %>
+      <% end %>
     </div>
 
     <% if total_view > 0 %>
@@ -36,7 +51,9 @@
       <div class="stats-container">
         <h3 class="text-center"><%= t('.downloads') %></h3>
         <div id="downloads">
-          <%= render 'downloads' %>
+          <!-- There is an extra closing div in downloads -->
+          <div><%= render 'downloads' %>
+          <div><%= t('hyrax.stats.work.download_stats.message', :download_start_date => @default_download_start_date) %></div>
         </div>
       </div>
     <% end %>

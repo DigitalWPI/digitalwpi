@@ -104,7 +104,7 @@ en:
     stats:
       work:
         download_stats:
-          message: Download data available starting September 2025.
+          message: "Download data available starting %{download_start_date}."
   blacklight_advanced_search:
     all: all
     any: any
