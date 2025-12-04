@@ -95,7 +95,7 @@ module Hyrax
     end
 
     def selected_range
-      label = "Custom range"
+      #ToDo: This is not being selected properly. It always selects "Custom range"
       default_start_date = Hyrax.config.analytics_start_date
       st_dt, end_dt = date_range_for_view_statistics
       if st_dt == default_start_date and end_dt == Time.zone.today
