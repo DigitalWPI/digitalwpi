@@ -15,6 +15,7 @@ class EtdIndexer < Hyrax::WorkIndexer
       solr_doc['license_sim'] = object.license
       solr_doc['all_metadata_tesim'] = all_metadata_values
       solr_doc['title_ansort'] = object.title.first
+      solr_doc['year_sim'] = object.year.strip[0,4] if object.year
     end
   end
 end
