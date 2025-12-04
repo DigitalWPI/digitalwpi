@@ -131,6 +131,37 @@
       </analyzer>
     </fieldtype>
 
+    <fieldType name="alphaNumericSort" class="solr.TextField" sortMissingLast="false" omitNorms="true">
+      <analyzer>
+        <!-- KeywordTokenizer does no actual tokenizing, so the entire
+            input string is preserved as a single token
+          -->
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <!-- The LowerCase TokenFilter does what you expect, which can be
+            when you want your sorting to be case insensitive
+          -->
+        <filter class="solr.LowerCaseFilterFactory" />
+        <!-- The TrimFilter removes any leading or trailing whitespace -->
+        <filter class="solr.TrimFilterFactory" />
+        <!-- Remove leading articles -->
+        <!-- <filter class="solr.PatternReplaceFilterFactory"
+                pattern="^(a |the |les |la |le |l'|de la |du |des )" replacement="" replace="all"
+        /> -->
+        <!-- Left-pad numbers with zeroes -->
+        <filter class="solr.PatternReplaceFilterFactory"
+                pattern="(\d+)" replacement="00000$1" replace="all"
+        />
+        <!-- Left-trim zeroes to produce 6 digit numbers -->
+        <filter class="solr.PatternReplaceFilterFactory"
+                pattern="0*([0-9]{6,})" replacement="$1" replace="all"
+        />
+        <!-- Remove all but alphanumeric characters -->
+        <filter class="solr.PatternReplaceFilterFactory"
+                pattern="([^a-z0-9])" replacement="" replace="all"
+        />
+      </analyzer>
+    </fieldType>
+
     <!-- A text field with defaults appropriate for English -->
     <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
       <analyzer>
@@ -326,7 +357,7 @@
 
     <!-- you must define copyField source and dest fields explicity or schemaBrowser doesn't work -->
     <field name="all_text_timv" type="text" stored="false" indexed="true" multiValued="true" termVectors="true" termPositions="true" termOffsets="true"/>
-
+    <dynamicField name="*_ansort" type="alphaNumericSort" stored="false" indexed="true" multiValued="false"/>
 
   </fields>
 
