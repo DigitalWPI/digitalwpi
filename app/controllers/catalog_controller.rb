@@ -77,7 +77,7 @@ class CatalogController < ApplicationController
      maxlength: 10
     }, include_in_advanced_search: false
     config.add_facet_field solr_name("creator_lsim"), sort: 'index', index_range: 'a'..'z', limit: 5, include_in_advanced_search: false
-    config.add_facet_field solr_name("advisor_lsim"), label: "Advisor", sort: 'index', index_range: 'a'..'a', limit: 5
+    config.add_facet_field solr_name("advisor_lsim"), label: "Advisor", sort: 'index', index_range: 'a'..'z', limit: 5
     config.add_facet_field solr_name("contributor", :facetable), label: "Contributor", sort: 'index', index_range: 'A'..'Z', limit: 5, include_in_advanced_search: false
     config.add_facet_field solr_name("center", :facetable), label: "Project Center", sort: 'index', index_range: 'A'..'Z', limit: 5
     config.add_facet_field solr_name("major", :facetable), label: "Major", sort: 'index', index_range: 'A'..'Z', limit: 5
