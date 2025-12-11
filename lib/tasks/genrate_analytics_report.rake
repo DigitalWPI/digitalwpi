@@ -18,7 +18,7 @@ namespace :wpi do
     data = build_top_works_list(work_views, work_file_downloads)
     csv = CSV.open(Rails.root.join('tmp', "analytics_report_#{@start_date}_#{@end_date}.csv"), "wb") do |rows|
       rows << ['Title', 'Digital WPI URL', 'Work Page Views', 'Total Downloads',
-               'Collection IDs', 'Creator(s)', 'Advisor(s)', 'Resource type',
+               'Collection Name', 'Creator(s)', 'Advisor(s)', 'Resource type',
                'Date created', 'Major', 'Unit', 'Project Center', 'Sponsor', 'UN SDG']
       data.each do |row|
         rows << [row[1], row[0], row[2], row[3], Array(row[4]).join('; ')]
@@ -37,7 +37,7 @@ namespace :wpi do
         PermalinksPresenter.new("/show/#{id}").url,
         views,
         work_downloads[id] || 0,
-        work['member_of_collection_ids_ssim']&.join('; ') || '',
+        get_collection_name(work['member_of_collection_ids_ssim'])&.join('; ') || '',
         work['creator_tesim']&.join('; ') || '',
         work['advisor_tesim']&.join('; ') || '',
         work['resource_type_tesim']&.join('; ') || '',
@@ -101,5 +101,18 @@ namespace :wpi do
     fl = 'id, title_tesim, member_of_collection_ids_ssim, file_set_ids_ssim, center_tesim'
     
     ActiveFedora::SolrService.query(query, fl: fl, rows: 50_000)
+  end
+
+  def get_collection_name(member_ids)
+    member_names = []
+    member_ids.each do |member_id|
+      c = Collection.find(member_id)
+      if c
+        member_names << c.title.first
+      else
+        member_names << member_id
+      end
+    end
+    member_names
   end
 end
