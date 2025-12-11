@@ -16,6 +16,7 @@ class GenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['all_metadata_tesim'] = all_metadata_values
       solr_doc['title_ansort'] = object.title.first
       solr_doc['year_sim'] = object.year.strip[0,4] if object.year
+      solr_doc['creator_lsim'] = object.creator
     end
   end
 end
