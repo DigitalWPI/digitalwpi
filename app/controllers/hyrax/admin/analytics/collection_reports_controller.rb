@@ -38,7 +38,7 @@ module Hyrax
         # rubocop:disable Metrics/MethodLength
         def export_data
           csv_row = CSV.generate do |csv|
-            csv << ["Name", "ID", "View of Works In Collection", "Downloads of Works In Collection", "Collection Page Views"]
+            csv << ["Collection Name", "Views of Works In Collection", "Downloads of Works In Collection"]
             @all_top_collections.each do |collection|
               document = begin
                            ::SolrDocument.find(collection[0])
@@ -49,7 +49,7 @@ module Hyrax
               download_count = download_match ? download_match[1] : 0
               collection_match = @top_collection_pages.detect { |a, _b| a == collection[0] }
               collection_count = collection_match ? collection_match[1] : 0
-              csv << [document, collection[0], collection[1], download_count, collection_count]
+              csv << [document, collection[1], download_count]
             end
           end
           send_data csv_row, filename: "#{@start_date}-#{@end_date}-collections.csv"
