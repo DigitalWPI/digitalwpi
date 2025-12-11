@@ -17,9 +17,9 @@ namespace :wpi do
 
     data = build_top_works_list(work_views, work_file_downloads)
     csv = CSV.open(Rails.root.join('tmp', "analytics_report_#{@start_date}_#{@end_date}.csv"), "wb") do |rows|
-      rows << ['Title', 'ID', 'Work Page Views', 'Total Downloads', 'Collection IDs',
-               'Creator(s)', 'Advisor(s)', 'Resource type', 'Date created', 'Major',
-               'Unit', 'Project Center', 'Sponsor', 'UN SDG']
+      rows << ['Title', 'Digital WPI URL', 'Work Page Views', 'Total Downloads',
+               'Collection IDs', 'Creator(s)', 'Advisor(s)', 'Resource type',
+               'Date created', 'Major', 'Unit', 'Project Center', 'Sponsor', 'UN SDG']
       data.each do |row|
         rows << [row[1], row[0], row[2], row[3], Array(row[4]).join('; ')]
       end
