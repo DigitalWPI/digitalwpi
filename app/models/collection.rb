@@ -5,7 +5,7 @@ class Collection < ActiveFedora::Base
   # You can replace these metadata if they're not suitable
   include Hyrax::BasicMetadata
 
-  self.indexer = Hyrax::CollectionWithBasicMetadataIndexer
+  self.indexer = CollectionIndexer
 
   def after_update_nested_collection_relationship_indices
     @during_save = false
