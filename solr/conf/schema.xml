@@ -48,16 +48,13 @@
 <schema name="Hydra Demo Index" version="1.5">
   <!-- attribute "name" is the name of this schema and is only used for display purposes.
        Applications should change this to reflect the nature of the search collection.
-       version="1.5" is Solr's version number for the schema syntax and semantics.  It should
+       version="1.4" is Solr's version number for the schema syntax and semantics.  It should
        not normally be changed by applications.
        1.0: multiValued attribute did not exist, all fields are multiValued by nature
        1.1: multiValued attribute introduced, false by default
        1.2: omitTermFreqAndPositions attribute introduced, true by default except for text fields.
        1.3: removed optional field compress feature
        1.4: default auto-phrase (QueryParser feature) to off
-       1.5: omitNorms defaults to true for primitive field types (int, float, boolean, string...)
-# TODO 1.6: useDocValuesAsStored defaults to true.
-# See https://github.com/samvera/active_fedora/issues/1346
      -->
 
   <types>
@@ -66,25 +63,24 @@
     <fieldType name="rand" class="solr.RandomSortField" omitNorms="true"/>
 
     <!-- Default numeric field types.  -->
-    <fieldType name="int" class="solr.IntPointField" docValues="true"/>
-    <fieldType name="float" class="solr.FloatPointField" docValues="true"/>
-    <fieldType name="long" class="solr.LongPointField" docValues="true"/>
-    <fieldType name="double" class="solr.DoublePointField" docValues="true"/>
+    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
 
-    <!-- PointField numeric field types for faster range queries -->
-    <fieldType name="tint" class="solr.IntPointField" docValues="true"/>
-    <fieldType name="tfloat" class="solr.FloatPointField" docValues="true"/>
-    <fieldType name="tlong" class="solr.LongPointField" docValues="true"/>
-    <fieldType name="tdouble" class="solr.DoublePointField" docValues="true"/>
+    <!-- trie numeric field types for faster range queries -->
+    <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" positionIncrementGap="0"/>
+    <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" positionIncrementGap="0"/>
+    <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" positionIncrementGap="0"/>
+    <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0"/>
 
     <!-- The format for this date field is of the form 1995-12-31T23:59:59Z
          Optional fractional seconds are allowed: 1995-12-31T23:59:59.999Z
       -->
-    <fieldType name="date" class="solr.DatePointField" docValues="true"/>
-    <!-- A PointField based date field for faster date range queries and date faceting. -->
-    <fieldType name="tdate" class="solr.DatePointField" docValues="true"/>
-    <!-- A DateRange based date field for truly faster date range queries. -->
-    <fieldType name="dateRange" class="solr.DateRangeField" omitNorms="true" omitTermFreqAndPositions="true"/>
+    <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
+    <!-- A Trie based date field for faster date range queries and date faceting. -->
+    <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0"/>
+
 
     <!-- This point type indexes the coordinates as separate fields (subFields)
       If subFieldType is defined, it references a type, and a dynamic field
@@ -99,7 +95,10 @@
      -->
     <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
 
-    <!-- A geospatial field type new to Solr 4.  It supports multiValued and polygon shapes.
+    <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
+    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
+
+    <!-- An alternative geospatial field type new to Solr 4.  It supports multiValued and polygon shapes.
       For more information about this and other Spatial fields new to Solr 4, see:
       http://wiki.apache.org/solr/SolrAdaptersForLuceneSpatial4
     -->
@@ -130,6 +129,37 @@
         <filter class="solr.TrimFilterFactory" />
       </analyzer>
     </fieldtype>
+
+    <fieldType name="alphaNumericSort" class="solr.TextField" sortMissingLast="false" omitNorms="true">
+      <analyzer>
+        <!-- KeywordTokenizer does no actual tokenizing, so the entire
+            input string is preserved as a single token
+          -->
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <!-- The LowerCase TokenFilter does what you expect, which can be
+            when you want your sorting to be case insensitive
+          -->
+        <filter class="solr.LowerCaseFilterFactory" />
+        <!-- The TrimFilter removes any leading or trailing whitespace -->
+        <filter class="solr.TrimFilterFactory" />
+        <!-- Remove leading articles -->
+        <!-- <filter class="solr.PatternReplaceFilterFactory"
+                pattern="^(a |the |les |la |le |l'|de la |du |des )" replacement="" replace="all"
+        /> -->
+        <!-- Left-pad numbers with zeroes -->
+        <filter class="solr.PatternReplaceFilterFactory"
+                pattern="(\d+)" replacement="00000$1" replace="all"
+        />
+        <!-- Left-trim zeroes to produce 6 digit numbers -->
+        <filter class="solr.PatternReplaceFilterFactory"
+                pattern="0*([0-9]{6,})" replacement="$1" replace="all"
+        />
+        <!-- Remove all but alphanumeric characters -->
+        <filter class="solr.PatternReplaceFilterFactory"
+                pattern="([^a-z0-9])" replacement="" replace="all"
+        />
+      </analyzer>
+    </fieldType>
 
     <!-- A text field with defaults appropriate for English -->
     <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
@@ -169,10 +199,32 @@
     <fieldType class="solr.TextField" name="textSuggest" positionIncrementGap="100">
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.StandardFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+        <filter class="solr.LengthFilterFactory" min="2" max="255"/>
       </analyzer>
     </fieldType>
+
+    <fieldType name="ngrams" class="solr.TextField" omitNorms="false">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.EdgeNGramFilterFactory" minGramSize="2" maxGramSize="20"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="string_lower" class="solr.TextField" sortMissingLast="true">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
   </types>
 
 
@@ -217,6 +269,7 @@
     <!-- string (_s...) -->
     <dynamicField name="*_si" type="string" stored="false" indexed="true" multiValued="false"/>
     <dynamicField name="*_sim" type="string" stored="false" indexed="true" multiValued="true"/>
+    <dynamicField name="*_lsim" type="string_lower" stored="false" indexed="true" multiValued="true"/>
     <dynamicField name="*_ss" type="string" stored="true" indexed="false" multiValued="false"/>
     <dynamicField name="*_ssm" type="string" stored="true" indexed="false" multiValued="true"/>
     <dynamicField name="*_ssi" type="string" stored="true" indexed="true" multiValued="false"/>
@@ -231,7 +284,7 @@
     <dynamicField name="*_isi" type="int" stored="true" indexed="true" multiValued="false"/>
     <dynamicField name="*_isim" type="int" stored="true" indexed="true" multiValued="true"/>
 
-    <!-- IntegerPointField (_it...) (for faster range queries) -->
+    <!-- trie integer (_it...) (for faster range queries) -->
     <dynamicField name="*_iti" type="tint" stored="false" indexed="true" multiValued="false"/>
     <dynamicField name="*_itim" type="tint" stored="false" indexed="true" multiValued="true"/>
     <dynamicField name="*_its" type="tint" stored="true" indexed="false" multiValued="false"/>
@@ -249,7 +302,7 @@
     <dynamicField name="*_dtsi" type="date" stored="true" indexed="true" multiValued="false"/>
     <dynamicField name="*_dtsim" type="date" stored="true" indexed="true" multiValued="true"/>
 
-    <!-- DatePointField (_dtt...) (for faster range queries) -->
+    <!-- trie date (_dtt...) (for faster range queries) -->
     <dynamicField name="*_dtti" type="tdate" stored="false" indexed="true" multiValued="false"/>
     <dynamicField name="*_dttim" type="tdate" stored="false" indexed="true" multiValued="true"/>
     <dynamicField name="*_dtts" type="tdate" stored="true" indexed="false" multiValued="false"/>
@@ -257,24 +310,15 @@
     <dynamicField name="*_dttsi" type="tdate" stored="true" indexed="true" multiValued="false"/>
     <dynamicField name="*_dttsim" type="tdate" stored="true" indexed="true" multiValued="true"/>
 
-
-    <!-- date range (_dr...) (for faster AND better range queries) -->
-    <dynamicField name="*_dri" type="dateRange" stored="false" indexed="true" multiValued="false"/>
-    <dynamicField name="*_drim" type="dateRange" stored="false" indexed="true" multiValued="true"/>
-    <dynamicField name="*_drsi" type="dateRange" stored="true" indexed="true" multiValued="false"/>
-    <dynamicField name="*_drsim" type="dateRange" stored="true" indexed="true" multiValued="true"/>
-    <dynamicField name="*_drs" type="dateRange" stored="true" indexed="true" multiValued="false"/> <!-- indexed anyway because DateRangeField errors otherwise -->
-    <dynamicField name="*_drsm" type="dateRange" stored="true" indexed="true" multiValued="true"/> <!-- indexed anyway because DateRangeField errors otherwise -->
-
     <!-- long (_l...) -->
     <dynamicField name="*_li" type="long" stored="false" indexed="true" multiValued="false"/>
     <dynamicField name="*_lim" type="long" stored="false" indexed="true" multiValued="true"/>
     <dynamicField name="*_ls" type="long" stored="true" indexed="false" multiValued="false"/>
     <dynamicField name="*_lsm" type="long" stored="true" indexed="false" multiValued="true"/>
     <dynamicField name="*_lsi" type="long" stored="true" indexed="true" multiValued="false"/>
-    <dynamicField name="*_lsim" type="long" stored="true" indexed="true" multiValued="true"/>
+    <!-- <dynamicField name="*_lsim" type="long" stored="true" indexed="true" multiValued="true"/>  -->
 
-    <!-- LongPointField (_lt...) (for faster range queries) -->
+    <!-- trie long (_lt...) (for faster range queries) -->
     <dynamicField name="*_lti" type="tlong" stored="false" indexed="true" multiValued="false"/>
     <dynamicField name="*_ltim" type="tlong" stored="false" indexed="true" multiValued="true"/>
     <dynamicField name="*_lts" type="tlong" stored="true" indexed="false" multiValued="false"/>
@@ -290,7 +334,7 @@
     <dynamicField name="*_dbsi" type="double" stored="true" indexed="true" multiValued="false"/>
     <dynamicField name="*_dbsim" type="double" stored="true" indexed="true" multiValued="true"/>
 
-    <!-- DoublePointField (_dbt...) (for faster range queries) -->
+    <!-- trie double (_dbt...) (for faster range queries) -->
     <dynamicField name="*_dbti" type="tdouble" stored="false" indexed="true" multiValued="false"/>
     <dynamicField name="*_dbtim" type="tdouble" stored="false" indexed="true" multiValued="true"/>
     <dynamicField name="*_dbts" type="tdouble" stored="true" indexed="false" multiValued="false"/>
@@ -306,7 +350,7 @@
     <dynamicField name="*_fsi" type="float" stored="true" indexed="true" multiValued="false"/>
     <dynamicField name="*_fsim" type="float" stored="true" indexed="true" multiValued="true"/>
 
-    <!-- FloatPointField (_ft...) (for faster range queries) -->
+    <!-- trie float (_ft...) (for faster range queries) -->
     <dynamicField name="*_fti" type="tfloat" stored="false" indexed="true" multiValued="false"/>
     <dynamicField name="*_ftim" type="tfloat" stored="false" indexed="true" multiValued="true"/>
     <dynamicField name="*_fts" type="tfloat" stored="true" indexed="false" multiValued="false"/>
@@ -322,11 +366,20 @@
     <!-- Type used to index the lat and lon components for the "location" FieldType -->
     <dynamicField name="*_coordinate" type="tdouble" indexed="true"  stored="false" />
 
+    <!-- location (_ll...) -->
+    <dynamicField name="*_lli" type="location" stored="false" indexed="true" multiValued="false"/>
+    <dynamicField name="*_llim" type="location" stored="false" indexed="true" multiValued="true"/>
+    <dynamicField name="*_lls" type="location" stored="true" indexed="false" multiValued="false"/>
+    <dynamicField name="*_llsm" type="location" stored="true" indexed="false" multiValued="true"/>
+    <dynamicField name="*_llsi" type="location" stored="true" indexed="true" multiValued="false"/>
+    <dynamicField name="*_llsim" type="location" stored="true" indexed="true" multiValued="true"/>
+
     <dynamicField name="*suggest" type="textSuggest" indexed="true" stored="false" multiValued="true" />
+    <dynamicField name="*_ng" type="ngrams" indexed="true" stored="false" multiValued="true" />
 
     <!-- you must define copyField source and dest fields explicity or schemaBrowser doesn't work -->
     <field name="all_text_timv" type="text" stored="false" indexed="true" multiValued="true" termVectors="true" termPositions="true" termOffsets="true"/>
-
+    <dynamicField name="*_ansort" type="alphaNumericSort" stored="false" indexed="true" multiValued="false"/>
 
   </fields>
 
@@ -349,6 +402,10 @@
    <!-- for suggestions -->
    <copyField source="*_tesim" dest="suggest"/>
    <copyField source="*_ssim" dest="suggest"/>
+
+   <!-- for suggestions with ngrams -->
+   <copyField source="id" dest="id_ng"/>
+   <copyField source="title_tesim" dest="full_title_ng"/>
 
  <!-- Similarity is the scoring routine for each document vs. a query.
       A custom similarity may be specified here, but the default is fine
