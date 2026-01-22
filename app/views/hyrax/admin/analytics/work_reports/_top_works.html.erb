@@ -49,7 +49,7 @@
   <div class="panel-heading">
     <h4><%= t('.top_works') %>
       <div class="btn-group pull-right">
-        <%= link_to "#{t('.export')}", admin_analytics_work_reports_path(start_date: @start_date, end_date: @end_date, center_tesim: params[:center_tesim], format: :csv, disposition: "attachment"), class: "btn btn-default" %>
+        <%= link_to "#{t('.export')}", admin_analytics_work_reports_path(start_date: @start_date, end_date: @end_date, center_tesim: params[:center_tesim], include_ga3: include_ga3, format: :csv, disposition: "attachment"), class: "btn btn-default" %>
       </div>
     </h4>
   </div>
