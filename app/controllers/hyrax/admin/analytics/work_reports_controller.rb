@@ -8,7 +8,8 @@ module Hyrax
         def index
           return unless Hyrax.config.analytics? && Hyrax.config.analytics_provider != 'ga4'
 
-          @start_date, @end_date = date_range.split(',').map(&:to_date)
+          @start_date, @end_date = start_date_for_download_stats, end_date_for_download_stats
+
           @accessible_works = accessible_works
           @accessible_file_sets = accessible_file_sets
 
@@ -60,7 +61,7 @@ module Hyrax
             query += " AND member_of_collection_ids_ssim:#{params['member_of_collection_ids_ssim']}"
           end
 
-          fl = 'id, title_tesim, member_of_collection_ids_ssim, file_set_ids_ssim, center_tesim'
+          fl = 'id, has_model_ssim, title_tesim, member_of_collection_ids_ssim, member_of_collections_ssim, file_set_ids_ssim, creator_tesim, advisor_tesim, resource_type_tesim, system_create_dtsi, center_tesim, major_tesim, sponsor_tesim, sdg_tesim'
           if current_user.ability.admin?
             ActiveFedora::SolrService.query(query, fl: fl, rows: 50_000)
           else
@@ -125,10 +126,20 @@ module Hyrax
               work['title_tesim']&.join('') || '',
               views,
               work_downloads[id] || 0,
-              work['member_of_collection_ids_ssim']
+              work['member_of_collection_ids_ssim'],
+              work['member_of_collections_ssim'],
+              work['has_model_ssim'],
+              work['creator_tesim'],
+              work['advisor_tesim'],
+              work['resource_type_tesim'],
+              work['system_create_dtsi'],
+              work['major_tesim'],
+              work['center_tesim'],
+              work['sponsor_tesim'],
+              work['sdg_tesim']
             ]
           end
-          result.sort_by! { |work| -work[2] }
+          result.sort_by! { |work| work[2] }
           result
         end
 
@@ -149,9 +160,10 @@ module Hyrax
         def export_data(work_views, work_downloads)
           data = build_top_works_list(work_views, work_downloads)
           csv = CSV.generate do |rows|
-            rows << ['Name', 'ID', 'Work Page Views', 'Total Downloads of File Sets In Work', 'Collections']
+            rows << ['Title', 'Digital WPI URL', 'Work Page Views', 'Total Downloads of File Sets In Work', 'Collection Name', 'Creator(s)', 'Advisor(s)', 'Resource Type', 'Date created', 'Major', 'Project Center', 'Sponsor', 'UN SDG']
             data.each do |row|
-              rows << [row[1], row[0], row[2], row[3], Array(row[4]).join('; ')]
+              data_url = PermalinksPresenter.new("/show/#{row[0]}").url
+              rows << [row[1], data_url, row[2], row[3], Array(row[5]).join('; '), Array(row[7]).join('; '), Array(row[8]).join('; '), Array(row[9]).join('; '), row[10], Array(row[11]).join('; '), Array(row[12]).join('; '), Array(row[13]).join('; '), Array(row[14]).join('; ')]
             end
           end
           send_data csv, filename: "#{params[:start_date]}-#{params[:end_date]}-works.csv"
@@ -195,15 +207,15 @@ module Hyrax
         def start_date_for_download_stats
           default_start_date = ENV['DOWNLOAD_STATS_START_DATE'].to_date || Hyrax.config.analytics_start_date.to_date
           include_ga3 = params[:include_ga3] == 'true'
-          return @start_date if include_ga3
-          @start_date.present? && @start_date >= default_start_date ? @start_date.to_date : default_start_date.to_date
+          return @start_date.to_date if include_ga3
+          @start_date.present? && @start_date.to_date >= default_start_date ? @start_date.to_date : default_start_date.to_date
         end
 
         def end_date_for_download_stats
           default_start_date = ENV['DOWNLOAD_STATS_START_DATE'].to_date || Hyrax.config.analytics_start_date.to_date
           include_ga3 = params[:include_ga3] == 'true'
-          return @end_date if include_ga3
-          @end_date.present? && @end_date >= default_start_date ? @end_date.to_date : Date.today
+          return @end_date.to_date if include_ga3
+          @end_date.present? && @end_date.to_date >= default_start_date ? @end_date.to_date : Date.today
         end
       end
     end
