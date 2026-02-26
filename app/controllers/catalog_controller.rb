@@ -72,12 +72,12 @@ class CatalogController < ApplicationController
     #config.add_facet_field solr_name("year", :facetable), label: "Year", sort: 'index desc', limit: 5
     config.add_facet_field solr_name("year", :facetable), label: "Year", range: {
      num_segments: 6,
-     assumed_boundaries: [1350, Time.now.year+2],
+     assumed_boundaries: [1840, Time.now.year+2],
      segments: true,
      maxlength: 10
     }, include_in_advanced_search: false
-    config.add_facet_field solr_name("creator_lsim"), sort: 'index', index_range: 'a'..'z', limit: 5, include_in_advanced_search: false
-    config.add_facet_field solr_name("advisor_lsim"), label: "Advisor", sort: 'index', index_range: 'a'..'z', limit: 5
+    config.add_facet_field solr_name("creator", :facetable), sort: 'index', index_range: 'A'..'Z', limit: 5, include_in_advanced_search: false
+    config.add_facet_field solr_name("advisor", :facetable), label: "Advisor", sort: 'index', index_range: 'A'..'Z', limit: 5
     config.add_facet_field solr_name("contributor", :facetable), label: "Contributor", sort: 'index', index_range: 'A'..'Z', limit: 5, include_in_advanced_search: false
     config.add_facet_field solr_name("center", :facetable), label: "Project Center", sort: 'index', index_range: 'A'..'Z', limit: 5
     config.add_facet_field solr_name("major", :facetable), label: "Major", sort: 'index', index_range: 'A'..'Z', limit: 5
