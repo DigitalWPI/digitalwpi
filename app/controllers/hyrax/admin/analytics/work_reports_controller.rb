@@ -61,7 +61,7 @@ module Hyrax
             query += " AND member_of_collection_ids_ssim:#{params['member_of_collection_ids_ssim']}"
           end
 
-          fl = 'id, has_model_ssim, title_tesim, member_of_collection_ids_ssim, member_of_collections_ssim, file_set_ids_ssim, creator_tesim, advisor_tesim, resource_type_tesim, system_create_dtsi, center_tesim, major_tesim, sponsor_tesim, sdg_tesim'
+          fl = 'id, has_model_ssim, title_tesim, member_of_collection_ids_ssim, member_of_collections_ssim, file_set_ids_ssim, creator_tesim, advisor_tesim, resource_type_tesim, date_created_tesim, center_tesim, major_tesim, sponsor_tesim, sdg_tesim'
           if current_user.ability.admin?
             ActiveFedora::SolrService.query(query, fl: fl, rows: 50_000)
           else
@@ -132,7 +132,7 @@ module Hyrax
               work['creator_tesim'],
               work['advisor_tesim'],
               work['resource_type_tesim'],
-              work['system_create_dtsi'],
+              work['date_created_tesim'],
               work['major_tesim'],
               work['center_tesim'],
               work['sponsor_tesim'],
