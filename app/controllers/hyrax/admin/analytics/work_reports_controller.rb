@@ -132,7 +132,7 @@ module Hyrax
               work['creator_tesim'],
               work['advisor_tesim'],
               work['resource_type_tesim'],
-              work['date_created_tesim'],
+              work['date_created_tesim']&.join(' ') || '',
               work['major_tesim'],
               work['center_tesim'],
               work['sponsor_tesim'],
