@@ -100,6 +100,7 @@ module Hyrax
             secondaryDimension: "eventName",
             filter_column: 'Events_EventAction',
             filter_pattern: action,
+            filter_limit: '-1',
             flat: 1,
             force_api_session: 1
           }
