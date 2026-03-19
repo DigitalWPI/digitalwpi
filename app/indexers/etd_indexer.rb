@@ -15,7 +15,14 @@ class EtdIndexer < Hyrax::WorkIndexer
       solr_doc['license_sim'] = object.license
       solr_doc['all_metadata_tesim'] = all_metadata_values
       solr_doc['title_ansort'] = object.title.first
-      solr_doc['year_sim'] = object.year.strip[0,4] if object.year
+      dt = nil
+      dt = parse_date(object.date_created&.first) if object.date_created&.first
+      solr_doc['date_created_dtsi'] = dt.strftime("%Y-%m-%dT%H:%M:%SZ") if dt
+      if object.year
+        solr_doc['year_sim'] = object.year.strip[0,4]
+      elsif dt
+        solr_doc['year_sim'] = dt.year
+      end
       solr_doc['creator_lsim'] = object.creator
       solr_doc['advisor_lsim'] = object.advisor
     end
