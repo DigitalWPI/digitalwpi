@@ -6,9 +6,9 @@ ruby '2.7.5'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.6'
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.3.0"
+#gem "sqlite3", "~> 1.3.0"
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+#gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -23,7 +23,8 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # add mysql for prod envs
-gem 'mysql2', '< 0.5'
+#gem 'mysql2', '< 0.5'
+gem 'mysql2', '~> 0.5.7'
 # Use Redis adapter to run Action Cable in production
 gem 'redis', '~> 4.0'
 
@@ -47,7 +48,7 @@ gem 'bootstrap-sass', '~> 3.0'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'jquery-rails'
 gem 'devise'
-gem 'devise-guests', '~> 0.6'
+#gem 'devise-guests', '~> 0.6'
 gem 'devise-multi_auth', git: 'https://github.com/DigitalWPI/devise-multi_auth', branch: 'rails-5-1'
 gem 'hydra-role-management'
 gem 'omniauth'
@@ -71,7 +72,7 @@ gem 'pdfjs_viewer-rails', git: 'https://github.com/TuftsUniversity/pdfjs_viewer-
 gem 'honeypot-captcha'
 gem 'lograge'
 gem 'logstash-event'
-gem 'honeybadger', '~> 4.0'
+#gem 'honeybadger', '~> 4.0'
 gem 'rack-attack'
 gem 'xray-rails'
 gem 'yajl-ruby', require: 'yajl'
