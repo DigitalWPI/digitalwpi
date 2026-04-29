@@ -17,7 +17,9 @@ namespace :wpi do
 
     data = build_top_works_list(work_views, work_file_downloads)
     csv = CSV.open(Rails.root.join('tmp', "analytics_report_#{@start_date}_#{@end_date}.csv"), "wb") do |rows|
-      rows << ['Name', 'ID', 'Work Page Views', 'Total Downloads of File Sets In Work', 'Collections']
+      rows << ['Title', 'Digital WPI URL', 'Work Page Views', 'Total Downloads',
+               'Collection Name', 'Creator(s)', 'Advisor(s)', 'Resource type',
+               'Date created', 'Major', 'Unit', 'Project Center', 'Sponsor', 'UN SDG']
       data.each do |row|
         rows << [row[1], row[0], row[2], row[3], Array(row[4]).join('; ')]
       end
@@ -31,11 +33,20 @@ namespace :wpi do
       views = work_views[id]
       next unless views
       result << [
-        id,
         work['title_tesim']&.join('') || '',
+        PermalinksPresenter.new("/show/#{id}").url,
         views,
         work_downloads[id] || 0,
-        work['member_of_collection_ids_ssim']
+        get_collection_name(work['member_of_collection_ids_ssim'])&.join('; ') || '',
+        work['creator_tesim']&.join('; ') || '',
+        work['advisor_tesim']&.join('; ') || '',
+        work['resource_type_tesim']&.join('; ') || '',
+        work['date_created_tesim']&.join('; ') || '',
+        work['major_tesim']&.join('; ') || '',
+        work['department_tesim']&.join('; ') || '',
+        work['center_tesim']&.join('; ') || '',
+        work['sponsor_tesin']&.join('; ') || '',
+        work['sdg_tesim']&.join('; ') || ''
       ]
     end
     result.sort_by! { |work| -work[2] }
@@ -90,5 +101,18 @@ namespace :wpi do
     fl = 'id, title_tesim, member_of_collection_ids_ssim, file_set_ids_ssim, center_tesim'
     
     ActiveFedora::SolrService.query(query, fl: fl, rows: 50_000)
+  end
+
+  def get_collection_name(member_ids)
+    member_names = []
+    member_ids.each do |member_id|
+      c = Collection.find(member_id)
+      if c
+        member_names << c.title.first
+      else
+        member_names << member_id
+      end
+    end
+    member_names
   end
 end

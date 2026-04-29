@@ -56,6 +56,9 @@ en:
       my:
         heading:
           embargo_release_date: Embargo Release Date
+      collections:
+        show_document_list:
+          date_added: Date Created
     directory:
       suffix: "@example.org"
     footer:
