@@ -14,7 +14,7 @@
 //= require activestorage
 //= require turbolinks
 //
-//= require tether
+// require tether
 // Required by Blacklight
 //= require jquery
 
