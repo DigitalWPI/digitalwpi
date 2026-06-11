@@ -26,10 +26,10 @@ Hyrax.config do |config|
   # config.logger = Rails.logger
 
   # Email recipient of messages sent via the contact form
-  # config.contact_email = "repo-admin@example.org"
+  config.contact_email = ENV['CONTACT_FORM_RECIPIENT_EMAIL'] || "repo-admin@example.org"
 
   # Text prefacing the subject entered in the contact form
-  # config.subject_prefix = "Contact form:"
+  config.subject_prefix = ENV['CONTACT_FORM_SUBJECT_PREFIX'] || "Hyrax Contact form:"
 
   # How many notifications should be displayed on the dashboard
   # config.max_notifications_for_dashboard = 5
@@ -52,7 +52,7 @@ Hyrax.config do |config|
   # config.temp_file_base = '/home/developer1'
 
   # Hostpath to be used in Endnote exports
-  # config.persistent_hostpath = 'http://localhost/files/'
+  config.persistent_hostpath = "#{ENV['APPLICATION_URL'] || 'http://localhost'}"
 
   # If you have ffmpeg installed and want to transcode audio and video set to true
   # config.enable_ffmpeg = false
@@ -74,14 +74,14 @@ Hyrax.config do |config|
   # config.redis_namespace = "hyrax"
 
   # Path to the file characterization tool
-  # config.fits_path = "fits.sh"
+  config.fits_path = ENV['FITS_PATH'] || "/fits/fits-1.5.5/fits.sh"
 
   # Path to the file derivatives creation tool
   # config.libreoffice_path = "soffice"
 
   # Option to enable/disable full text extraction from PDFs
   # Default is true, set to false to disable full text extraction
-  # config.extract_full_text = true
+  config.extract_full_text = false
 
   # How many seconds back from the current time that we should show by default of the user's activity on the user's dashboard
   # config.activity_to_show_default_seconds_since_now = 24*60*60
@@ -95,7 +95,7 @@ Hyrax.config do |config|
 
   # Location autocomplete uses geonames to search for named regions
   # Username for connecting to geonames
-  config.geonames_username = ENV['GEONAMES_USERNAME'] || ''
+  config.geonames_username = ENV['GEONAMES'] || ''
 
   # Should the acceptance of the licence agreement be active (checkbox), or
   # implied when the save button is pressed? Set to true for active
@@ -105,7 +105,7 @@ Hyrax.config do |config|
   # Should work creation require file upload, or can a work be created first
   # and a file added at a later time?
   # The default is true.
-  # config.work_requires_files = true
+  config.work_requires_files = false
 
   # How many rows of items should appear on the work show view?
   # The default is 10
@@ -126,24 +126,22 @@ Hyrax.config do |config|
   #
   # Default is false
   config.iiif_image_server = true
-  # config.iiif_image_server = false
 
   # Returns a URL that resolves to an image provided by a IIIF image server
   config.iiif_image_url_builder = lambda do |file_id, base_url, size, format|
-    Riiif::Engine.routes.url_helpers.image_url(file_id, host: base_url, size: size)
+    Riiif::Engine.routes.url_helpers.image_url(file_id, size: size, only_path: true)
   end
   # config.iiif_image_url_builder = lambda do |file_id, base_url, size, format|
   #   "#{base_url}/downloads/#{file_id.split('/').first}"
   # end
 
   # Returns a URL that resolves to an info.json file provided by a IIIF image server
+
   config.iiif_info_url_builder = lambda do |file_id, base_url|
-    uri = Riiif::Engine.routes.url_helpers.info_url(file_id, host: base_url)
+    uri = Riiif::Engine.routes.url_helpers.info_url(file_id, only_path: true)
+    uri.sub(/\Ahttp:/, 'https:') if ENV['RAILS_ENV'] == 'production'
     uri.sub(%r{/info\.json\Z}, '')
   end
-  # config.iiif_info_url_builder = lambda do |_, _|
-  #   ""
-  # end
 
   # Returns a URL that indicates your IIIF image server compliance level
   # config.iiif_image_compliance_level_uri = 'http://iiif.io/api/image/2/level2.json'
@@ -155,7 +153,7 @@ Hyrax.config do |config|
   # config.iiif_metadata_fields = Hyrax::Forms::WorkForm.required_fields
 
   # Should a button with "Share my work" show on the front page to all users (even those not logged in)?
-  # config.display_share_button_when_not_logged_in = true
+  config.display_share_button_when_not_logged_in = false
 
   # This user is logged as the acting user for jobs and other processes that
   # run without being attributed to a specific user (e.g. creation of the
@@ -173,16 +171,12 @@ Hyrax.config do |config|
 
   # Temporary paths to hold uploads before they are ingested into FCrepo
   # These must be lambdas that return a Pathname. Can be configured separately
-  #  config.upload_path = ->() { Rails.root + 'tmp' + 'uploads' }
-  #  config.cache_path = ->() { Rails.root + 'tmp' + 'uploads' + 'cache' }
-
-  # The registered candidate derivative services.  In the array, the first `valid?` candidate will
-  # handle the derivative generation.
-  # config.derivative_services = [Hyrax::FileSetDerivativesService]
+  config.upload_path = ->() { ENV.fetch('UPLOADS_PATH', Rails.root.join('tmp', 'uploads')) }
+  config.cache_path = ->() { ENV.fetch('CACHE_PATH', Rails.root.join('tmp', 'uploads', 'cache')) }
 
   # Location on local file system where derivatives will be stored
   # If you use a multi-server architecture, this MUST be a shared volume
-  # config.derivatives_path = Rails.root.join('tmp', 'derivatives')
+  config.derivatives_path = ENV.fetch('DERIVATIVES_PATH', Rails.root.join('tmp', 'derivatives'))
 
   # Should schema.org microdata be displayed?
   # config.display_microdata = true
@@ -194,7 +188,7 @@ Hyrax.config do |config|
   # Location on local file system where uploaded files will be staged
   # prior to being ingested into the repository or having derivatives generated.
   # If you use a multi-server architecture, this MUST be a shared volume.
-  # config.working_path = Rails.root.join('tmp', 'uploads')
+  config.working_path = ENV.fetch('UPLOADS_PATH', Rails.root.join('tmp', 'uploads'))
 
   # Should the media display partial render a download link?
   # config.display_media_download_link = true
@@ -242,8 +236,7 @@ Hyrax.config do |config|
 
   # Identify the model class name that will be used for Collections in your app
   # (i.e. ::Collection for ActiveFedora, Hyrax::PcdmCollection for Valkyrie)
-  # config.collection_model = '::Collection'
-  config.collection_model = 'Hyrax::PcdmCollection'
+  config.collection_model = '::Collection'
 
   # Identify the model class name that will be used for Admin Sets in your app
   # (i.e. AdminSet for ActiveFedora, Hyrax::AdministrativeSet for Valkyrie)
@@ -304,10 +297,11 @@ Hyrax.config do |config|
 
   # If browse-everything has been configured, load the configs.  Otherwise, set to nil.
   begin
-    if defined? BrowseEverything
+    if defined? BrowseEverything and ENV.fetch('USE_BROWSE_EVERYTHING', 'false') == 'true'
       config.browse_everything = BrowseEverything.config
     else
-      Hyrax.logger.warn "BrowseEverything is not installed"
+      config.browse_everything = nil
+      Rails.logger.warn "BrowseEverything is not installed or configured"
     end
   rescue Errno::ENOENT
     config.browse_everything = nil
@@ -339,7 +333,10 @@ Hyrax.config do |config|
   # config.identifier_registrars = {}
 end
 
-Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
+DEFAULT_DATE_FORMAT = ENV['DEFAULT_DATE_FORMAT'] || '%d/%m/%Y'
+Date::DATE_FORMATS[:standard] = DEFAULT_DATE_FORMAT
+DateTime::DATE_FORMATS[:standard] = DEFAULT_DATE_FORMAT
+Date::DATE_FORMATS[:default] = DEFAULT_DATE_FORMAT
 
 Qa::Authorities::Local.register_subauthority('subjects', 'Qa::Authorities::Local::TableBasedAuthority')
 Qa::Authorities::Local.register_subauthority('languages', 'Qa::Authorities::Local::TableBasedAuthority')

@@ -1,0 +1,147 @@
+version: '3'
+
+volumes:
+  db:
+  db-fcrepo:
+  fcrepo:
+  solr:
+  redis:
+  app:
+  file_uploads:
+  derivatives:
+  cache:
+  branding:
+
+networks:
+  internal:
+
+services:
+  solr:
+    image: solr:9
+    expose:
+      - 8983
+    ports:
+      - 8983:8983
+    env_file:
+      - .env
+    environment:
+      - OOM=script
+      - SOLR_MODULES=analysis-extras,extraction
+    healthcheck:
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:8983/solr/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      internal:
+    volumes:
+      - solr:/var/solr
+      - ./solr/conf:/opt/solr/solr_conf
+    command:
+      - sh
+      - "-c"
+      - "precreate-core ${SOLR_TEST_CORE} /opt/solr/solr_conf; solr-precreate ${SOLR_CORE} /opt/solr/solr_conf"
+  appdb:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB_APP}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGPORT=${POSTGRES_PORT}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      internal:
+    expose:
+      - ${POSTGRES_PORT}
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "POSTGRES_PASSWORD=${POSTGRES_PASSWORD} pg_isready -U ${POSTGRES_USER} -h localhost -d ${POSTGRES_DB_APP}"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  app: &app
+    build:
+      context: .
+      args:
+        RAILS_ENV: ${RAILS_ENV}
+        UPLOADS_PATH: ${UPLOADS_PATH}
+        DERIVATIVES_PATH: ${DERIVATIVES_PATH}
+        CACHE_PATH: ${CACHE_PATH}
+        FITS_PATH: ${FITS_PATH}
+        FITS_VERSION: ${FITS_VERSION}
+    env_file:
+      - .env
+    volumes:
+      - file_uploads:${UPLOADS_PATH}
+      - derivatives:${DERIVATIVES_PATH}
+      - cache:${CACHE_PATH}
+    networks:
+      internal:
+
+  web:
+    <<: *app
+    command: bash -c "/bin/docker-entrypoint.sh"
+    environment:
+      - VIRTUAL_HOST=wpi.docker
+      - VIRTUAL_PORT=3000
+    depends_on:
+      - appdb
+      - solr
+      - redis
+    ports:
+      - 3000:3000
+    networks:
+      internal:
+        aliases:
+          - web
+    expose:
+      - 3000
+    volumes:
+      - file_uploads:${UPLOADS_PATH}
+      - derivatives:${DERIVATIVES_PATH}
+      - cache:${CACHE_PATH}
+      - branding:${BRAND_PATH}
+      - .:/data:cached
+      - ./config/ssl:/etc/ssl/private
+
+  workers:
+    <<: *app
+    command: bash -c "bundle install && bundle exec sidekiq"
+    depends_on:
+      - appdb
+      - solr
+      - redis
+    volumes:
+      - file_uploads:${UPLOADS_PATH}
+      - derivatives:${DERIVATIVES_PATH}
+      - cache:${CACHE_PATH}
+      - branding:${BRAND_PATH}
+      - .:/data:cached
+
+  redis:
+    image: redis:8
+    command: redis-server --appendonly yes
+    networks:
+      internal:
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    expose:
+      - 6379
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data

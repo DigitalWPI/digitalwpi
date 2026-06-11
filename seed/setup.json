@@ -1,0 +1,22 @@
+{
+  "users": [{
+      "email": "admin@hyrax",
+      "password": "password",
+      "name": "hyrax Admin",
+      "role": "admin"
+    },
+    {
+      "email": "user@hyrax",
+      "password": "demouser",
+      "name": "Demo User",
+      "role": "user",
+      "depositor": true
+    },
+    {
+      "email": "workflow@hyrax",
+      "password": "workflow",
+      "name": "Workflow Admin",
+      "role": "admin"
+    }
+  ]
+}

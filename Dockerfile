@@ -1,69 +1,72 @@
-# syntax = docker/dockerfile:1
+FROM ruby:3.3.9-alpine
 
-# This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t my-app .
-# docker run -d -p 80:80 -p 443:443 --name my-app -e RAILS_MASTER_KEY=<value from config/master.key> my-app
+# Setup build variables
+ARG RAILS_ENV
+ARG DERIVATIVES_PATH
+ARG UPLOADS_PATH
+ARG CACHE_PATH
+ARG FITS_VERSION
 
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=3.3.0
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+ENV APP_PRODUCTION=/data/
 
-# Rails app lives here
-WORKDIR /rails
+# Add backports to apt-get sources
+# Install libraries, dependencies, java and fits
 
-# Install base packages
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+RUN apk update && \
+    apk upgrade && \
+    apk add bash build-base curl curl-dev gcompat imagemagick imagemagick-libs imagemagick-dev libreoffice libjpeg libarchive-tools  \
+    libpq-dev libxml2-dev libxslt-dev nodejs openjdk11-jre-headless sqlite-dev tzdata yarn git firefox-esr ghostscript
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+# install required fonts for testing
+RUN apk add --no-cache fontconfig ttf-dejavu ttf-liberation
 
-# Throw-away build stage to reduce size of final image
-FROM base AS build
+COPY policy.xml /etc/ImageMagick-7/policy.xml
 
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+RUN mkdir -p /fits/fits-$FITS_VERSION \
+    && curl --fail --location "https://github.com/harvard-lts/fits/releases/download/$FITS_VERSION/fits-$FITS_VERSION.zip" | bsdtar --extract --directory /fits/fits-$FITS_VERSION \
+    && chmod +x "/fits/fits-$FITS_VERSION/fits.sh" "/fits/fits-$FITS_VERSION/fits-env.sh" "/fits/fits-$FITS_VERSION/fits-ngserver.sh"
 
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+# copy gemfiles to production folder
+COPY Gemfile Gemfile.lock $APP_PRODUCTION
 
-# Copy application code
-COPY . .
+# install gems to system - use flags dependent on RAILS_ENV
+RUN cd $APP_PRODUCTION \
+    && bundle config build.nokogiri --use-system-libraries \
+    && if [ "$RAILS_ENV" = "production" ]; then \
+            bundle install --without test:development; \
+        else \
+            bundle install --without production --no-deployment; \
+        fi \
+    && mv Gemfile.lock Gemfile.lock.built_by_docker
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
+# create a folder to store derivatives, file uploads and cache directory
+RUN mkdir -p $DERIVATIVES_PATH
+RUN mkdir -p $UPLOADS_PATH
+RUN mkdir -p $CACHE_PATH
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# copy the application
+COPY . $APP_PRODUCTION
 
+# use the just built Gemfile.lock, not the one copied into the container and verify the gems are correctly installed
+RUN cd $APP_PRODUCTION \
+    && mv Gemfile.lock.built_by_docker Gemfile.lock \
+    && bundle check
 
+# generate production assets if production environment
+RUN if [ "$RAILS_ENV" = "production" ] && [ ! -f "/data/yarn.lock" ]; then \
+        cd $APP_PRODUCTION \
+        && yarn install; \
+    fi
+RUN if [ "$RAILS_ENV" = "production" ]; then \
+        cd $APP_PRODUCTION \
+        && SECRET_KEY_BASE_PRODUCTION=0 bundle exec rake assets:clean assets:precompile; \
+    fi
 
+COPY docker-entrypoint.sh /bin/
 
-# Final stage for app image
-FROM base
+WORKDIR $APP_PRODUCTION
+RUN mkdir -p $APP_PRODUCTION/public/assets
+RUN mkdir -p /data-backup/public
+RUN cp -Rp $APP_PRODUCTION/public/assets /data-backup/public/
 
-# Copy built artifacts: gems, application
-COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=build /rails /rails
-
-# Run and own only the runtime files as a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER 1000:1000
-
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD ["./bin/rails", "server"]
+RUN chmod +x /bin/docker-entrypoint.sh

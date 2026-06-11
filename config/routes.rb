@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     concerns :searchable
   end
   devise_for :users
+  mount Hydra::RoleManagement::Engine => '/'
+
 
   mount Qa::Engine => '/authorities'
   mount Hyrax::Engine, at: '/'

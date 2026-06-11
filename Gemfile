@@ -18,6 +18,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
+gem 'sidekiq'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -33,6 +34,8 @@ gem "bootsnap", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
+
+gem 'rack-attack'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -61,7 +64,7 @@ group :development, :test do
   gem "solr_wrapper", ">= 0.3"
 end
 gem "rsolr", ">= 1.0", "< 3"
-gem "bootstrap", "\~\>\ 4.0"
+gem "bootstrap", "~> 4.0"
 gem "jquery-rails"
 gem "twitter-typeahead-rails", "0.11.1.pre.corejavascript"
 gem "sassc-rails", "~> 2.1"
@@ -77,4 +80,10 @@ gem "riiif", "~> 2.1"
 
 group :development, :test do
   gem "dotenv-rails", "~> 2.8"
+end
+
+gem 'hydra-role-management'
+
+group :development, :test do
+  gem "solr_wrapper", ">= 0.3"
 end
