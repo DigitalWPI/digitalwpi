@@ -1,8 +1,0 @@
-fr:
-  hyrax:
-    icons:
-      generic_work:     'fa fa-file-text-o'
-    select_type:
-      generic_work:
-        description:        "Generic work œuvres"
-        name:               "Generic Work"
