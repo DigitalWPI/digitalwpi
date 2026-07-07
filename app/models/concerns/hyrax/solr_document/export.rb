@@ -237,8 +237,10 @@ module Hyrax
       end
 
       def format_month
-        if date_created[0].length == 10
-          "\t%month = \"" + Date::MONTHNAMES[DateTime.parse(date_created[0]).month] + "\""
+        unless date_created.blank?
+          if date_created[0].length == 10
+            "\t%month = \"" + Date::MONTHNAMES[DateTime.parse(date_created[0]).month] + "\""
+          end
         end
       end
 
@@ -248,7 +250,9 @@ module Hyrax
           creator.each do |key|
             unique_key = unique_key + key.split(",").first.gsub(/\s+/, "")
           end
-          unique_key = unique_key + year[0]
+          unless year.blank?
+            unique_key = unique_key + year[0]
+          end
         end
       end
 
