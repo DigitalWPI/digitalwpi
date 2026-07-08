@@ -1,0 +1,24 @@
+<div>
+  <div class="featured-item-title">
+    <span class="sr-only"><%= t('hyrax.homepage.featured_works.document.title_label') %></span>
+  
+      
+      <div class="featured-image-header">
+        <%= render_thumbnail_tag(featured, {suppress_link: true}) %>
+      </div>
+      <h2 class="featured-item-title">  
+      <%= link_to [main_app, featured] do %>
+        <%= featured.title.first %>
+      <% end %>
+    </h2>
+  </div>
+
+  <div class="featured-field featured-item-description">
+    <p><%= featured.description.first %></p> 
+  </div>
+  <h4>
+    <%= link_to [main_app, featured] do %>
+      EXPLORE THE PROJECT
+    <% end %>
+  </h4>
+</div>

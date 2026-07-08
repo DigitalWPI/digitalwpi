@@ -1,0 +1,50 @@
+  <% if controller_name=='homepage' %>
+    <div class="image-masthead">
+  <% else %>
+    <div class="image-masthead shortstack">
+  <% end %>
+
+    <div class="col-sm-6 logo_image">
+        <%= link_to image_tag("DigitalWPILogo_2019.png"), hyrax.root_path %>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-default justify-content-between" role="navigation" aria-label="masthead">
+      <h1 class="sr-only navbar-text"><%= application_name %></h1>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#top-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="top-navbar-collapse">
+        <ul class="navbar-nav mr-3">
+          <li class="nav-item">
+            <%= link_to t(:'hyrax.controls.home'), hyrax.root_path, class: "nav-link#{current_page?(hyrax.root_path) ? ' active' : ''}", aria: current_page?(hyrax.root_path) ? {current: 'page'} : nil %>
+          </li>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Browse <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/col">Browse by Collection</a></li>
+              <li><a class="dropdown-item" href="/project-centers">Browse by Project Center</a></li>
+              <li><%= link_to "Browse Exhibits", ENV['EXHIBITS_HOST_URL'], class: 'dropdown-item' %></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/about-page">About Us</a></li>
+              <li><a class="dropdown-item" href="/help-page">Help</a></li>
+            </ul>
+          </li>
+        </ul>
+        <%= render '/user_util_links' %>
+      </div>
+    </nav>
+        <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="large-header-nav col-sm-6 offset-3 search-holder">
+        <h3>Explore, Discover, Share</h3>
+        <%= render partial: 'catalog/search_form' %>
+    </div>
+  </div>
+
+
+</div>

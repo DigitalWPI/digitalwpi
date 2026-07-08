@@ -1,0 +1,25 @@
+<div role="dialog" class="modal select-bookmark-category-modal fade" id="select-bookmark-category-modal" tabindex="-1" aria-labelledby="col_add_title">
+  <div class="modal-dialog text-left">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <span class="modal-title" id="col_add_title">Select Bookmark Category</span>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="bookmark-category-error"></div>
+            <%= label_tag 'category', 'Bookmark Category:' %>
+            <select id="bookmark-category-select" class="form-control">
+              <% current_user.categories.each do |category| %>
+                <option value="<%= category.id %>"><%= category.title %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" id="select-bookmark-category-modal-cancel" data-dismiss="modal">Cancel</button>
+          <%= submit_tag 'Submit', class: 'btn btn-primary', id: "select-bookmark-category-modal-Submit" %>
+        </div>
+      </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
