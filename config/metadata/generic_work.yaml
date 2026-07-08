@@ -21,4 +21,114 @@
 # Generated via
 #  `rails generate hyrax:work_resource GenericWork`
 
-attributes: {}
+attributes:
+  award:
+    type: string
+    predicate: "http://id.loc.gov/ontologies/bibframe/awards"
+    multiple: false
+    index_keys:
+      - "award_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  includes:
+    type: string
+    predicate: "http://purl.org/dc/terms/hasPart"
+    multiple: false
+    index_keys:
+      - "includes_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  alternate_title:
+    type: string
+    predicate: "http://purl.org/dc/terms/alternative"
+    multiple: false
+    index_keys:
+      - "alternate_title_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  digitization_date:
+    type: string
+    predicate: "http://purl.org/dc/terms/date#digitized"
+    multiple: false
+    index_keys:
+      - "digitization_date_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  series:
+    type: string
+    predicate: "http://opaquenamespace.org/ns/seriesName"
+    multiple: false
+    index_keys:
+      - "series_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  event:
+    type: string
+    predicate: "http://purl.org/dc/terms/coverage"
+    multiple: false
+    index_keys:
+      - "event_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  year:
+    type: string
+    predicate: "http://purl.org/dc/terms/date"
+    multiple: false
+    index_keys:
+      - "year_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  extent:
+    type: string
+    predicate: "http://purl.org/dc/terms/extent"
+    multiple: false
+    index_keys:
+      - "extent_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  school:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#College"
+    multiple: false
+    index_keys:
+      - "school_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  citation:
+    type: string
+    predicate: "http://purl.org/dc/terms/bibliographicCitation"
+    multiple: false
+    index_keys:
+      - "citation_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  editorial_note:
+    type: string
+    predicate: "http://www.w3.org/2004/02/skos/core#editorialNote"
+    multiple: false
+    index_keys:
+      - "editorial_note_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false

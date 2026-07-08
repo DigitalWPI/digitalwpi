@@ -1,0 +1,233 @@
+---
+attributes:
+  creator:
+    type: string
+    multiple: false
+    form:
+      required: true
+      primary: true
+      multiple: false
+    index_keys:
+      - "creator_sim"
+      - "creator_tesim"
+    predicate: http://purl.org/dc/elements/1.1/creator
+    view:
+      render_as: "faceted"
+      html_dl: true
+  rights_statement:
+    type: string
+    multiple: false
+    form:
+      required: true
+      primary: true
+      multiple: false
+    index_keys:
+      - "rights_statement_sim"
+      - "rights_statement_tesim"
+    view:
+      html_dl: true
+      render_as: "rights_statement"
+    predicate: http://www.europeana.eu/schemas/edm/rights
+  contributor:
+    type: string
+    multiple: false
+    form:
+      primary: true
+      multiple: false
+    index_keys:
+      - "contributor_tesim"
+      - "contributor_sim"
+    predicate: http://purl.org/dc/elements/1.1/contributor
+    view:
+      render_as: "faceted"
+      html_dl: true
+  description:
+    type: string
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "description_sim"
+      - "description_tesim"
+    predicate: http://purl.org/dc/elements/1.1/description
+  abstract:
+    type: string
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "abstract_sim"
+      - "abstract_tesim"
+    predicate: http://purl.org/dc/terms/abstract
+    view:
+      html_dl: true
+  keyword:
+    type: string
+    multiple: false
+    index_keys:
+      - "keyword_sim"
+      - "keyword_tesim"
+    form:
+      multiple: false
+      primary: true
+    predicate: http://schema.org/keywords
+    view:
+      render_as: "faceted"
+      html_dl: true
+  license:
+    type: string
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "license_sim"
+      - "license_tesim"
+    predicate: http://purl.org/dc/terms/license
+    view:
+      render_as: "license"
+      html_dl: true
+  access_right:
+    type: string
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "access_right_sim"
+      - "access_right_tesim"
+    predicate: http://purl.org/dc/terms/accessRights
+    view:
+      html_dl: true
+  rights_notes:
+    type: string
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "rights_notes_sim"
+      - "rights_notes_tesim"
+    predicate: http://purl.org/dc/elements/1.1/rights
+    view:
+      html_dl: true
+  publisher:
+    type: string
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "publisher_sim"
+      - "publisher_tesim"
+    predicate: http://purl.org/dc/elements/1.1/publisher
+    view:
+      render_as: "faceted"
+      html_dl: true
+  date_created:
+    type: date_time
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "date_created_sim"
+      - "date_created_tesim"
+    predicate: http://purl.org/dc/terms/created
+    view:
+      render_as: "linked"
+      search_field: 'date_created_tesim'
+      html_dl: true
+  subject:
+    type: string
+    multiple: false
+    index_keys:
+      - "subject_sim"
+      - "subject_tesim"
+    form:
+      multiple: false
+      primary: true
+    predicate: http://purl.org/dc/elements/1.1/subject
+    view:
+      render_as: "faceted"
+      html_dl: true
+  language:
+    type: string
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "language_sim"
+      - "language_tesim"
+    predicate: http://purl.org/dc/elements/1.1/language
+    view:
+      render_as: "faceted"
+      html_dl: true
+  identifier:
+    type: string
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "identifier_sim"
+      - "identifier_tesim"
+    predicate: http://purl.org/dc/terms/identifier
+    view:
+      render_as: "linked"
+      search_field: 'identifier_tesim'
+      html_dl: true
+  based_near:
+    type: string
+    multiple: true
+    form:
+      multiple: true
+      primary: true
+    index_keys:
+      - "based_near_sim"
+      - "based_near_tesim"
+    predicate: http://xmlns.com/foaf/0.1/based_near
+    view:
+      render_term: 'based_near_label'
+      html_dl: true
+  related_url:
+    type: string
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "related_url_sim"
+      - "related_url_tesim"
+    predicate: http://www.w3.org/2000/01/rdf-schema#seeAlso
+    view:
+      render_as: "external_link"
+      html_dl: true
+  source:
+    type: string
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "source_sim"
+      - "source_tesim"
+    predicate: http://purl.org/dc/terms/source
+    view:
+      html_dl: true
+  resource_type:
+    type: string
+    multiple: false
+    form:
+      multiple: false
+      primary: true
+    index_keys:
+      - "resource_type_sim"
+      - "resource_type_tesim"
+    predicate: http://purl.org/dc/terms/type
+    view:
+      render_as: "faceted"
+      html_dl: true
