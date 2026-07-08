@@ -1,3 +1,7 @@
 en:
   blacklight:
     application_name: 'Blacklight'
+    bookmarks:
+      clear:
+        action_confirm: 'This will delete all bookmarks. Are you sure you want to clear your bookmarks?'
+        action_title: 'Clear All Bookmarks'

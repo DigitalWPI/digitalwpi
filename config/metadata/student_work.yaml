@@ -1,0 +1,164 @@
+# Simple yaml config-driven schema which is used to define model attributes,
+# index key names, and form properties.
+#
+# Attributes must have a type but all other configuration options are optional.
+# Please note: If using Valkyrie's Fedora Metadata Adapter, predicates for attributes
+# must be placed here.
+#
+# attributes:
+#   attribute_name:
+#     type: string
+#     multiple: false
+#     index_keys:
+#       - "attribute_name_sim"
+#     form:
+#       required: true
+#       primary: true
+#       multiple: false
+#
+# @see config/metadata/basic_metadata.yaml for an example configuration
+#
+# Generated via
+#  `rails generate hyrax:work_resource StudentWork`
+
+attributes:
+  award:
+    type: string
+    predicate: "http://id.loc.gov/ontologies/bibframe/awards"
+    multiple: false
+    index_keys:
+      - "award_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  includes:
+    type: string
+    predicate: "http://purl.org/dc/terms/hasPart"
+    multiple: false
+    index_keys:
+      - "includes_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  alternate_title:
+    type: string
+    predicate: "http://purl.org/dc/terms/alternative"
+    multiple: false
+    index_keys:
+      - "alternate_title_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  advisor:
+    type: string
+    predicate: "http://id.loc.gov/vocabulary/relators/ths"
+    multiple: false
+    index_keys:
+      - "advisor_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  sponsor:
+    type: string
+    predicate: "http://id.loc.gov/vocabulary/relators/spn"
+    multiple: false
+    index_keys:
+      - "sponsor_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  center:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#Center"
+    multiple: false
+    index_keys:
+      - "center_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  year:
+    type: string
+    predicate: "http://purl.org/dc/terms/date"
+    multiple: false
+    index_keys:
+      - "year_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  funding:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#FundingOrganization"
+    multiple: false
+    index_keys:
+      - "funding_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  institute:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#Institute"
+    multiple: false
+    index_keys:
+      - "institute_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  sdg:
+    type: string
+    predicate: "http://metadata.un.org/sdg/ontology#Goal"
+    multiple: false
+    index_keys:
+      - "sdg_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  school:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#College"
+    multiple: false
+    index_keys:
+      - "school_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  major:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#majorField"
+    multiple: false
+    index_keys:
+      - "major_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  note:
+    type: string
+    predicate: "http://www.w3.org/2006/vcard/ns#Note"
+    multiple: false
+    index_keys:
+      - "note_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  editorial_note:
+    type: string
+    predicate: "http://www.w3.org/2004/02/skos/core#editorialNote"
+    multiple: false
+    index_keys:
+      - "editorial_note_sim"
+    form:
+      required: false
+      primary: true
+      multiple: false
