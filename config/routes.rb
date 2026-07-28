@@ -35,6 +35,8 @@ Rails.application.routes.draw do
       delete 'clear'
     end
   end
+
+  match 'show/:id' => 'common_objects#show', via: :get, as: 'common_object'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

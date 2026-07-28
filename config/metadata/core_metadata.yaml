@@ -1,14 +1,14 @@
 attributes:
   title:
     type: string
-    multiple: false
+    multiple: true
     index_keys:
       - "title_sim"
       - "title_tesim"
     form:
       required: true
       primary: true
-      multiple: false
+      multiple: true
     predicate: http://purl.org/dc/terms/title
   date_modified:
     type: date_time

@@ -28,6 +28,7 @@ attributes:
     multiple: false
     index_keys:
       - "award_sim"
+      - "award_tesim"
     form:
       required: false
       primary: true
@@ -38,6 +39,7 @@ attributes:
     multiple: false
     index_keys:
       - "includes_sim"
+      - "includes_tesim"
     form:
       required: false
       primary: true
@@ -48,6 +50,7 @@ attributes:
     multiple: false
     index_keys:
       - "alternate_title_sim"
+      - "alternate_title_tesim"
     form:
       required: false
       primary: true
@@ -58,6 +61,7 @@ attributes:
     multiple: false
     index_keys:
       - "digitization_date_sim"
+      - "digitization_date_tesim"
     form:
       required: false
       primary: true
@@ -68,6 +72,7 @@ attributes:
     multiple: false
     index_keys:
       - "series_sim"
+      - "series_tesim"
     form:
       required: false
       primary: true
@@ -78,6 +83,7 @@ attributes:
     multiple: false
     index_keys:
       - "event_sim"
+      - "event_tesim"
     form:
       required: false
       primary: true
@@ -88,6 +94,7 @@ attributes:
     multiple: false
     index_keys:
       - "year_sim"
+      - "year_tesim"
     form:
       required: false
       primary: true
@@ -98,6 +105,7 @@ attributes:
     multiple: false
     index_keys:
       - "extent_sim"
+      - "extent_tesim"
     form:
       required: false
       primary: true
@@ -108,6 +116,7 @@ attributes:
     multiple: false
     index_keys:
       - "school_sim"
+      - "school_tesim"
     form:
       required: false
       primary: true
@@ -118,6 +127,7 @@ attributes:
     multiple: false
     index_keys:
       - "citation_sim"
+      - "citation_tesim"  
     form:
       required: false
       primary: true
@@ -128,6 +138,7 @@ attributes:
     multiple: false
     index_keys:
       - "editorial_note_sim"
+      - "editorial_note_tesim"
     form:
       required: false
       primary: true
