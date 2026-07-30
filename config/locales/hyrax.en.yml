@@ -45,14 +45,77 @@ en:
           rights_statement_tesim: Rights Statement
           subject_tesim: Subject
           title_tesim: Title
+          institute_tesim: UN Sustainable Development Goals
+          institute_sim: UN Sustainable Development Goals
   hyrax:
     account_name: My Institution Account Id
+    base:
+      items:
+        embargo_release_date: Embargo Release Date
+    dashboard:
+      my:
+        heading:
+          embargo_release_date: Embargo Release Date
+      collections:
+        show_document_list:
+          date_added: Date Created
     directory:
       suffix: "@example.org"
     footer:
       copyright_html: "<strong>Copyright &copy; %{current_year} Samvera</strong> Licensed under the Apache License, Version 2.0"
       service_html: A service of <a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a>.
-    institution_name: Institution
-    institution_name_full: The Institution Name
-    product_name: Hyrax
+    institution_name: WPI
+    institution_name_full: Worcester Polytechnic Institute
+    institution_address: "100 Institute Road, Worcester MA 01609-2280 USA"
+    product_name: Digital WPI
     product_twitter_handle: "@SamveraRepo"
+    search:
+      button:
+        html: <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+        text: Search
+      form:
+        q:
+          placeholder: Search Digital WPI
+    downloads:
+      csv_header:
+        fields:
+          id: Digital WPI URL
+          has_model_ssim: Model
+          title_tesim: Title
+          creator_tesim: Creator
+          identifier_tesim: Identifier
+          description_tesim: Description
+          contributor_tesim: Contributor
+          advisor_tesim: Advisor
+          committee_tesim: Committee
+          keyword_tesim: Keyword
+          publisher_tesim: Publisher
+          subject_tesim: Subject
+          resource_type_tesim: Resource Type
+          degree_tesim: Degree
+          department_tesim: Department
+          year_tesim: Year
+          rights_statement_tesim: Rights Statement
+          license_tesim: License
+          sponsor_tesim: Sponsor
+          orcid_tesim: Orcid
+          date_created_tesim: Date created
+          award_tesim: Award
+          center_tesim: Project Center
+          sdg_tesim: UN SDG
+          major_tesim: Major
+    stats:
+      work:
+        download_stats:
+          message: "Download data available starting %{download_start_date}."
+  blacklight_advanced_search:
+    all: all
+    any: any
+    form:
+      title: Advanced Search Options
+      search_context: Within search
+      limit_criteria_heading_html: "<strong>AND</strong> have these attributes"
+      query_criteria_heading_html: "Find items that match %{select_menu} search terms"
+      sort_label: "Sort results by"
+      start_over: "Start over"
+      search_btn: 'Search'

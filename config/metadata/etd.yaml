@@ -1,0 +1,211 @@
+# Simple yaml config-driven schema which is used to define model attributes,
+# index key names, and form properties.
+#
+# Attributes must have a type but all other configuration options are optional.
+# Please note: If using Valkyrie's Fedora Metadata Adapter, predicates for attributes
+# must be placed here.
+#
+# attributes:
+#   attribute_name:
+#     type: string
+#     multiple: false
+#     index_keys:
+#       - "attribute_name_sim"
+#     form:
+#       required: true
+#       primary: true
+#       multiple: false
+#
+# @see config/metadata/basic_metadata.yaml for an example configuration
+#
+# Generated via
+#  `rails generate hyrax:work_resource Etd`
+
+attributes:
+  degree:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#AcademicDegree"
+    multiple: false
+    index_keys:
+      - "degree_sim"
+      - "degree_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  department:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#AcademicDepartment"
+    multiple: false
+    index_keys:
+      - "department_sim"
+      - "department_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  alternate_title:
+    type: string
+    predicate: "http://purl.org/dc/terms/alternative"
+    multiple: false
+    index_keys:
+      - "alternate_title_sim"
+      - "alternate_title_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  advisor:
+    type: string
+    predicate: "http://id.loc.gov/vocabulary/relators/ths"
+    multiple: false
+    index_keys:
+      - "advisor_sim"
+      - "advisor_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  orcid:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#orcidId"
+    multiple: false
+    index_keys:
+      - "orcid_sim"
+      - "orcid_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  committee:
+    type: string
+    predicate: "http://id.loc.gov/ontologies/bibframe/contribution"
+    multiple: false
+    index_keys:
+      - "committee_sim"
+      - "committee_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  defense_date:
+    type: string
+    predicate: "http://purl.org/dc/terms/dateAccepted"
+    multiple: false
+    index_keys:
+      - "defense_date_sim"
+      - "defense_date_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  year:
+    type: string
+    predicate: "http://purl.org/dc/terms/date"
+    multiple: false
+    index_keys:
+      - "year_sim"
+      - "year_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  center:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#Center"
+    multiple: false
+    index_keys:
+      - "center_sim"
+      - "center_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  funding:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#FundingOrganization"
+    multiple: false
+    index_keys:
+      - "funding_sim"
+      - "funding_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  sponsor:
+    type: string
+    predicate: "http://id.loc.gov/vocabulary/relators/spn"
+    multiple: false
+    index_keys:
+      - "sponsor_sim"
+      - "sponsor_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  institute:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#Institute"
+    multiple: false
+    index_keys:
+      - "institute_sim"
+      - "institute_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  sdg:
+    type: string
+    predicate: "http://metadata.un.org/sdg/ontology#Goal"
+    multiple: false
+    index_keys:
+      - "sdg_sim"
+      - "sdg_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  school:
+    type: string
+    predicate: "http://vivoweb.org/ontology/core#College"
+    multiple: false
+    index_keys:
+      - "school_sim"
+      - "school_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  award:
+    type: string
+    predicate: "http://id.loc.gov/ontologies/bibframe/awards"
+    multiple: false
+    index_keys:
+      - "award_sim"
+      - "award_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  includes:
+    type: string
+    predicate: "http://purl.org/dc/terms/hasPart"
+    multiple: false
+    index_keys:
+      - "includes_sim"
+      - "includes_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
+  editorial_note:
+    type: string
+    predicate: "http://www.w3.org/2004/02/skos/core#editorialNote"
+    multiple: false
+    index_keys:
+      - "editorial_note_sim"
+      - "editorial_note_tesim"
+    form:
+      required: false
+      primary: true
+      multiple: false
