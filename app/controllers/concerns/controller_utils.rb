@@ -50,17 +50,38 @@ module ControllerUtils
 
   def add_date_and_creator_to_note
     model = _curation_concern_type.model_name.param_key
-    notes = []
-    notes = JSON.parse(@curation_concern.editorial_note) if @curation_concern.editorial_note.present?
-    notes = [notes] unless notes.is_a? Array
+    notes = normalize_editorial_notes(@curation_concern.editorial_note)
 
-    if params[model].include?('editorial_note') and params[model]['editorial_note'].present?
-      notes = notes.append(
-        {'note': params[model]['editorial_note'], created: Time.now, user_id: current_user.email, user_name: current_user.name}
-      ).to_json
+    if params[model].include?('editorial_note') && params[model]['editorial_note'].present?
+      notes << {
+        'note' => params[model]['editorial_note'],
+        'created' => Time.current.iso8601,
+        'user_id' => current_user&.email,
+        'user_name' => current_user&.name
+      }
     end
 
-    params[model]['editorial_note'] = notes if notes.present?
+    params[model]['editorial_note'] = notes.to_json if notes.present?
+  end
+
+  def normalize_editorial_notes(value)
+    return [] if value.blank?
+
+    parsed_value = case value
+                   when String
+                     JSON.parse(value)
+                   when Array
+                     value
+                   when Hash
+                     [value]
+                   else
+                     []
+                   end
+
+    parsed_value = [parsed_value] unless parsed_value.is_a?(Array)
+    parsed_value.map { |note| note.is_a?(Hash) ? note : { 'note' => note.to_s } }
+  rescue JSON::ParserError
+    []
   end
 
 end

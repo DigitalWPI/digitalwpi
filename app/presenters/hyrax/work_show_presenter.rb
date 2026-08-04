@@ -1,46 +1,38 @@
-require Hyrax::Engine.root.join('app/presenters/hyrax/work_show_presenter.rb')
+# frozen_string_literal: true
 module Hyrax
   class WorkShowPresenter
     include ModelProxy
     include PresentsAttributes
 
+    ##
+    # @!attribute [w] member_presenter_factory
+    #   @return [MemberPresenterFactory]
+    attr_writer :member_presenter_factory
     attr_accessor :solr_document, :current_ability, :request
 
-    class_attribute :collection_presenter_class
+    class_attribute :collection_presenter_class, :presenter_factory_class
 
     # modify this attribute to use an alternate presenter class for the collections
     self.collection_presenter_class = CollectionPresenter
-
-    # Methods used by blacklight helpers
-    delegate :has?, :first, :fetch, :export_formats, :export_as, to: :solr_document
-
-    # delegate fields from Hyrax::Works::Metadata to solr_document
-    delegate :based_near_label, :related_url, :depositor, :identifier, :resource_type,
-             :keyword, :itemtype, :admin_set, to: :solr_document
+    self.presenter_factory_class = MemberPresenterFactory
 
     # @param [SolrDocument] solr_document
     # @param [Ability] current_ability
     # @param [ActionDispatch::Request] request the http request context. Used so
     #                                  the GraphExporter knows what URLs to draw.
     def initialize(solr_document, current_ability, request = nil)
-      @solr_document = solr_document
+      @solr_document = Hyrax::SolrDocument::OrderedMembers.decorate(solr_document)
       @current_ability = current_ability
       @request = request
     end
 
+    # We cannot rely on the method missing to catch this delegation.  Because
+    # most all objects implicitly implicitly implement #to_s
+    delegate :to_s, to: :solr_document
+
     def page_title
       "#{human_readable_type} | #{title.first} | ID: #{id} | #{I18n.t('hyrax.product_name')}"
     end
-
-    # CurationConcern methods
-    delegate :stringify_keys, :human_readable_type, :collection?, :to_s,
-             to: :solr_document
-
-    # Metadata Methods
-    delegate :title, :date_created, :description,
-             :creator, :contributor, :subject, :publisher, :language, :embargo_release_date,
-             :lease_expiration_date, :license, :source, :rights_statement, :thumbnail_id, :representative_id,
-             :rendering_ids, :member_of_collection_ids, to: :solr_document
 
     def workflow
       @workflow ||= WorkflowPresenter.new(solr_document, current_ability)
@@ -58,10 +50,10 @@ module Hyrax
 
     # @return [Boolean] render a IIIF viewer
     def iiif_viewer?
-      representative_id.present? &&
+      Hyrax.config.iiif_image_server? &&
+        representative_id.present? &&
         representative_presenter.present? &&
         representative_presenter.image? &&
-        Hyrax.config.iiif_image_server? &&
         members_include_viewable_image?
     end
 
@@ -90,13 +82,12 @@ module Hyrax
       return nil if representative_id.blank?
       @representative_presenter ||=
         begin
-          result = member_presenters_for([representative_id]).first
+          result = member_presenters([representative_id]).first
           return nil if result.try(:id) == id
-          if result.respond_to?(:representative_presenter)
-            result.representative_presenter
-          else
-            result
-          end
+          result.try(:representative_presenter) || result
+        rescue Hyrax::ObjectNotFoundError
+          Hyrax.logger.warn "Unable to find representative_id #{representative_id} for work #{id}"
+          return nil
         end
     end
 
@@ -117,7 +108,7 @@ module Hyrax
     end
 
     def link_name
-      current_ability.can?(:read, id) ? to_s : 'File'
+      current_ability.can?(:read, id) ? to_s : 'Private'
     end
 
     def export_as_nt
@@ -163,7 +154,7 @@ module Hyrax
     end
 
     def editor?
-      current_ability.can?(:edit, solr_document)
+      current_ability.can?(:edit, self)
     end
 
     def tweeter
@@ -178,9 +169,9 @@ module Hyrax
     def grouped_presenters(filtered_by: nil, except: nil)
       # TODO: we probably need to retain collection_presenters (as parent_presenters)
       #       and join this with member_of_collection_presenters
-      grouped = member_of_collection_presenters.group_by(&:model_name).transform_keys { |key| key.to_s.underscore }
-      grouped.select! { |obj| obj.downcase == filtered_by } unless filtered_by.nil?
-      grouped.except!(*except) unless except.nil?
+      grouped = member_of_collection_presenters.group_by(&:model_name).transform_keys(&:human)
+      grouped.select! { |obj| obj.casecmp(filtered_by).zero? } unless filtered_by.nil?
+      grouped.reject! { |obj| except.map(&:downcase).include? obj.downcase } unless except.nil?
       grouped
     end
 
@@ -211,12 +202,6 @@ module Hyrax
       paginated_item_list(page_array: authorized_item_ids)
     end
 
-    # @param [Array<String>] ids a list of ids to build presenters for
-    # @return [Array<presenter_class>] presenters for the array of ids (not filtered by class)
-    def member_presenters_for(an_array_of_ids)
-      member_presenters(an_array_of_ids)
-    end
-
     # @return [Integer] total number of pages of viewable items
     def total_pages
       (total_items.to_f / rows_from_params.to_f).ceil
@@ -231,13 +216,9 @@ module Hyrax
     #
     # @return [Array] array of rendering hashes
     def sequence_rendering
-      renderings = []
-      if solr_document.rendering_ids.present?
-        solr_document.rendering_ids.each do |file_set_id|
-          renderings << manifest_helper.build_rendering(file_set_id)
-        end
-      end
-      renderings.flatten
+      solr_document.rendering_ids.each_with_object([]) do |file_set_id, renderings|
+        renderings << manifest_helper.build_rendering(file_set_id)
+      end.flatten
     end
 
     # IIIF metadata for inclusion in the manifest
@@ -245,84 +226,124 @@ module Hyrax
     #
     # @return [Array] array of metadata hashes
     def manifest_metadata
-      metadata = []
-      Hyrax.config.iiif_metadata_fields.each do |field|
+      Hyrax.config.iiif_metadata_fields.each_with_object([]) do |field, metadata|
         metadata << {
           'label' => I18n.t("simple_form.labels.defaults.#{field}"),
-          'value' => Array.wrap(send(field))
+          'value' => Array.wrap(send(field).map { |f| Loofah.fragment(f.to_s).scrub!(:whitewash).to_s })
         }
       end
-      metadata
     end
 
-    # determine if the user can add this work to a collection
-    # @param collections <Collections> list of collections to which this user can deposit
-    # @return true if the user can deposit to at least one collection OR if the user can create a collection; otherwise, false
+    ##
+    # @return [Integer]
+    def member_count
+      @member_count ||= member_presenters.count
+    end
+
+    ##
+    # Given a set of collections, which the caller asserts the current ability
+    # can deposit to, decide whether to display actions to add this work to a
+    # collection.
+    #
+    # By default, this returns `true` if any collections are passed in OR the
+    # current ability can create a collection.
+    #
+    # @param collections [Enumerable<::Collection>, nil] list of collections to
+    #   which the current ability can deposit
+    #
+    # @return [Boolean] a flag indicating whether to display collection deposit
+    #   options.
     def show_deposit_for?(collections:)
-      collections.present? || current_ability.can?(:create_any, Collection)
+      collections.present? ||
+        current_ability.can?(:create_any, Hyrax.config.collection_class)
+    end
+
+    ##
+    # @return [Array<Class>]
+    def valid_child_concerns
+      Hyrax::ChildTypes.for(parent: solr_document.hydra_model).to_a
+    end
+
+    # @return [Boolean]
+    def valkyrie_presenter?
+      solr_document.hydra_model < Valkyrie::Resource
     end
 
     private
 
-      # list of item ids to display is based on ordered_ids
-      def authorized_item_ids
-        @member_item_list_ids ||= begin
-          items = ordered_ids 
-          items.delete_if { |m| !current_ability.can?(:read, m) } if Flipflop.hide_private_items?
-          items
+    def method_missing(method_name, *args, &block)
+      return solr_document.public_send(method_name, *args, &block) if solr_document.respond_to?(method_name)
+      super
+    end
+
+    def respond_to_missing?(method_name, include_private = false)
+      solr_document.respond_to?(method_name, include_private) || super
+    end
+
+    # list of item ids to display is based on ordered_ids
+    def authorized_item_ids(filter_unreadable: Flipflop.hide_private_items?)
+      @member_item_list_ids ||=
+        filter_unreadable ? ordered_ids.reject { |id| !current_ability.can?(:read, id) } : ordered_ids
+    end
+
+    # Uses kaminari to paginate an array to avoid need for solr documents for items here
+    def paginated_item_list(page_array:)
+      Kaminari.paginate_array(page_array, total_count: page_array.size).page(current_page).per(rows_from_params)
+    end
+
+    def total_items
+      authorized_item_ids.size
+    end
+
+    def rows_from_params
+      request.params[:rows].nil? ? Hyrax.config.show_work_item_rows : request.params[:rows].to_i
+    end
+
+    def current_page
+      page = request.params[:page].nil? ? 1 : request.params[:page].to_i
+      page > total_pages ? total_pages : page
+    end
+
+    def manifest_helper
+      @manifest_helper ||= ManifestHelper.new(request.base_url)
+    end
+
+    def featured?
+      # only look this up if it's not boolean; ||= won't work here
+      @featured = FeaturedWork.where(work_id: solr_document.id).exists? if @featured.nil?
+      @featured
+    end
+
+    def user_can_feature_works?
+      current_ability.can?(:create, FeaturedWork)
+    end
+
+    def presenter_factory_arguments
+      [current_ability, request]
+    end
+
+    def member_presenter_factory
+      @member_presenter_factory ||=
+        if valkyrie_presenter?
+          PcdmMemberPresenterFactory.new(solr_document, current_ability)
+        else
+          self.class
+              .presenter_factory_class
+              .new(solr_document, current_ability, request)
         end
-      end
+    end
 
-      # Uses kaminari to paginate an array to avoid need for solr documents for items here
-      def paginated_item_list(page_array:)
-        Kaminari.paginate_array(page_array, total_count: page_array.size).page(current_page).per(rows_from_params)
-      end
+    def graph
+      GraphExporter.new(solr_document, hostname: request.host).fetch
+    end
 
-      def total_items
-        authorized_item_ids.size
-      end
+    # @return [Array<String>] member_of_collection_ids with current_ability access
+    def member_of_authorized_parent_collections
+      @member_of ||= Hyrax::CollectionMemberService.run(solr_document, current_ability).map(&:id)
+    end
 
-      def rows_from_params
-        request.params[:rows].nil? ? Hyrax.config.show_work_item_rows : request.params[:rows].to_i
-      end
-
-      def current_page
-        page = request.params[:page].nil? ? 1 : request.params[:page].to_i
-        page > total_pages ? total_pages : page
-      end
-
-      def manifest_helper
-        @manifest_helper ||= ManifestHelper.new(request.base_url)
-      end
-
-      def featured?
-        @featured = FeaturedWork.where(work_id: solr_document.id).exists? if @featured.nil?
-        @featured
-      end
-
-      def user_can_feature_works?
-        current_ability.can?(:create, FeaturedWork)
-      end
-
-      def presenter_factory_arguments
-        [current_ability, request]
-      end
-
-      def member_presenter_factory
-        MemberPresenterFactory.new(solr_document, current_ability, request)
-      end
-
-      def graph
-        GraphExporter.new(solr_document, request).fetch
-      end
-
-      def member_of_authorized_parent_collections
-        # member_of_collection_ids with current_ability access
-        @member_of ||= Hyrax::CollectionMemberService.run(solr_document, current_ability).map(&:id)
-      end
-
-      def members_include_viewable_image?
-        file_set_presenters.any? { |presenter| presenter.image? && current_ability.can?(:read, presenter.id) }
-      end
+    def members_include_viewable_image?
+      file_set_presenters.any? { |presenter| presenter.image? && current_ability.can?(:read, presenter.id) }
+    end
   end
 end

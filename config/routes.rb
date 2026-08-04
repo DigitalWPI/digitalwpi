@@ -1,3 +1,4 @@
+require 'sidekiq/web'
 Rails.application.routes.draw do
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
         mount BrowseEverything::Engine => '/browse'
@@ -16,6 +17,9 @@ Rails.application.routes.draw do
   get 'col' => 'static#collections'
   mount Hydra::RoleManagement::Engine => '/'
 
+  authenticate :user, ->(u) { u.admin? } do
+    mount Sidekiq::Web => 'sidekiq'
+  end
 
   mount Qa::Engine => '/authorities'
   mount Hyrax::Engine, at: '/'

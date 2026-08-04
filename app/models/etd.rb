@@ -5,4 +5,5 @@
 class Etd < Hyrax::Work
   include Hyrax::Schema(:basic_metadata)
   include Hyrax::Schema(:etd)
+  include CommonQuery
 end
