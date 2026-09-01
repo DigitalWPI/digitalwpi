@@ -1,4 +1,5 @@
 class ImportFilesetService
+  include ImportHelper
   attr_reader :file_path, :base_dir, :metadata
   attr_accessor :parent_work
 

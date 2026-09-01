@@ -119,7 +119,7 @@ module ImportHelper
 
   def parse_metadata_file(file_path)
     data = File.read(file_path)
-    JSON.parse(data)
+    HashWithIndifferentAccess.new(JSON.parse(data))
   end
 
   def write_json(file_path, data)
