@@ -41,6 +41,7 @@ services:
       - sh
       - "-c"
       - "precreate-core ${SOLR_TEST_CORE} /opt/solr/solr_conf; solr-precreate ${SOLR_CORE} /opt/solr/solr_conf"
+
   appdb:
     image: postgres:17-alpine
     restart: unless-stopped

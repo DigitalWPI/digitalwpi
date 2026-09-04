@@ -10,7 +10,7 @@ development:
   adapter: postgresql
   encoding: unicode
   database: <%= ENV['POSTGRES_DB_APP'] || 'hydra_development' %>
-  host: <%= ENV['POSTGRES_HOST_APP'] || 'db' %>
+  host: <%= ENV['POSTGRES_HOST'] || 'db' %>
   port: <%= ENV['POSTGRES_PORT'] || '5432' %>
   username: <%= ENV['POSTGRES_USER'] || 'postgres' %>
   password: <%= ENV['POSTGRES_PASSWORD'] || 'password' %>
