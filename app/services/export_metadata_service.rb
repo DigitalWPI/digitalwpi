@@ -31,6 +31,12 @@ class ExportMetadataService
     end
   end
 
+  def map_ids
+    map_collection_ids
+    map_work_ids
+    map_fileset_ids
+  end
+
   private
 
   def batch_dir(model_name, batch_number)
@@ -143,4 +149,53 @@ class ExportMetadataService
     end
     workflow_roles_data
   end
+
+  def map_fileset_ids
+    ids_file_path = mapping_ids_file_path['FileSet']
+    ids = {}
+    return if File.exist?(ids_file_path)
+    model_dir = Rails.root.join(@base_dir, 'FileSet')
+    ids = map_ids_for_model(model_dir)
+    write_json(ids_file_path, ids)
+  end
+
+  def map_work_ids
+    work_models = %w(Etd GenericWork StudentWork)
+    ids = {}
+    work_models.each do |model_name|
+      model_dir = Rails.root.join(@base_dir, model_name)
+      ids_work = map_ids_for_model(model_dir)
+      ids = ids.merge(ids_work)
+    end
+    ids_file_path = mapping_ids_file_path['Work']
+    write_json(ids_file_path, ids)
+  end
+
+  def map_collection_ids
+    ids_file_path = mapping_ids_file_path['Collection']
+    model_dir = Rails.root.join(@base_dir, 'Collection')
+    ids = map_ids_for_model(model_dir)
+    write_json(ids_file_path, ids)
+    ids
+  end
+
+  def map_ids_for_model(model_dir)
+    ids = {}
+    Dir.glob(Rails.root.join(model_dir, '*', '*')).each do |file_path|
+      metadata = parse_metadata_file(file_path)
+      old_id = metadata['id']
+      new_id = SecureRandom.uuid
+      ids[old_id] = new_id
+    end
+    ids
+  end
+
+  def mapping_ids_file_path
+    {
+      'Work' => Rails.root.join(@base_dir, "mapping.json"),
+      'Collection' => Rails.root.join(@base_dir, "collection_mapping.json"),
+      'FileSet' => Rails.root.join(@base_dir, "fileset_mapping.json")
+    }
+  end
+
 end
