@@ -87,3 +87,8 @@ gem 'hydra-role-management'
 group :development, :test do
   gem "solr_wrapper", ">= 0.3"
 end
+
+# Use for advanced search and range limit features in Blacklight
+gem "blacklight_advanced_search"
+gem "blacklight_range_limit"
+gem 'blacklight_oai_provider'

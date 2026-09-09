@@ -99,7 +99,9 @@
      -->
     <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
 
-    <!-- A geospatial field type new to Solr 4.  It supports multiValued and polygon shapes.
+    <fieldType name="location" class="solr.LatLonPointSpatialField"/>
+
+    <!-- An alternative geospatial field type new to Solr 4.  It supports multiValued and polygon shapes.
       For more information about this and other Spatial fields new to Solr 4, see:
       http://wiki.apache.org/solr/SolrAdaptersForLuceneSpatial4
     -->
@@ -123,13 +125,44 @@
     </fieldType>
 
     <!-- single token analyzed text, for sorting.  Punctuation is significant. -->
-    <fieldtype name="alphaSort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
+    <fieldType name="alphaSort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory" />
         <filter class="solr.ICUFoldingFilterFactory"/>
         <filter class="solr.TrimFilterFactory" />
       </analyzer>
-    </fieldtype>
+    </fieldType>
+
+    <fieldType name="alphaNumericSort" class="solr.TextField" sortMissingLast="false" omitNorms="true">
+      <analyzer>
+        <!-- KeywordTokenizer does no actual tokenizing, so the entire
+            input string is preserved as a single token
+          -->
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <!-- The LowerCase TokenFilter does what you expect, which can be
+            when you want your sorting to be case insensitive
+          -->
+        <filter class="solr.LowerCaseFilterFactory" />
+        <!-- The TrimFilter removes any leading or trailing whitespace -->
+        <filter class="solr.TrimFilterFactory" />
+        <!-- Remove leading articles -->
+        <!-- <filter class="solr.PatternReplaceFilterFactory"
+                pattern="^(a |the |les |la |le |l'|de la |du |des )" replacement="" replace="all"
+        /> -->
+        <!-- Left-pad numbers with zeroes -->
+        <filter class="solr.PatternReplaceFilterFactory"
+                pattern="(\d+)" replacement="00000$1" replace="all"
+        />
+        <!-- Left-trim zeroes to produce 6 digit numbers -->
+        <filter class="solr.PatternReplaceFilterFactory"
+                pattern="0*([0-9]{6,})" replacement="$1" replace="all"
+        />
+        <!-- Remove all but alphanumeric characters -->
+        <filter class="solr.PatternReplaceFilterFactory"
+                pattern="([^a-z0-9])" replacement="" replace="all"
+        />
+      </analyzer>
+    </fieldType>
 
     <!-- A text field with defaults appropriate for English -->
     <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
@@ -171,6 +204,25 @@
         <tokenizer class="solr.KeywordTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="ngrams" class="solr.TextField" omitNorms="false">
+      <analyzer type="index">
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.EdgeNGramFilterFactory" minGramSize="2" maxGramSize="20"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <fieldType name="string_lower" class="solr.TextField" sortMissingLast="true">
+      <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
   </types>
@@ -217,6 +269,7 @@
     <!-- string (_s...) -->
     <dynamicField name="*_si" type="string" stored="false" indexed="true" multiValued="false"/>
     <dynamicField name="*_sim" type="string" stored="false" indexed="true" multiValued="true"/>
+    <dynamicField name="*_lsim" type="string_lower" stored="false" indexed="true" multiValued="true"/>
     <dynamicField name="*_ss" type="string" stored="true" indexed="false" multiValued="false"/>
     <dynamicField name="*_ssm" type="string" stored="true" indexed="false" multiValued="true"/>
     <dynamicField name="*_ssi" type="string" stored="true" indexed="true" multiValued="false"/>
@@ -272,7 +325,6 @@
     <dynamicField name="*_ls" type="long" stored="true" indexed="false" multiValued="false"/>
     <dynamicField name="*_lsm" type="long" stored="true" indexed="false" multiValued="true"/>
     <dynamicField name="*_lsi" type="long" stored="true" indexed="true" multiValued="false"/>
-    <dynamicField name="*_lsim" type="long" stored="true" indexed="true" multiValued="true"/>
 
     <!-- LongPointField (_lt...) (for faster range queries) -->
     <dynamicField name="*_lti" type="tlong" stored="false" indexed="true" multiValued="false"/>
@@ -322,11 +374,16 @@
     <!-- Type used to index the lat and lon components for the "location" FieldType -->
     <dynamicField name="*_coordinate" type="tdouble" indexed="true"  stored="false" />
 
+    <!-- location (_ll...) -->
+    <dynamicField name="*_p"  type="location" indexed="true" stored="true"/>
+    <dynamicField name="*_srpt"  type="location_rpt" indexed="true" stored="true"/>
+
     <dynamicField name="*suggest" type="textSuggest" indexed="true" stored="false" multiValued="true" />
+    <dynamicField name="*_ng" type="ngrams" indexed="true" stored="false" multiValued="true" />
 
     <!-- you must define copyField source and dest fields explicity or schemaBrowser doesn't work -->
     <field name="all_text_timv" type="text" stored="false" indexed="true" multiValued="true" termVectors="true" termPositions="true" termOffsets="true"/>
-
+    <dynamicField name="*_ansort" type="alphaNumericSort" stored="false" indexed="true" multiValued="false"/>
 
   </fields>
 
@@ -349,6 +406,10 @@
    <!-- for suggestions -->
    <copyField source="*_tesim" dest="suggest"/>
    <copyField source="*_ssim" dest="suggest"/>
+
+   <!-- for suggestions with ngrams -->
+    <copyField source="id" dest="id_ng"/>
+    <copyField source="title_tesim" dest="full_title_ng"/>
 
  <!-- Similarity is the scoring routine for each document vs. a query.
       A custom similarity may be specified here, but the default is fine

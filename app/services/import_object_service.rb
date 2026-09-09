@@ -89,7 +89,7 @@ class ImportObjectService
     work.award = metadata["award_tesim"]
     work.includes = metadata["includes_tesim"]
     work.alternate_title = metadata["alternate_title_tesim"]
-    work.year = metadata["year_tesim"]
+    work.year = metadata["year_tesim"].is_a?(Array) ? metadata["year_tesim"].first : metadata["year_tesim"]
     work.school = metadata["school_tesim"]
     work.editorial_note = metadata["editorial_note_tesim"]
 
