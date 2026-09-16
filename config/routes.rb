@@ -44,6 +44,12 @@ Rails.application.routes.draw do
 
     collection do
       delete 'clear'
+      post :create_category
+      post :update_category_to_bookmark
+      post :remove_category_from_bookmark
+      get :generate_share_url
+      delete :delete_share_url
+      delete :delete_category
     end
   end
 

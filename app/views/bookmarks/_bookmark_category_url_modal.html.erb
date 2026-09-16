@@ -1,0 +1,24 @@
+<div role="dialog" class="modal bookmark-category-url-modal fade" id="bookmark-category-url-modal" tabindex="-1" aria-labelledby="col_url_title" aria-hidden="true">
+  <div class="modal-dialog text-left" role="document">
+    <%= form_tag(create_category_bookmarks_path, method: "post") do %>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="col_url_title">Share Category URL</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="shareable-url" class="p-3 bg-light border rounded">
+            <code><%= request.base_url + bookmarks_path(encrypted_user_id: @bookmark_category.access_token) %></code>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div>
+            <%= link_to "Copy Url", "javascript:void(0)", class: 'copy_bookmark_url btn btn-primary', style: "color: #fff;" %>
+          </div>
+        </div>
+      </div><!-- /.modal-content -->
+    <% end %>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

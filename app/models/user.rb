@@ -9,7 +9,7 @@ class User < ApplicationRecord
   include Hyrax::User
   include Hyrax::UserUsageStats
 
-
+  has_many :categories, dependent: :destroy
 
   # Connects this user object to Blacklights Bookmarks.
   include Blacklight::User
