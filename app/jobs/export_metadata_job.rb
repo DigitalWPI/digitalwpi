@@ -1,7 +1,6 @@
 class ExportMetadataJob < Hyrax::ApplicationJob
-  def perform(update=false, models_to_export=%w[Collection Etd GenericWork StudentWork FileSet User Role])
+  def perform(update=false, models_to_export=%w[Collection Etd GenericWork StudentWork FileSet User Role Id])
     ems = ExportMetadataService.new(update=update, models_to_export=models_to_export)
     ems.export
-    ems.map_ids
   end
 end

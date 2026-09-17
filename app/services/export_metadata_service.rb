@@ -1,5 +1,5 @@
 class ExportMetadataService
-  def initialize(update=false, models_to_export=%w[Collection Etd GenericWork StudentWork FileSet User Role], base_dir="/tmp/metadata_export")
+  def initialize(update=false, models_to_export=%w[Collection Etd GenericWork StudentWork FileSet User Role Id], base_dir="/tmp/metadata_export")
     @parent_child_objects = {}
     @update = update
     @models_to_export = models_to_export
@@ -28,6 +28,9 @@ class ExportMetadataService
     end
     if @models_to_export.include?('Role')
       export_roles
+    end
+    if @models_to_export.include?('Id')
+      map_ids
     end
   end
 
@@ -60,13 +63,16 @@ class ExportMetadataService
       objects.each do |object|
         Rails.logger.info("Starting export of #{label} #{object[:id]}")
         data = metadata(object)
-        if data[:has_model_ssim].include?('FileSet') && !data[:parent_work_id].present?
-          orphan_dir = batch_dir("OrphanFileSet", page)
-          FileUtils.mkdir_p(orphan_dir) unless Dir.exist?(orphan_dir)
-          metadata_file = file_path(object[:id], "OrphanFileSet", page)
-        else
-          metadata_file = file_path(object[:id], label, page)
-        end
+        # ToDo: This check for parent is wrong. Fix this
+        # if data[:has_model_ssim].include?('FileSet') && !data[:parent_work_id].present?
+        #   orphan_dir = batch_dir("OrphanFileSet", page)
+        #   FileUtils.mkdir_p(orphan_dir) unless Dir.exist?(orphan_dir)
+        #   metadata_file = file_path(object[:id], "OrphanFileSet", page)
+        # else
+        #   metadata_file = file_path(object[:id], label, page)
+        # end
+        metadata_file = file_path(object[:id], label, page)
+        # ToDo: Check if file exists in disk for FileSet using digest
         next if File.exist?(metadata_file) and not @update
         File.delete(metadata_file) if File.exist?(metadata_file)
         File.open(metadata_file, 'a+') do |file|
