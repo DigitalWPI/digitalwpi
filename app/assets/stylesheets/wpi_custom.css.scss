@@ -1,5 +1,15 @@
 $light-gray: lightgray;
 
+.dashboard {
+  .sidebar {
+    padding-top: 16px;
+  }
+
+  .main-content {
+    padding-top: 16px;
+  }
+}
+
 div.wpi-citation-modal {
   h4 {
     text-align: left;
