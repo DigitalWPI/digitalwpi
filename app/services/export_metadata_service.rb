@@ -77,8 +77,8 @@ class ExportMetadataService
         # end
         metadata_file = file_path(object[:id], label, page)
         if data[:has_model_ssim].include?('FileSet')
-          @filesets_without_parent.append(object[:id]) unless data[:parent_work_id].present?
-          @filesets_without_files.append(object[:id]) unless data[:file_exists]
+          @filesets_without_parent << object[:id] unless data[:parent_work_id].present?
+          @filesets_without_files << object[:id] unless data[:file_exists]
         end
         next if File.exist?(metadata_file) and not @update
         File.delete(metadata_file) if File.exist?(metadata_file)
