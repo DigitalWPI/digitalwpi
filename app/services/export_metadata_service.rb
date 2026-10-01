@@ -228,9 +228,8 @@ class ExportMetadataService
   def get_file_path(object)
     d = object.fetch(:digest_ssim, "")&.first&.split(":")[-1]
     fileset_base_dir = "/hyraxnas/upgrade_qa/data/fedora-data/fcrepo.binary.directory/"
-    fileset_base_dir = fileset_base_dir + "/" unless fileset_base_dir.end_with?("/")
-    path = "#{base_dir}/#{d[0..1]}/#{d[2..3]}/#{d[4..5]}/#{d}"
-    path
+    fileset_base_dir = fileset_base_dir.delete_suffix("/") if fileset_base_dir.end_with?("/")
+    "#{fileset_base_dir}/#{d[0..1]}/#{d[2..3]}/#{d[4..5]}/#{d}"
   end
 
   def write_fileset_status
