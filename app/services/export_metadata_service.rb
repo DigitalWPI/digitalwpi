@@ -204,4 +204,15 @@ class ExportMetadataService
     }
   end
 
+  def parse_metadata_file(file_path)
+    data = File.read(file_path)
+    JSON.parse(data)
+  end
+
+  def write_json(file_path, data)
+    File.open(file_path,"w") do |f|
+      f.write(JSON.pretty_generate(data))
+    end
+  end
+
 end
