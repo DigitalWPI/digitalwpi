@@ -5,6 +5,8 @@ class ExportMetadataService
     @models_to_export = models_to_export
     @work_models = [GenericWork, StudentWork, Etd]
     @base_dir = base_dir
+    @filesets_without_parent = []
+    @filesets_without_files = []
   end
 
   def export
@@ -32,12 +34,14 @@ class ExportMetadataService
     if @models_to_export.include?('Id')
       map_ids
     end
+
   end
 
   def map_ids
     map_collection_ids
     map_work_ids
     map_fileset_ids
+    write_fileset_status
   end
 
   private
@@ -72,7 +76,10 @@ class ExportMetadataService
         #   metadata_file = file_path(object[:id], label, page)
         # end
         metadata_file = file_path(object[:id], label, page)
-        # ToDo: Check if file exists in disk for FileSet using digest
+        if data[:has_model_ssim].include?('FileSet')
+          @filesets_without_parent.append(object[:id]) unless data[:parent_work_id].present?
+          @filesets_without_files.append(object[:id]) unless data[:file_exists]
+        end
         next if File.exist?(metadata_file) and not @update
         File.delete(metadata_file) if File.exist?(metadata_file)
         File.open(metadata_file, 'a+') do |file|
@@ -91,6 +98,9 @@ class ExportMetadataService
     if object[:has_model_ssim].include?('FileSet')
       parent_id = @parent_child_objects.find { |_parent, file_sets| file_sets.include?(object[:id]) }&.first
       file_additional_metadata[:parent_work_id] = parent_id
+      file_path = get_file_path(object)
+      file_additional_metadata[:file_path] = file_path
+      file_additional_metadata[:file_exists] = File.exist?(file_path)
     end
     object.merge(file_additional_metadata)
   end
@@ -213,6 +223,21 @@ class ExportMetadataService
     File.open(file_path,"w") do |f|
       f.write(JSON.pretty_generate(data))
     end
+  end
+
+  def get_file_path(object)
+    d = object.fetch(:digest_ssim, "")&.first&.split(":")[-1]
+    fileset_base_dir = "/hyraxnas/upgrade_qa/data/fedora-data/fcrepo.binary.directory/"
+    fileset_base_dir = fileset_base_dir + "/" unless fileset_base_dir.end_with?("/")
+    path = "#{base_dir}/#{d[0..1]}/#{d[2..3]}/#{d[4..5]}/#{d}"
+    path
+  end
+
+  def write_fileset_status
+    file_path = Rails.root.join(@base_dir, "filesets_without_parent.json")
+    write_json(file_path, @filesets_without_parent)
+    file_path = Rails.root.join(@base_dir, "filesets_without_files.json")
+    write_json(file_path, @filesets_without_files)
   end
 
 end
