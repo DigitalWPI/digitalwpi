@@ -110,10 +110,10 @@ docker exec -it digitalwpi_web_1 /bin/bash
 rails c
 ```
 
-Define the base directory and include the `CheckMigrationHelper` module before we run the import jobs
+Define the base directory and include the `CheckImportHelper` module before we run the import jobs
 
 ```
-include CheckMigrationHelper
+include CheckImportHelper
 base_dir = "/shared/uploads/metadata_export/"
 ```
 
