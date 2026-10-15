@@ -128,48 +128,11 @@ module ImportHelper
     end
   end
 
-  def parse_roles(roles, comma_separated: true)
-    new_roles = []
-    return new_roles unless roles.present?
-    roles.each do |role|
-      new_role = role
-      if role == "crc_1280_manager" or role == "crc_1280_member"
-        new_role = role
-      elsif role.start_with?("crc_1280") and role.end_with?("manager")
-        regex1 = /crc_1280_(.*)_manager/
-        match1 = role.match(regex1)
-        new_role = nil
-        if match1
-          new_id = @collection_ids.fetch(match1[1], nil)
-          if comma_separated and new_id
-            new_role = "crc_1280_group_manager, #{new_id}"
-          elsif new_id
-            new_role = "crc_1280_#{new_id}_manager"
-          end
-        end
-      elsif role.start_with?("crc_1280") and role.end_with?("member")
-        regex2 = /crc_1280_(.*)_member/
-        match2 = role.match(regex2)
-        new_role = nil
-        if match2
-          new_id = @collection_ids.fetch(match2[1], nil)
-          if comma_separated and new_id
-            new_role = "crc_1280_group_member, #{new_id}"
-          elsif new_id
-            new_role = "crc_1280_#{new_id}_member"
-          end
-        end
-      end
-      new_roles.append(new_role) if new_role
-    end
-    new_roles
-  end
-
   def update_access_controls(record)
     edit_access_group = @metadata.fetch("edit_access_group_ssim", [])
-    record.edit_groups = parse_roles(edit_access_group, comma_separated: false) if edit_access_group.present?
+    record.edit_groups = edit_access_group
     read_access_group = @metadata.fetch("read_access_group_ssim", [])
-    record.read_groups = parse_roles(read_access_group, comma_separated: false) if read_access_group.present?
+    record.read_groups = read_access_group
     record.edit_users = @metadata["edit_access_person_ssim"].presence || []
     record.read_users = @metadata["read_access_person_ssim"].presence || []
     record.save_acl
