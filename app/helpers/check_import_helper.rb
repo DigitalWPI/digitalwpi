@@ -235,9 +235,9 @@ module CheckImportHelper
     #ToDo
   end
 
-  def check_work(base_dir, model)
-    raise "Model not found #{model}" unless %w(Etd GenericWork StudentWork).include?(model)
-    model_dir = Rails.root.join(base_dir, model.to_s)
+  def check_work(base_dir, model_name)
+    raise "Model not found #{model_name}" unless %w(Etd GenericWork StudentWork).include?(model_name)
+    model_dir = Rails.root.join(base_dir, model_name.to_s)
     has_work = []
     work_missing = []
     id_missing = []
@@ -247,7 +247,7 @@ module CheckImportHelper
       work_hash = parse_metadata_file(file_path)
       new_id =  @work_ids.fetch(work_hash["id"], nil)
       if new_id.present?
-        work = model.constantize.find_by(id: new_id)
+        work = model_name.constantize.find_by(id: new_id)
         if work.present?
           has_work.append("#{work_hash["title_tesim"]}, #{file_path}")
         else
@@ -257,12 +257,12 @@ module CheckImportHelper
         id_missing.append(file_path)
       end
     end
-    puts "Number of #{model.to_s} created: #{has_work.size}"
-    puts "Number of #{model.to_s} missing: #{work_missing.size}"
-    puts "Number of #{model.to_s} with no mapped id: #{id_missing.size}"
+    puts "Number of #{model_name.to_s} created: #{has_work.size}"
+    puts "Number of #{model_name.to_s} missing: #{work_missing.size}"
+    puts "Number of #{model_name.to_s} with no mapped id: #{id_missing.size}"
     {
-      "has_#{model.to_s.downcase}" => has_work,
-      "#{model.to_s.downcase}_missing" => work_missing,
+      "has_#{model_name.to_s.downcase}" => has_work,
+      "#{model_name.to_s.downcase}_missing" => work_missing,
       'id_missing' => id_missing
     }
   end
