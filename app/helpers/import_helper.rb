@@ -80,17 +80,29 @@ module ImportHelper
       if new_id.present?
         if check_exists
           if student_work_ids_old.include?(m_id)
-            parent_work = StudentWork.find(new_id)
+            parent_work = StudentWork.find_by(id: new_id)
             work_members << parent_work.id if parent_work
           elsif generic_work_ids_old.include?(m_id)
-            parent_work = GenericWork.find(new_id)
+            parent_work = GenericWork.find_by(id: new_id)
             work_members << parent_work.id if parent_work
           elsif edt_ids_old.include?(m_id)
-            parent_work = Etd.find(new_id)
+            parent_work = Etd.find_by(id: new_id)
             work_members << parent_work.id if parent_work
+          else
+            begin
+              object = Hyrax.query_service.find_by(id: new_id)
+              work_members << new_id if object
+            rescue Valkyrie::Persistence::ObjectNotFoundError, ActiveRecord::RecordNotFound
+              Rails.logger.warn("Object with id #{new_id} not found in the database")
+            end
           end
         else
-          work_members << new_id
+          begin
+            object = Hyrax.query_service.find_by(id: new_id)
+            work_members << new_id if object
+          rescue Valkyrie::Persistence::ObjectNotFoundError, ActiveRecord::RecordNotFound
+            Rails.logger.warn("Object with id #{new_id} not found in the database")
+          end
         end
       end
     end
