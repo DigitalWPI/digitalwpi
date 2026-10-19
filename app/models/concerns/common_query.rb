@@ -17,7 +17,7 @@ module CommonQuery
   # save resource
   def save(index: false)
     object = Hyrax.persister.save(resource: self)
-    save_index if index
+    object.save_index if index
     object
   end
 
